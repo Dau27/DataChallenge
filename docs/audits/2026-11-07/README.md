@@ -2,7 +2,7 @@
 
 Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
 
-**Updated verdict after fixes: the required workflow and all 26 targeted scoring diagnostics pass. All 65 DEV records have complete saved results. Independent human accuracy and event submission/control remain unverified. No new features were added.**
+**Latest PDF re-audit:** required workflow and arithmetic checks pass; all 65 DEV results are complete and the 26 prior diagnostics still match. Additional spot-checks found residual saved-judgment issues outside those diagnostics. Informal readiness estimate: about 85/100, not an official project grade or model accuracy. See [current PDF re-audit](07-updated-pdf-reaudit.md).
 
 | Audit stage | Completed work | Report |
 | --- | --- | --- |
@@ -12,6 +12,7 @@ Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
 | 4 | Fixed applicability/answer consistency, exclusive provider decisions, role focus, consultation/closing rules and source-evidence validation | [Scoring fixes](C:/Users/user/Desktop/DataChallenge/docs/audits/2026-11-07/04-scoring-fixes.md) |
 | 5 | Rechecked all 65 saved results, reran rejected/failed cases, passed 26 targeted diagnostics, 94 backend tests and restart/custom-configuration checks | [Re-audit results](C:/Users/user/Desktop/DataChallenge/docs/audits/2026-11-07/05-scoring-reaudit-results.md) |
 | 6 | Corrected the recording control; fresh setup/94 backend/nine client checks, copied-data review/version restart, private human-review packet, demo/control preparation and verified private GitHub checkpoint; zero added inference | [Zero-spend readiness](06-zero-spend-readiness.md) |
+| 7 | Re-read all PDF sources after the three enhancements; fresh 125 backend/14 client/build checks, 130 saved snapshots and additional semantic spot-checks; zero model calls | [Updated PDF re-audit](07-updated-pdf-reaudit.md) |
 
 Initial audit: 65 succeeded, 44 complete / 21 needs review, with concrete rubric defects. Reports 01–03 preserve that historical evidence.
 
@@ -19,4 +20,4 @@ After fixes: **65 complete / zero latest failed or unresolved DEV records**, **2
 
 The initial isolated audit estimated $0.3018500; the entire subsequent fix/re-audit estimated **$0.6271780**, including failed trials and repairs. Combined conservative usage/reservations/overhead are **$4.13490090**, below the fix ceiling of $4.25 and the user's $5 task allowance. Earlier database rows were preserved; new corrected evaluations were added to the main database. No further paid run is needed for this fix.
 
-Next concrete step: complete the prepared private human-review packet and two timed presentations, deliver the reviewed current source, then perform official control/freeze steps when organizers supply inputs. See the zero-spend report for completed preparation. Market features remain deferred; no blind benchmark is claimed.
+Next concrete step: adjudicate the newly flagged saved judgments, complete independent review and a timed presentation, then public submission and official control/freeze when inputs are supplied. Earlier reports preserve historical outcomes. The shared-budget/preview/review-filter enhancements are recorded in docs/improvements; no further feature work was done in this audit.
