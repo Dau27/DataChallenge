@@ -76,6 +76,17 @@ def numeric_difference(left, right):
         return None
 
 
+def _safe_generation_value(value):
+    if value is None:
+        return True
+    if type(value) not in {int, float}:
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:
+        return False
+
+
 def _side(snapshot, basis):
     score = snapshot[basis + "_score"]
     # Only evaluation provenance belongs here; arbitrary stored metadata is not a credential channel.
@@ -95,7 +106,7 @@ def _side(snapshot, basis):
     if not isinstance(generation, dict):
         generation = {}
     metadata["generation"] = {key: generation[key] for key in ("temperature", "max_output_tokens", "top_p")
-        if key in generation and (generation[key] is None or type(generation[key]) in {int, float} and math.isfinite(generation[key]))}
+        if key in generation and _safe_generation_value(generation[key])}
     if isinstance(generation.get("reasoning"), dict):
         effort = generation["reasoning"].get("effort")
         if isinstance(effort, str) and effort in {"none", "minimal", "low", "medium", "high", "xhigh"}:

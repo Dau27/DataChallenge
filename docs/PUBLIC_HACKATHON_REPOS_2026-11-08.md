@@ -1,5 +1,7 @@
 # Public Freedom CQA repository comparison — 8 November 2026
 
+**Implementation follow-up:** cohort comparison, printable reports and recovery are now integrated; [stage22](improvements/22-cohort-print-integration.md) records exact-ID/browser/print-preview acceptance and remaining paper-layout limits. The [fresh PDF audit](audits/2026-11-08/02-post-cohort-print-audit.md) passed408 backend /182 client/build checks with preserved results and no inference. Research-era pending-integration statements below are historical. The user authorized further offline work: an optional explicit-reference quality report is next, with no labels/accuracy fabricated and no archived manual packet reinstated. [Continuation boundaries](plans/2026-11-08-offline-continuation.md).
+
 The most useful additions are stronger validation reporting, safe recording-to-evidence navigation, a concrete embedding adapter and a verified submission-export boundary. These fit the existing application. First complete the cohort/print integration already prepared in the other chats; those are existing work, not missing features to rebuild.
 
 ## Scope and evidence

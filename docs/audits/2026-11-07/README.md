@@ -1,6 +1,6 @@
 # Existing solution audit
 
-Historical audits completed 7 November 2026 against the supplied PDFs and MASTER_CONTEXT.md. Latest combined-source audit: [8 November PDF audit](../2026-11-08/01-integrated-pdf-audit.md), with 309 backend/118 client/build checks and zero new inference.
+Historical audits completed 7 November 2026 against the supplied PDFs and MASTER_CONTEXT.md. Latest combined-source audit: [post-cohort/print PDF audit](../2026-11-08/02-post-cohort-print-audit.md), with408 backend/182 client/build checks, a saved-metadata display fix and zero new inference. The earlier [8 November audit](../2026-11-08/01-integrated-pdf-audit.md) records309/118 checks at its historical source.
 
 Implementation follow-up: the comparison freshness issue from audit 13 is [fixed and regression-tested](../../improvements/07-comparison-refresh-and-differences.md). [Refinement verification](../../improvements/10-refinements-verification.md) passed 173 backend/58 client/build and actual saved-data/browser checks, with zero provider calls and preserved originals. The earlier audit/readiness estimate is not recalculated into a new official score. Demo remains deferred.
 

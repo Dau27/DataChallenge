@@ -1,0 +1,13 @@
+# Offline continuation — 8 November 2026
+
+Authorized by the user to keep checking/updating the application after the post-integration PDF audit while they are away. Continue useful bounded stages; do not promise perpetual background operation or fabricate completion. No model/provider access checks, new evaluations, paid API calls, organizer fetches, demo preparation, remote publication, private-data release or destructive changes. Existing originals, source revisions, checklists, reviews, credentials, budget baseline and the user's staged work remain protected.
+
+| Stage | Acceptance / status |
+| --- | --- |
+| A — PDF/repository audit | Complete in [audit02](../audits/2026-11-08/02-post-cohort-print-audit.md): informal readiness about85/100;408 backend /182 client/build passed. One reproduced shared metadata-reader crash fixed; no score changed. Checkpoint/preservation required before stage B. |
+| B — Offline quality report | Next. Read-only service/CLI over explicit saved-run IDs and opt-in, separately identified references. Bounded strict manifests; exact source/checklist hashes; original basis; no auto-use of reviews or archived packet. Report unlabeled when no references exist. Coverage, N/A/critical/scale disagreements and language/channel/provenance groups must retain denominators and nulls. Synthetic arithmetic/identity/error tests, actual unlabeled saved-data acceptance, no app/DB initialization or outbound request. |
+| C — Repeatable verification and documentation | After B, run appropriate full backend checks; client/build only if client changes or unresolved concern. Repeat all-row/schema/protected/index/source preservation, safe source/history scan, CLI cold reread and regression pack. Update CURRENT_CONTEXT and stage MD, then local checkpoint. Fix demonstrated defects; avoid repeated unchanged test loops. |
+
+Work in the existing clean coordinator lineage, preserve both builder worktrees and use hash-gated copying into the shared folder after acceptance. Do not reset main or alter its index. No new chats/subagents are required. The archive of optional manual reference review remains private and outside delivery requirements.
+
+External/blocked items stay explicit: independent reference acquisition and substantive judgment validation, approved company policy, organizer control/replacement data, unclear call introduction, A4/Letter/multilingual paper visuals after native-input control stops, public/event submission and official freeze. An unweighted PDF requirement list cannot justify inventing a precise official project score. Optional product additions do not close those gates by themselves.

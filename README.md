@@ -6,6 +6,8 @@ The application uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite,
 
 ## Current verified state
 
+- **Post-integration PDF audit (8 November):** informal readiness remains **about85/100**, with accuracy/organizer/publication gates open. **408 backend /182 client passed, one paid opt-in skipped; build and pip check passed.** Saved arithmetic/history and integrated tools reconcile; fixed an oversized saved-metadata comparison crash without changing scores. [Current audit and remaining gaps](docs/audits/2026-11-08/02-post-cohort-print-audit.md). Autonomous offline quality-report work is next; no API spending, demo deferred.
+
 - **Cohort comparison and printable reports integrated (8 November):** recorded cohort coverage/transitions, exact two-run review handoff and isolated original/effective saved print reports now work in the existing UI. **403 backend / 182 client passed, one paid opt-in skipped; build and pip check passed.** All 249 saved runs/protected files preserved; **$0 added inference, demo deferred**. Browser exact-pair/narrow/print-preview checks passed; A4/Letter and long multilingual paper pagination remain unverified after native input control stopped. [Integration report](docs/improvements/22-cohort-print-integration.md).
 
 - **Public CQA repository research (8 November):** [52 same-case candidate repositories and feasible improvements](docs/PUBLIC_HACKATHON_REPOS_2026-11-08.md), with [per-repository evidence and gaps](docs/research/2026-11-08-public-cqa-inventory.md). Research only; no competitor accuracy claims adopted, no product/API-spend change, demo deferred.
