@@ -1,5 +1,7 @@
 # Implemented workflow improvements
 
+Latest offline stage: [21 — private backup/recovery](21-backup-recovery.md), with a verified actual-data fresh-path round trip and preservation checks. The [common baseline and two builder worktrees are READY](../plans/2026-11-08-three-chat-handoff.md); cohort/print features are separately owned and not claimed integrated here. No API spending; demo deferred.
+
 Current combined-source verification: [8 November PDF audit](../audits/2026-11-08/01-integrated-pdf-audit.md) covers these stages together with completed history/index/design work. It repairs extreme-weight validation and records 309 backend/118 client/build checks, preserved originals and zero added inference. Earlier stage counts below remain historical.
 
 Updated 8 November 2026. The latest stages add saved-data criterion breakdowns, explained review priority and strict weight-impact preview. Existing comparison/export/search/preset refinements, budget protection and concurrent UI/backend fixes are retained. Demo work remains deferred.

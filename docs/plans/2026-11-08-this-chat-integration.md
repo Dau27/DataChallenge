@@ -1,6 +1,6 @@
 # This chat's eight-hour role — three-chat configuration
 
-Prepared 8 November 2026. This adapts the [four-lane plan](2026-11-08-eight-hour-improvement-plan.md) to **this chat plus two others**. Planning only; execution has not begun.
+Started 8 November 2026. This adapts the [four-lane plan](2026-11-08-eight-hour-improvement-plan.md) to **this chat plus two others**. [Baseline/worktrees are READY](2026-11-08-three-chat-handoff.md); [CLI recovery is implemented and tested](../improvements/21-backup-recovery.md). The schedule below retains the original execution gates. Builder features remain separate until accepted and integrated.
 
 ## Assignment
 

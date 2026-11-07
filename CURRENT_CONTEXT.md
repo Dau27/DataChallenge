@@ -1,3 +1,17 @@
+# Current sprint — baseline READY and recovery completed, 8 November 2026
+
+The [common baseline and two isolated builder worktrees are READY](docs/plans/2026-11-08-three-chat-handoff.md), based on local commit **d7d8a9d2a93ff5b537e34e689dd63b0e952f0fb3**. [Baseline stage report](docs/plans/2026-11-08-baseline-acceptance.md). CLI-only [private backup/verification/fresh-path recovery is implemented](docs/improvements/21-backup-recovery.md) in the coordinator worktree and mirrored into this root. No existing app source, schema or dependencies changed for recovery.
+
+Tests actually run: isolated socket-guarded full backend **346 passed**, 54.59s, including **37 new recovery tests** (targeted run: 37 passed, 8.59s). Baseline acceptance before the feature repeated 309 backend tests, 77.19s; root frontend **118 passed / one paid opt-in skipped**, 34.54s; production build passed, Vite 2.30s. Frontend source remained unchanged throughout this stage, so the earlier same-stage client/build acceptance still applies. pip check passed; one existing Starlette/AnyIO deprecation warning remains.
+
+Actual CLI create→verify→fresh-path restore on the copied saved DB passed. The independent audit fingerprint helper confirms **all 15 recovered tables/schema equal the execution-start backup**, including 249 saved evaluations, 75 source revisions, five checklists, nine appeals/nine reviews and 198 original-history replays. Main 15 tables/schema, 30 protected files and 131 pre-existing non-Markdown source/config/test files remain unchanged. Main budget_state remains 0; no app initialization or new reservation. Index current 75/75 with 1297 messages. Verification reports two historical assessment contract warnings without changing them; it does not measure semantic accuracy or regrade records.
+
+Private source/data fingerprints, backup, recovery and command outputs: ignored local_data/sprint_20261108. The old root dirty source/index and older worktrees remain intact. No .env copied; backup contains private DB source/recording URL references and must stay private. External budget baseline/media/config files are retained separately, not bundled. No provider/organizer request or new inference spend; paid limit remains 0. **Demo deferred.**
+
+Final pre-checkpoint source/history/MD scan passed: 200 candidate files / 393 then-reachable Git blobs, zero credential/private-path matches; 66 MD / 309 local links; diff check passed. Root CLI independently verified the actual 249-evaluation bundle. Recovery code/reports are checkpointed locally on sprint-integration-20261108; nothing pushed. The root remains on main with its original changes and the new recovery files.
+
+Next concrete step: each builder uses its assigned worktree and canonical root handoff to finish cohort comparison or printable reports, then returns tested owned files/commit and stage19/20 MD. The coordinator accepts them and performs shared integration sequentially. Neither builder feature is claimed complete here. No public/event publication or demo preparation is authorized by this stage.
+
 # CURRENT_CONTEXT — verified implementation state, 2026-11-08
 
 ## Outcome
