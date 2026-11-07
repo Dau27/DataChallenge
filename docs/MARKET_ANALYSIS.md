@@ -1,5 +1,7 @@
 # Market analysis and incremental development plan for CQA
 
+Current-build refresh: [market feature options](MARKET_FEATURE_OPTIONS.md) rechecks ten platforms after budget protection, checklist preview and review filters were implemented. It ranks remaining zero-inference additions and preserves manual-packet removal/demo deferral. The survey below retains its earlier baseline.
+
 Research date: 7 November 2026. Scope: 14 conversation quality and contact centre platforms, plus one adjacent evaluation tool. This is an analysis of documented capabilities and their fit with the inspected repository, rather than a hands-on accuracy benchmark or a procurement quotation.
 
 ## Main conclusion

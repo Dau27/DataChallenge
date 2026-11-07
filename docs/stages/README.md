@@ -20,6 +20,8 @@ Latest root verification: **127 backend / 15 ordinary client tests**, production
 
 Supplementary research completed: [Market analysis and incremental development plan](../MARKET_ANALYSIS.md). Compares 14 platforms, maps their approaches to the existing application and defines proposed future acceptance gates. This research does not establish model accuracy or complete the demo/control/freeze steps.
 
+Current-build refresh: [market feature options](../MARKET_FEATURE_OPTIONS.md) rechecks ten platforms after the three implemented enhancements and ranks saved-run comparison, evidence export and transcript-text search as the next zero-inference additions. Research only; no implementation or demo work was performed.
+
 Historical paid scoring checkpoint: [Re-audit](../audits/2026-11-07/05-scoring-reaudit-results.md). Its 65-complete count is superseded by the uncertainty retraction above; model provenance remains unchanged. The $0.6271780 earlier scoring-fix cost is historical; latest corrections add $0.00 inference. Independent human accuracy remains unverified.
 
 Delivery references: [readiness checks](../audits/2026-11-07/06-zero-spend-readiness.md), [deferred demo](../DEMO.md) and [control/freeze runbook](../CONTROL_AND_FREEZE.md). The [scope update](../audits/2026-11-07/12-delivery-scope-cleanup.md) removes the manual packet from delivery and demo plans; private evidence remains archived. No new hosted-model requests were made.

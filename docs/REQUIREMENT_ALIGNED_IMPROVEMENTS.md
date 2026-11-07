@@ -1,5 +1,7 @@
 # Improvements using existing data and requirements
 
+Current feature-selection research: [market feature options](MARKET_FEATURE_OPTIONS.md). Budget protection, checklist preview and review filters below have already been implemented; the refresh ranks remaining additions without reassigning the archived manual review or starting demo work.
+
 Implementation update: the first three enhancements were subsequently implemented and tested without model calls. See [completed stage reports](improvements/README.md). The assessment below preserves its original recommendation context; saved-run comparison and export were not added.
 
 Assessment date: 7 November 2026, implementation checkpoint 810e31f. Scope: identify improvements; no new feature implementation or paid inference in this assessment. Hidden organizer control data remain unavailable. The 65 DEV conversations and their saved results remain locally available.

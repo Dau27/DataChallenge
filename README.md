@@ -6,6 +6,8 @@ The application uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite,
 
 ## Current verified state
 
+- **Market feature research refreshed:** ten platforms rechecked against the current build. Recommended next additions are saved-run comparison, evidence exports and transcript-text search with saved filters; all can use existing data without new inference. These are proposals, not implemented features. [Feature options and acceptance gates](docs/MARKET_FEATURE_OPTIONS.md). Demo deferral and zero-spend limits remain in force.
+
 - **Delivery scope updated:** the manual reference-review exercise is removed from delivery and demo plans. Private evidence is retained. **Five-minute demo work is deferred at the user's request.** [Scope update](docs/audits/2026-11-07/12-delivery-scope-cleanup.md).
 
 - **Call recording follow-up:** verified and excerpted the actual dataset audio. The introduction remains unclear in local recognition and the user's listening check; original Yes/92.31 preserved, contact needs_review and final total withheld. No database changes or paid API calls. [Recording review](docs/audits/2026-11-07/10-call-recording-review.md).
