@@ -11,7 +11,7 @@ Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
 | 3 | Identified concrete rubric defects and distinguished software completeness from scoring reliability and submission readiness | [Sufficiency verdict](C:/Users/user/Desktop/DataChallenge/docs/audits/2026-11-07/03-sufficiency-verdict.md) |
 | 4 | Fixed applicability/answer consistency, exclusive provider decisions, role focus, consultation/closing rules and source-evidence validation | [Scoring fixes](C:/Users/user/Desktop/DataChallenge/docs/audits/2026-11-07/04-scoring-fixes.md) |
 | 5 | Rechecked all 65 saved results, reran rejected/failed cases, passed 26 targeted diagnostics, 94 backend tests and restart/custom-configuration checks | [Re-audit results](C:/Users/user/Desktop/DataChallenge/docs/audits/2026-11-07/05-scoring-reaudit-results.md) |
-| 6 | Corrected the recording control; fresh setup/94 backend/nine client checks, copied-data review/version restart, private human-review packet and demo/control preparation; zero added inference | [Zero-spend readiness](06-zero-spend-readiness.md) |
+| 6 | Corrected the recording control; fresh setup/94 backend/nine client checks, copied-data review/version restart, private human-review packet, demo/control preparation and verified private GitHub checkpoint; zero added inference | [Zero-spend readiness](06-zero-spend-readiness.md) |
 
 Initial audit: 65 succeeded, 44 complete / 21 needs review, with concrete rubric defects. Reports 01–03 preserve that historical evidence.
 

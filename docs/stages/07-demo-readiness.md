@@ -2,7 +2,7 @@
 
 Status: current software, clean-source installation, zero-spend technical walkthrough and handoff materials verified; timed human presentation/public-submission gate **not claimed complete**.
 
-- The reviewed scoring/recording fixes and documentation are being recorded in the existing private GitHub repository. Verify the actual checkpoint/push outcome in CURRENT_CONTEXT.md. Public accessibility, submission and official freeze are separate pending steps.
+- The reviewed scoring/recording fixes and documentation were committed/pushed as private implementation checkpoint 6e16fdd, with matching ls-remote verification. A documentation-only follow-up records the evidence; tested code is unchanged. Public accessibility, submission and official freeze remain pending.
 - Real import/evaluation, source evidence, immutable new criterion, separate appeal/review and preserved original/effective result have been exercised through the real API and React DOM integration.
 - Model usage/cost is measured from actual token records using an identified rate source. No synthetic result is presented as actual DEV or a fresh cached inference.
 - [DEMO.md](../DEMO.md) now contains concrete DEV examples, a five-minute presenter card, honest saved-versus-fresh evaluation wording and two blank human rehearsal timing records.
