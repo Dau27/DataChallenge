@@ -1,5 +1,7 @@
 # Provisional packet review and organizer requirements
 
+Archived development record: the user subsequently removed this exercise from delivery and demo plans. Private evidence is retained unchanged. No further packet labeling is assigned, and demo work is explicitly deferred. See the [scope amendment](12-delivery-scope-cleanup.md).
+
 Completed 7 November 2026, Asia/Bishkek. The user delegated the judgments to the agent and asked whether a manual packet is required by the organizers. **This is optional development QA, not an organizer-mandated human-labeling deliverable. No API spending or application regrading occurred.**
 
 ## What the organizers actually require
@@ -66,4 +68,4 @@ Main DEV stays **64 complete / one needs review**. The earlier ambiguous p4-ru-0
 
 ## Practical priority
 
-Keep this free provisional QA as development evidence. It is **not a reason to demand 120 manual decisions from the user before submission**. Prioritize the required five-minute workflow demonstration, source/setup readiness, public repository/submission and actual organizer control/replacement/freeze steps. The retained applicability concerns can guide a targeted correction if requested; uncertain policy/interpretation cases need better authority rather than fabricated labels. Paid requests stay paused.
+Retain this provisional QA only as archived development evidence. It is excluded from active delivery/demo plans; do not assign additional manual labels or treat the packet as a submission gate. Demo work is deferred until the user resumes it. Applicability concerns remain available for a separately requested targeted correction; they do not authorize further work here. Paid requests stay paused.

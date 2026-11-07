@@ -2,6 +2,8 @@
 
 Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
 
+**Current delivery scope:** the manual reference-review exercise is removed from delivery/demo plans. Existing private evidence and historical reports are retained. **Demo work is deferred at the user's request; no preparation or rehearsal is being started.** [Scope update](12-delivery-scope-cleanup.md).
+
 **Optional packet QA completed after user delegation:** 120 provisional agent decisions, zero independent human labels; 105 pairs match saved effective judgments and 15 differ. These are not accuracy/organizer grades or 15 proven bugs. The PDFs require the application reviewer workflow, not a manually graded 15-case packet. Originals unchanged; zero paid requests. [Requirements clarification and review](11-guided-human-review.md).
 
 **Latest PDF audit after corrections:** required prototype workflows and arithmetic pass; **64 DEV complete / one awaiting recording review**, with originals preserved. Fresh **127 backend / 15 client tests and build pass**, zero added inference. Informal readiness remains about **85/100**, not an official grade or accuracy percentage. [Current audit and remaining gaps](09-post-correction-pdf-audit.md); [correction history](08-zero-spend-scoring-corrections.md).
@@ -21,6 +23,7 @@ Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
 | 9 | Rechecked all PDF sources, corrected source cases, required workflows and delivery gaps; fresh 127 backend/15 client/build, 130 snapshots and 198 history replays pass; no data changes or model calls | [Post-correction PDF audit](09-post-correction-pdf-audit.md) |
 | 10 | Verified dataset recording access/provenance; extracted opening clip; local recognition and user listening did not establish an introduction; preserved every database row and pending appeal; no paid API calls | [Call recording review](10-call-recording-review.md) |
 | 11 — optional QA completed | User delegated labels; reviewed all 15 sources/120 criteria, retained provisional differences and one explicit agent revision; clarified manual packet is not an organizer deliverable; no independent human labels or paid requests | [Provisional review and organizer requirements](11-guided-human-review.md) |
+| 12 | Removed manual-packet assignments from active plans, retained private evidence and the application reviewer workflow, recorded explicit demo deferral; documentation and preservation checks only | [Delivery-scope cleanup](12-delivery-scope-cleanup.md) |
 
 Initial audit: 65 succeeded, 44 complete / 21 needs review, with concrete rubric defects. Reports 01–03 preserve that historical evidence.
 
@@ -28,4 +31,4 @@ At the earlier paid-fix checkpoint: **65 complete / zero latest failed or unreso
 
 The initial isolated audit estimated $0.3018500; the entire subsequent fix/re-audit estimated **$0.6271780**, including failed trials and repairs. Combined conservative usage/reservations/overhead are **$4.13490090**, below the fix ceiling of $4.25 and the user's $5 task allowance. Earlier database rows were preserved; new corrected evaluations were added to the main database. No further paid run is needed for this fix.
 
-Next concrete step: qualified recording review for the open p4-ru-005 contact appeal, followed by independent review and a timed presentation, then public submission and official control/freeze when inputs are supplied. Paid requests remain paused. Earlier reports preserve historical outcomes; the three prior enhancements are recorded in docs/improvements.
+The open p4-ru-005 contact appeal still needs better evidence before it can be resolved. It does not assign a manual packet exercise. Demo work is deferred; await the user's next task. Public submission/control/freeze remain pending and paid requests remain paused. Earlier reports preserve historical outcomes.

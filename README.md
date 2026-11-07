@@ -6,7 +6,7 @@ The application uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite,
 
 ## Current verified state
 
-- **Optional development QA completed:** user delegated the 15-dialogue review; 120 provisional agent decisions / zero independent human labels, with 15 differences requiring qualification rather than automatic regrading. **A manually labeled packet is not an organizer requirement.** App results are unchanged; no paid requests. [Requirements clarification and review](docs/audits/2026-11-07/11-guided-human-review.md).
+- **Delivery scope updated:** the manual reference-review exercise is removed from delivery and demo plans. Private evidence is retained. **Five-minute demo work is deferred at the user's request.** [Scope update](docs/audits/2026-11-07/12-delivery-scope-cleanup.md).
 
 - **Call recording follow-up:** verified and excerpted the actual dataset audio. The introduction remains unclear in local recognition and the user's listening check; original Yes/92.31 preserved, contact needs_review and final total withheld. No database changes or paid API calls. [Recording review](docs/audits/2026-11-07/10-call-recording-review.md).
 
@@ -21,9 +21,9 @@ The application uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite,
 - Opt-in live React DOM/API test passed: add a substantive criterion → save new version → actual model evaluation; submit appeal → separate agent-attributed review → original/effective scores → reload. This is functional DOM integration, not visual/browser QA.
 - The initial DEV processing set had 59 complete / 6 needs review. The paid defect-fix audit reached 65 complete; the latest zero-spend correction has **64 complete / one needs review**, with zero calculation/evidence-reference mismatches. Earlier outputs and failures remain in history; no mock/fabricated fallback was used.
 - Accepted post-fix DEV assessment estimate: **$0.3983244**. The entire fix/re-audit, including unsuccessful trials/repairs/custom diagnostic, estimated **$0.6271780**. All known application/task usage including the separate prior audit is **$1.61195315**; historical unknown usage is conservatively reserved separately. This is not an invoice. Each result retains its actual model/prompt/schema/rate snapshot.
-- Ten explicitly synthetic gpt-5.4-mini diagnostics match 13/13 provisional checks; these are agent-authored diagnostics, not human-reviewed accuracy. In-app browser smoke verified the main views/evidence; independent human review and presentation/control stages remain outstanding. See CURRENT_CONTEXT.md and per-stage reports.
+- Ten explicitly synthetic gpt-5.4-mini diagnostics match 13/13 provisional checks; these are agent-authored diagnostics, not human-reviewed accuracy. In-app browser smoke verified the main views/evidence. Semantic accuracy remains unverified; demo execution is deferred and organizer control awaits inputs. See CURRENT_CONTEXT.md and per-stage reports.
 - See [CURRENT_CONTEXT.md](CURRENT_CONTEXT.md) for commands actually run, exact current outcomes, and blockers. Per-stage reports are in [docs/stages](docs/stages).
-- Latest zero-spend handoff checks passed a fresh setup, **94 backend / nine client tests**, copied-data review/version persistence and the corrected recording link. No new inference was used. [Readiness report](docs/audits/2026-11-07/06-zero-spend-readiness.md), [human review](docs/HUMAN_REVIEW.md), [five-minute demo](docs/DEMO.md) and [control/freeze runbook](docs/CONTROL_AND_FREEZE.md) distinguish completed preparation from pending human/organizer steps.
+- Earlier zero-spend handoff checks passed a fresh setup, **94 backend / nine client tests**, copied-data review/version persistence and the corrected recording link. No new inference was used. The [readiness report](docs/audits/2026-11-07/06-zero-spend-readiness.md) preserves that evidence; the [deferred demo](docs/DEMO.md) and [control/freeze runbook](docs/CONTROL_AND_FREEZE.md) describe remaining delivery steps.
 
 ## Windows quick start
 
@@ -135,12 +135,11 @@ The script writes full results under ignored `local_data/live_runs/` and reports
 Optional diagnostics after the real slice passes:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts\select_reference.py
 .\.venv\Scripts\python.exe scripts\behavior_checks.py
 .\.venv\Scripts\python.exe scripts\run_dev.py --budget-usd 4.00 --checklist 1
 ```
 
-Reference selection writes an ignored private manifest with development/holdout splits and `human_reviewed: false`. Behavioral checks submit the clearly synthetic multilingual fixtures to the actual hosted provider and can incur charges; expectations are provisional agent-authored checks, not independent labels or benchmark accuracy. Their report is private under `local_data/`. These diagnostics are not a substitute for actual DEV processing.
+Behavioral checks submit the clearly synthetic multilingual fixtures to the actual hosted provider and can incur charges; expectations are provisional agent-authored checks, not independent labels or benchmark accuracy. Their report is private under `local_data/`. These diagnostics are not a substitute for actual DEV processing.
 
 The DEV runner retains its additional $4 CLI ceiling and now preflights through the same persistent backend budget used by UI evaluations, retries and provider checks. The reviewed opening baseline includes prior isolated-audit costs and unknown-usage reservations; new operations reserve worst-case attempts atomically and reconcile actual/unknown usage. `--only-missing` preserves existing successes. Unrelated account activity is outside this ledger. The opt-in `npm run live-smoke` makes a real paid evaluation and saves versions/appeals; ordinary `npm test` skips it. The normal backend suite explicitly rejects real OpenAI HTTP transport. No opt-in paid test was run for these improvements.
 

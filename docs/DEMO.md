@@ -1,6 +1,6 @@
 # Five-minute demonstration
 
-Status, 7 November 2026: concrete examples and script prepared; current source installs cleanly. Two timed human presentations are still required. The latest local technical walkthrough used saved real assessments and a copied database with inference disabled; it was not a fresh evaluation or a timed human presentation.
+Status, 7 November 2026: **demo work is deferred at the user's request**. The existing script below is retained as reference; no new preparation, presentation or rehearsal is being performed. Resume only when the user requests it. The earlier technical walkthrough used saved assessments and a copied database with inference disabled; it was not a fresh evaluation or a timed human presentation.
 
 ## Presenter card
 
@@ -23,7 +23,7 @@ The private workspace has a database copy and a credential-free helper at `local
 
 Practice source navigation, the recording link, appeals/reviews, version editing and saved-result comparison. Provider controls are disabled in this mode. Saving a checklist or reviewer decision is free; fresh assessment is not part of this rehearsal. The copy already contains a labeled technical rehearsal version/decision; the main database is unchanged.
 
-Run two spoken rehearsals with a stopwatch. Record actual durations and any failure below; blank cells mean not performed. Target at most five minutes for the full required flow. A saved-result rehearsal cannot certify fresh model latency or an unseen criterion.
+When the user resumes demo work, the existing engineering plan calls for two spoken rehearsals with a stopwatch. Record actual durations and failures; blank cells mean not performed. Target at most five minutes for the required flow. A saved-result rehearsal cannot certify fresh model latency or an unseen criterion.
 
 | Human rehearsal | Date / presenter | Actual duration | Full flow completed? / issue |
 | --- | --- | --- | --- |

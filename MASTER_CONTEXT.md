@@ -361,7 +361,7 @@ Required cases include:
 - Review changes are validated, recomputed and persisted without changing the original assessment.
 - Model outage, malformed JSON, missing audio, invalid import, duplicate import, changed source content and application restart are visible and recoverable.
 
-Select up to 15 DEV conversations, ideally five per language with calls represented, for reference review; use nine for development and reserve six for an end check. This is a pragmatic small diagnostic set, not a statistically strong benchmark. A human-reviewed reference set is only human-reviewed when a human actually reviewed it. If Codex generated labels, call them provisional agent labels, not ground truth. When no independent labels exist, report behavioral checks and reviewed examples rather than invented accuracy.
+Delivery scope amendment, 7 November 2026: the user removed the 15-dialogue manual reference-review exercise from delivery and demo plans. Retain existing private reference material and provisional agent labels as archived development evidence; do not assign further packet labeling or require a signed reference packet for submission. Continue the behavioral/scoring checks above. Agent labels are not ground truth; when independent labels are unavailable, report checked examples and limitations rather than invented accuracy. The application's appeal and reviewer-decision workflow remains required.
 
 Track observed agreement by criterion where legitimate labels exist, N/A disagreements, critical-flag errors, schema failures, evidence-support failures, cost and latency. Do not invent acceptance accuracy targets the organizer did not specify. Run all DEV items and account for completed, unresolved and failed records separately.
 
@@ -374,6 +374,8 @@ The source guide calls for an open Git repository and a README, not publication 
 Prepare the repository and README, but do not claim submission or public publication unless it actually occurred. Use an explicitly supplied repository target and authorized push workflow. Record any manual submission step still needed.
 
 Five-minute demonstration:
+
+Execution status, 7 November 2026: demonstration work is deferred at the user's explicit request. Retain this outline as reference; do not start preparation or rehearsals until the user resumes that work.
 
 | Time | Action |
 |---|---|
