@@ -6,6 +6,8 @@ The application uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite,
 
 ## Current verified state
 
+- **Optional development QA completed:** user delegated the 15-dialogue review; 120 provisional agent decisions / zero independent human labels, with 15 differences requiring qualification rather than automatic regrading. **A manually labeled packet is not an organizer requirement.** App results are unchanged; no paid requests. [Requirements clarification and review](docs/audits/2026-11-07/11-guided-human-review.md).
+
 - **Call recording follow-up:** verified and excerpted the actual dataset audio. The introduction remains unclear in local recognition and the user's listening check; original Yes/92.31 preserved, contact needs_review and final total withheld. No database changes or paid API calls. [Recording review](docs/audits/2026-11-07/10-call-recording-review.md).
 
 - **Latest PDF audit after corrections:** core workflow and arithmetic pass; **64 DEV complete / one awaiting recording review**. Fresh **127 backend / 15 client tests and build pass**. Informal readiness remains about **85/100**, with independent accuracy, live v13/unseen control validation, timed demo and public/event handoff still unverified. No model calls or data changes. [Current audit](docs/audits/2026-11-07/09-post-correction-pdf-audit.md).

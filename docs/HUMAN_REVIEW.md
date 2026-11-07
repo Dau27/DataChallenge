@@ -4,7 +4,7 @@ Latest source correction: p4-ru-005 contact is needs_review, with its original Y
 
 [Recording follow-up](audits/2026-11-07/10-call-recording-review.md): the actual dataset audio was retrieved and a short unfiltered opening clip provided. The user reported the introduction is unclear; local recognition did not establish it. The appeal remains open. Obtain clearer audio or qualified interpretation before assigning Yes/No; the agent did not directly hear the recording and no independent packet label was marked complete.
 
-Status: packet prepared; human adjudication has not occurred. This is the principal remaining validation gap. Automated tests and 26 targeted agent diagnostics do not establish model accuracy.
+Status: the user delegated the judgments to the agent. [Provisional review completed](audits/2026-11-07/11-guided-human-review.md): **120 agent decisions / zero independent human labels**, with originals preserved. Fifteen disposition/value differences remain provisional; they are not an accuracy score or 15 proven bugs. The original human template is still blank. **The organizer PDFs do not require a manually labeled 15-dialogue packet**; this is an internal diagnostic from MASTER_CONTEXT.md, not a submission blocker.
 
 The private workspace packet is under `local_data/readiness_20261107/human_review/`:
 

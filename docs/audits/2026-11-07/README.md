@@ -2,6 +2,8 @@
 
 Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
 
+**Optional packet QA completed after user delegation:** 120 provisional agent decisions, zero independent human labels; 105 pairs match saved effective judgments and 15 differ. These are not accuracy/organizer grades or 15 proven bugs. The PDFs require the application reviewer workflow, not a manually graded 15-case packet. Originals unchanged; zero paid requests. [Requirements clarification and review](11-guided-human-review.md).
+
 **Latest PDF audit after corrections:** required prototype workflows and arithmetic pass; **64 DEV complete / one awaiting recording review**, with originals preserved. Fresh **127 backend / 15 client tests and build pass**, zero added inference. Informal readiness remains about **85/100**, not an official grade or accuracy percentage. [Current audit and remaining gaps](09-post-correction-pdf-audit.md); [correction history](08-zero-spend-scoring-corrections.md).
 
 **Recording follow-up:** fetched the actual dataset call and provided an unfiltered opening excerpt. Local recognition was inconclusive; the user also heard an unclear introduction. Contact remains needs_review, original Yes/92.31 preserved, no data changes or API spending. [Recording review](10-call-recording-review.md).
@@ -18,6 +20,7 @@ Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
 | 8 | Corrected three flagged effective judgments with original preservation; uncertain call keeps its appeal open and total withheld; 127 backend/15 client/build and 130-snapshot checks pass; zero model calls | [Zero-spend scoring corrections](08-zero-spend-scoring-corrections.md) |
 | 9 | Rechecked all PDF sources, corrected source cases, required workflows and delivery gaps; fresh 127 backend/15 client/build, 130 snapshots and 198 history replays pass; no data changes or model calls | [Post-correction PDF audit](09-post-correction-pdf-audit.md) |
 | 10 | Verified dataset recording access/provenance; extracted opening clip; local recognition and user listening did not establish an introduction; preserved every database row and pending appeal; no paid API calls | [Call recording review](10-call-recording-review.md) |
+| 11 — optional QA completed | User delegated labels; reviewed all 15 sources/120 criteria, retained provisional differences and one explicit agent revision; clarified manual packet is not an organizer deliverable; no independent human labels or paid requests | [Provisional review and organizer requirements](11-guided-human-review.md) |
 
 Initial audit: 65 succeeded, 44 complete / 21 needs review, with concrete rubric defects. Reports 01–03 preserve that historical evidence.
 
