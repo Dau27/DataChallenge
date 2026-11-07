@@ -2,6 +2,8 @@
 
 Status: current software, clean-source installation, zero-spend technical walkthrough and handoff materials verified; timed human presentation/public-submission gate **not claimed complete**.
 
+Latest authorized enhancements passed: shared spending protection, checklist preview/field errors and pending/critical review filters. Current root/isolated-source checks: 125 backend / 14 client tests and build passed; copied-data actual HTTP/browser/restart checks passed with zero added inference. Reviewed implementation aa3c08f was pushed privately. See [enhancement stage reports](../improvements/README.md); the readiness checkpoint examples below predate those additions.
+
 - The reviewed scoring/recording fixes and documentation were committed/pushed as private implementation checkpoint 6e16fdd, with matching ls-remote verification. A documentation-only follow-up records the evidence; tested code is unchanged. Public accessibility, submission and official freeze remain pending.
 - Real import/evaluation, source evidence, immutable new criterion, separate appeal/review and preserved original/effective result have been exercised through the real API and React DOM integration.
 - Model usage/cost is measured from actual token records using an identified rate source. No synthetic result is presented as actual DEV or a fresh cached inference.

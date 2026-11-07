@@ -2,6 +2,8 @@
 
 Status: **PASS for verified local reliability/installation gate**. Full DEV terminal-state report is tracked separately in Stage 5.
 
+Latest enhancement gate: [shared budget protection](../improvements/01-shared-budget.md) now covers UI, CLI, retries and provider checks with persistent reservations and a default zero limit. Root/isolated-source checks passed 125 backend / 14 client tests and production build without model calls. The earlier checkpoint details below are historical; current source initialization adds only the two budget tables.
+
 Current recheck, 7 November 2026: a clean source snapshot containing the scoring fixes and recording-link correction passed the actual setup script, 94 backend tests, nine client tests, production build, pip check and compileall. It received no real credentials. Fresh home/assets/health returned HTTP 200, with zero conversations/evaluations and the original eight-criterion checklist. Missing-provider requests returned HTTP 503 without creating a result. See [zero-spend readiness](../audits/2026-11-07/06-zero-spend-readiness.md). The details below preserve earlier implementation checkpoints.
 
 - Persistent bounded job runner, original-only cache, explicit retry, startup interruption detection, one output repair and bounded transport retry are implemented.

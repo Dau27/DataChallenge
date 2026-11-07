@@ -1,5 +1,7 @@
 # Stage 3 — Interface and versioned configuration
 
+Later enhancement: [checklist preview and field errors](../improvements/02-checklist-preview.md), budget-aware evaluation controls and [pending/critical review filters](../improvements/03-review-filters.md) passed root/isolated-source tests plus copied-data browser verification without inference. The original stage evidence below remains historical.
+
 Status: **PASS**. Real UI/component → actual API → actual provider flow and in-app browser smoke verified.
 
 - React/TypeScript/Vite UI includes conversation import, dataset/language/channel/status filters, selection/batch evaluation, and persistent job states.
