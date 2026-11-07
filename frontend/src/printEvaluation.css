@@ -1,0 +1,48 @@
+.cqa-print-tool { display: grid; gap: .75rem; padding: 1rem; border: 1px solid #cbd5e1; border-radius: .7rem; background: #fff; color: #172434; min-width: 0; }
+.cqa-print-tool .cqa-print-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; }
+.cqa-print-tool button { font: inherit; padding: .55rem .8rem; cursor: pointer; }
+.cqa-print-tool button:disabled { cursor: default; opacity: .6; }
+.cqa-print-tool :focus-visible { outline: 3px solid #175dcc; outline-offset: 3px; }
+.cqa-print-tool .cqa-print-option { display: flex; flex-direction: row; align-items: flex-start; gap: .5rem; }
+.cqa-print-tool .cqa-print-option input { flex: none; width: auto; margin-top: .25rem; }
+.cqa-print-tool .cqa-print-preview { min-width: 0; display: grid; gap: .75rem; }
+.cqa-print-tool .cqa-print-preview h3 { margin: 0; }
+.cqa-print-tool .cqa-print-frame { width: 100%; height: min(75vh, 900px); min-height: 320px; border: 1px solid #a9b6c5; background: white; }
+.cqa-print-tool .cqa-print-notice { margin: 0; font-size: .9rem; line-height: 1.55; }
+.cqa-print-tool .cqa-print-error { padding: .75rem; border: 1px solid #b73d2a; border-radius: .35rem; }
+.cqa-print-document { margin: 0; background: #fff; color: #172434; font: 15px/1.55 "Segoe UI", Arial, sans-serif; }
+.cqa-print-document * { box-sizing: border-box; }
+.cqa-print-document .cqa-report { max-width: 1040px; margin: 0 auto; padding: 28px; }
+.cqa-print-document h1 { font-size: 1.9em; line-height: 1.2; margin: 0 0 .4em; }
+.cqa-print-document h2 { font-size: 1.4em; border-bottom: 2px solid #657b91; padding-bottom: .25em; margin-top: 1.8em; }
+.cqa-print-document h3 { font-size: 1.14em; margin-top: 1.4em; }
+.cqa-print-document h4 { font-size: 1em; margin: 1em 0 .3em; }
+.cqa-print-document h1, .cqa-print-document h2, .cqa-print-document h3, .cqa-print-document h4, .cqa-print-document caption { break-after: avoid-page; page-break-after: avoid; }
+.cqa-print-document p, .cqa-print-document li, .cqa-print-document dd, .cqa-print-document td, .cqa-print-document th { overflow-wrap: anywhere; word-break: normal; orphans: 3; widows: 3; }
+.cqa-print-document p { margin: .4em 0 .8em; white-space: pre-wrap; }
+.cqa-print-document table { border-collapse: collapse; width: 100%; table-layout: fixed; margin: .65em 0 1em; }
+.cqa-print-document caption { text-align: left; font-weight: 600; margin-bottom: .4em; }
+.cqa-print-document th, .cqa-print-document td { padding: .5em .6em; border: 1px solid #a7b4c3; vertical-align: top; text-align: left; white-space: pre-wrap; }
+.cqa-print-document thead { display: table-header-group; }
+.cqa-print-document th { background: #edf1f5; font-weight: 600; }
+.cqa-print-document .cqa-report-pair th:first-child { width: 30%; }
+.cqa-print-document .cqa-report-note { padding: .8em; border-left: 4px solid #657b91; background: #f3f5f7; }
+.cqa-print-document .cqa-report-id { font-family: ui-monospace, Consolas, monospace; font-size: .86em; }
+.cqa-print-document .cqa-report-secondary { color: #405166; font-size: .92em; }
+.cqa-print-document .cqa-report-evidence { padding-left: 1.5em; }
+.cqa-print-document .cqa-report-excerpt { margin: .8em 0; padding-left: .8em; border-left: 2px solid #a7b4c3; }
+.cqa-print-document .cqa-report-criterion { padding-top: .2em; }
+.cqa-print-document .cqa-report-footer { border-top: 1px solid #a7b4c3; margin-top: 2em; padding-top: .8em; }
+@media (max-width: 480px) {
+  .cqa-print-document .cqa-report { padding: 12px; }
+  .cqa-print-document th, .cqa-print-document td { padding: .35em; }
+  .cqa-print-document { font-size: 14px; }
+}
+@media print {
+  .cqa-print-tool { display: none !important; }
+  .cqa-print-document { font-size: 10pt; line-height: 1.45; }
+  .cqa-print-document .cqa-report { max-width: none; padding: 0; }
+  .cqa-print-document tr { break-inside: avoid-page; page-break-inside: avoid; }
+  .cqa-print-document .cqa-report-excerpt p { break-inside: auto; }
+  .cqa-print-document h2 { margin-top: 1.3em; }
+}
