@@ -7,6 +7,6 @@ Status: software and script prepared; presentation/public-submission gate **not 
 - Model usage/cost is measured from actual token records using an identified rate source. No synthetic result is presented as actual DEV or a fresh cached inference.
 - `docs/DEMO.md` specifies the required five-minute presentation sequence.
 
-Not performed: two timed human presentation rehearsals, independent human quality review, browser visual QA, public visibility change, event submission, or sharing of private source PDFs/data. These are not implied by preparing a repository. The user initially requested repository creation; it was created private as a reversible default.
+Browser smoke and the real workflow integration test are complete. Not performed: two timed human presentation rehearsals, independent human quality review, public visibility change, event submission, or sharing of private source PDFs/data. These are not implied by preparing a repository. The user initially requested repository creation; it was created private as a reversible default.
 
 Next: review the live UI, select concrete real examples, rehearse twice and record timings, then use the user's chosen authorized public/submission workflow with private data excluded.

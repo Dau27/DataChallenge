@@ -18,6 +18,8 @@ Clean-start verification actually performed:
 5. Fresh-checkout tests: **67 backend passed in 5.41s** (one dependency deprecation warning); **7 client passed / 1 paid live test skipped**. `pip check` reported no broken requirements.
 6. Stopped the owned clean-start server. It never received the private `.env`, actual DEV payload, or model key, and made no model request.
 
+Final source recheck: pulled pushed implementation checkpoint `799c233` into that isolated checkout; **74 backend tests passed**, production frontend build passed, **7 client tests passed / 1 paid test skipped**. The root launch script also started successfully, returned health HTTP 200 and preserved all 65 DEV states, original/effective scores and six review decisions across restart. Owned servers were stopped after verification; `.\start.ps1` reopens the local application.
+
 Primary-source staged scan found zero occurrences of the locally configured key/signed URL/signature and no tracked private data paths. The repository remains private; public publication/submission is not claimed.
 
 Later browser smoke: the in-app browser surface became available. Inspected queue, dataset/status filters, withheld-total detail, evidence highlighting and saved checklist versions. Verified nine fields and the genuinely new ticket-reference definition in v4. Found/fixed hidden file-input horizontal overflow; final document width equals viewport width (699px) and DEV filter shows 65 rows. Earlier Windows Chrome stop was not bypassed. No independent human reference labels, timed human presentation rehearsals or supplied control/freeze inputs are claimed.
