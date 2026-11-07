@@ -6,6 +6,8 @@ The application uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite,
 
 ## Current verified state
 
+- **Refinements merged into main with concurrent UI preserved:** merge **c49da39** retains the design work and resolves queue/report conflicts. Exact merged-source checks: **173 backend / 63 client passed, one paid opt-in skipped; production build and pip check passed**. All 249 saved runs and protected files preserved; **$0 new inference, demo deferred**. Later active edits remain separate. [Merge verification and scope](docs/improvements/12-main-refinement-merge.md).
+
 - **Comparison repair and refinements complete:** reviewed-run changes now refresh open comparisons safely; difference filters and saved provenance are clearer. Added simple/selected-run exports, all-message match navigation/highlights, and atomic portable browser presets. **173 backend / 58 client tests and build passed**, plus actual saved-data/browser/preservation checks. **$0 new inference; originals preserved; demo deferred.** [Stage reports and verification](docs/improvements/10-refinements-verification.md).
 
 - **Latest PDF audit:** informal readiness was **about 85/100**, with 130 selected saved snapshots and 198 review histories rechecked. Its identified comparison freshness defect is now fixed above. DEV remains **64 complete / one needs review**; the software refinements do not establish new semantic accuracy or official grading points. [Audit and remaining gaps](docs/audits/2026-11-07/13-post-features-pdf-audit.md), [market follow-up](docs/ADOPTED_FEATURE_REVIEW.md).

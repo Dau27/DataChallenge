@@ -1,5 +1,7 @@
 # Refinements: final verification - 7 November 2026
 
+**Merge follow-up:** this branch is now merged into main as **c49da39**, preserving the concurrent UI. Fresh exact merged-source checks pass **173 backend / 63 client / one paid test skipped / production build**, with originals preserved and zero inference. The separate-branch statements below describe the earlier checkpoint. See [main merge report](12-main-refinement-merge.md) for conflicts, acceptance checks and later active work.
+
 **Completed:** stale comparison refresh repair, clearer difference views/provenance, simple and selected-run reports, all-message search navigation/highlights, and safer portable browser presets. No evaluator, rubric, scoring rule, model integration, dependency or main-data change. Demo remains deferred.
 
 Stage details: [comparison repair](07-comparison-refresh-and-differences.md), [exports](08-simple-and-selected-exports.md), [search/presets](09-match-navigation-and-presets.md). This implements the selected refinements from the [market follow-up](../ADOPTED_FEATURE_REVIEW.md); it does not claim every optional recommendation there is implemented.
