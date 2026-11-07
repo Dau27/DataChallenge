@@ -1,6 +1,6 @@
 # Stage 3 — Interface and versioned configuration
 
-Status: **PASS for functional interface/configuration gate**. Real UI/component → actual API → actual provider flow verified. Browser visual QA remains unverified.
+Status: **PASS**. Real UI/component → actual API → actual provider flow and in-app browser smoke verified.
 
 - React/TypeScript/Vite UI includes conversation import, dataset/language/channel/status filters, selection/batch evaluation, and persistent job states.
 - Conversation detail shows the exact source transcript next to assessments, original/effective totals, sections, criterion definitions, points, N/A and uncertainty reasons, and independent flags.
@@ -9,7 +9,7 @@ Status: **PASS for functional interface/configuration gate**. Real UI/component 
 - Draft edits are retained in browser session storage and saved separately as complete immutable versions. The UI makes the selected future-evaluation version explicit.
 - Client interaction test adds a substantively new ticket-reference criterion through the editor and verifies a complete new-version request without altering the source snapshot. Backend integration test verifies that the new criterion changes provider schema/coverage and invalidates cache reuse. Both use explicitly synthetic test inputs.
 - Local application responds at `http://127.0.0.1:8000`; home/health/transcript APIs returned HTTP 200 for real RU/KZ/EN records. All 65 real records are visible through the API as not evaluated.
-- Browser preview opening was queued in Codex. Visual/browser smoke verification was not performed because Computer Use had stopped on a URL-verification policy check. HTTP success is not claimed as browser visual acceptance.
+- Initial browser verification was blocked on Windows Chrome URL confidence. Later the in-app browser became available: verified queue/filter states, withheld totals, exact evidence highlighting, saved versions/new criterion and responsive layout at the available pane width. Fixed a hidden-upload-input overflow and verified document/viewport widths match. Broader device testing is not claimed.
 
 Checks actually run: initial TypeScript/Vite build passed; client tests passed (7 tests). A later test-fixture TypeScript error was found and fixed; final build/check repetition is recorded in CURRENT_CONTEXT.md.
 

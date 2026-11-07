@@ -1,103 +1,83 @@
-# Current implementation context — 2026-11-07
+# CURRENT_CONTEXT — verified implementation state, 2026-11-07
 
-## Latest state (authoritative; historical checkpoints follow below)
+## Outcome
 
-Working React/TypeScript + FastAPI/Pydantic + SQLAlchemy/SQLite application. Real organizer import, real hosted evaluations, transcript evidence, dynamic saved checklist versions, appeals, and persistent original/effective results are implemented and exercised.
+Working local CQA application: import → immutable checklist version → real hosted assessment → source evidence → criterion appeal → separate reviewer action → deterministic recalculation → preserved original/effective results. React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite. No prior application existed; no user code was replaced.
 
-- GitHub: private https://github.com/Dau27/DataChallenge . Domain checkpoint pushed as `ec3cbb4`; later implementation push pending at this checkpoint. No public publication/event submission claimed.
-- Actual DEV: 65 imported records, 35 RU / 15 KZ / 15 EN; 60 chats / 5 calls. Unchanged reimport: 0 new / 65 unchanged. Private payloads, signed endpoint, key, SQLite and extracted PDFs are ignored.
-- Real OpenAI key now authenticates. Initial `credit_balance_exhausted` / `insufficient_quota` block was resolved by user funding. Structured provider check succeeded: 38 input / 13 output tokens.
-- Model: `gpt-5.4-mini`, verified in actual model list and official docs. Identified standard-rate estimates configured locally: $0.75/million input, $4.50/million output. All input charged at the uncached rate is a conservative estimate, not an invoice.
-- User has only $5. `scripts/run_dev.py` guards at most $4 application spending, includes previous evaluation/diagnostic usage, reserves worst-case four-attempt cost before each new job, and leaves overhead headroom. This does not control unrelated account usage.
-- Current evaluator: prompt `operator-context-evidence-v5`, medium reasoning, 6000 maximum output tokens, concurrency 2. Every prompt/settings change invalidates cache. Old assessments/versions preserved.
-- Local server command: `.venv/Scripts/python.exe -m uvicorn backend.app.main:create_app --factory --host 127.0.0.1 --port 8000 --no-access-log`. Local app serves at http://127.0.0.1:8000 . Restarted after prompt/settings changes.
+GitHub repository: https://github.com/Dau27/DataChallenge (private). Source is committed/pushed in checkpoints; final documentation push is in progress at this update. No public publication, event submission or official code freeze is claimed.
 
-### Current gates
+All 65 actual DEV records have saved successful assessments against checklist v1:
 
-| Stage | Observed acceptance |
-| --- | --- |
-| 0 access | PASS: actual DEV, actual transcript rendered in DOM component integration, actual structured provider request succeeded. |
-| 1 domain | PASS: initial 32 arithmetic/validation tests; broader backend suite 66 passed before the new budget test. |
-| 2 real slice | PASS: saved real RU assessment, valid evidence IDs, code-computed score. Refined run 92.31, 3347 input / 1088 output tokens, estimated $0.00740625, one request. |
-| 3 UI/config | PASS functional DOM/API integration: added a genuinely new ticket-reference criterion through React editor, saved immutable version, actual model evaluated it as No. No application-code change. Visual/browser QA is separate and unverified. |
-| 4 appeals | PASS: real persisted agent-attributed reviews through React detail UI. Original 100.00 preserved; effective 92.31. Review made no model request. History remains inspectable after backend restart. |
-| 5 validation | IN PROGRESS: full DEV processing pending. Ten synthetic real-provider diagnostics executed; v4 matched 12/13 provisional checks, with a content-completeness/clarity disagreement. v5 rerun running. Labels are agent-authored, not human ground truth. |
-| 6 reliability | Retry/repair/cache/restart/usage/quota tests pass. Final clean install and lockfile/build verification pending. |
-| 7 demo | README, launch scripts, five-minute script prepared. Two timed human presentation rehearsals/public submission not performed. |
-| 8 control/freeze | Not reached: no organizer control identifier or official event start/freeze supplied. No guessed dates/IDs/frozen commit. |
+| State | Count |
+| --- | ---: |
+| Complete with numerical result | 59 |
+| Needs review, final total withheld | 6 |
+| Latest failed/interrupted/unstarted | 0 |
+| Total | 65 |
 
-### Latest checks actually run
+Counts verified from actual data: 35 RU / 15 KZ / 15 EN; 60 chats / 5 calls. Five original audio links are available. Transcript navigation and player/link are implemented; actual recording playback and audio-offset mapping are not claimed. No intonation/diction inference.
 
-- Backend: `.venv/Scripts/python.exe -m pytest -q` → **66 passed in 5.35s**, one Starlette/AnyIO deprecation warning. New budget test added afterward, rerun pending.
-- Frontend: `npm run build` passed; `npm test` → **7 passed** before adding opt-in live test. `npm audit` → **0 vulnerabilities** after compatible Vite 6.4.5 / Vitest 4.1.12 upgrades.
-- `npm run live-smoke` → **1 passed in 8.69s**, actual local API/DEV/provider/database and React DOM interactions. Earlier attempts failed on test-origin setup (before mutation), then on a multiple-match final assertion after real workflow completion. Fixed and reran. This is not visual/browser verification.
-- `scripts/behavior_checks.py`: v3 10 succeeded / 11 of 13 provisional matches; v4 10 succeeded / 12 of 13. v5 currently running. No benchmark accuracy or independent human agreement claimed.
-- `scripts/select_reference.py` → 15 private examples: 9 development / 6 holdout, two calls; all `human_reviewed: false`, no labels.
-- `python -m pip check`: no broken requirements. `compileall`, `git diff --check`, PowerShell AST parsing of setup/start scripts passed.
+Ten additional clearly labeled SYNTHETIC_TEST_ONLY diagnostic records exist locally, so the all-datasets UI shows 75 conversations. Select dataset DEV and checklist v1 for the 65-record DEV result set. Dataset/status filters and withheld totals were checked in the real browser.
 
-### Limitations and next concrete steps
+## Verified gates
 
-- First real pilot was structurally valid but over-awarded needs/closing. Kept it immutable; refined prompt and performed explicitly agent-attributed demonstration reviews. Structural evidence validation is not proof of semantic truth.
-- Computer Use stopped Brev console inspection because Chrome's URL could not be verified. Browser interaction stopped and completion summary sent. No alternative UI automation bypassed the block. Local preview opening was queued, not visually verified. No GPU/Brev credits/access changes were made; user chose hosted OpenAI key.
-- No independent human reference labels, fabricated policies, audio offset mapping, model accuracy claim, public submission or freeze claim.
-- Latest additions: v5 hosted diagnostics finished with all 10 executions succeeded and 13/13 provisional checks matching. Backend now **67 passed in 5.45s**, including the budget-bound test. Actual restart check preserved original 100.00, effective 92.31, four appeals and four decisions. Staged scan found no private values or private data paths.
-- Running: `scripts/run_dev.py --budget-usd 4.00 --checklist 1` on all 65 real DEV records. Final build/client tests are running. Next: collect actual full-run statuses/cost; clean-install from safe pushed source; update reports and push.
-- Remaining external/manual items: browser visual review, independent human semantic review, timed presentation rehearsals, public submission choice, organizer control/freeze inputs.
+- Stage 0 PASS: inspected repository/environment first; extracted actual organizer endpoint from supplied guide; real organizer GET and backend API import succeeded. One transcript rendered; actual structured provider request succeeded after the user funded billing.
+- Stage 1 PASS: original rubric copied byte for byte; strict models and Decimal arithmetic tests. SHA-256 source/copy: 913445BC3A3BBBB486AD2C124BEEBBACCF493F23E868B4212EEC7EF648500747.
+- Stage 2 PASS: actual imported conversations produced persisted structured judgments, existing ordered evidence ranges, and code-calculated scores. No fake model fallback exists.
+- Stage 3 PASS: real React editor interaction saved a genuinely new ticket-reference criterion; actual provider evaluated it without changing application code. Old checklist snapshots preserved. Browser inspected all three views, saved v4's nine criteria, evidence highlighting and responsive layout; fixed hidden upload-input overflow (final document/viewport widths both 699px).
+- Stage 4 PASS: actual appeal/review UI actions persisted. First original score 100.00 remains preserved; effective score is 92.31 after agent-attributed demonstration reviews. Six decisions/history survived restart. Reviewer operations make no model call. No claim of secure demo roles or independent human labels.
+- Stage 5 PASS for full processing/accounting: all 65 succeeded; 59 complete / 6 needs review. Reran scorer and evidence validation on all 65 immutable originals: zero mismatches/issues. Independent human semantic validation remains outstanding.
+- Stage 6 PASS: bounded jobs, caching, repair/retry, server-directed backoff, quota failures, budget guard, restart handling, clean installation, launch script and final browser checks verified.
+- Stage 7 prepared: README, private GitHub source and five-minute script exist. Two timed human presentation rehearsals, public visibility/submission and independent human quality review are not performed.
+- Stage 8 not reached: no organizer control identifier or official event start/freeze instruction supplied. No guessed control ID/time or falsely labeled frozen commit.
 
-## Historical checkpoints (superseded by latest state above)
+Per-stage Markdown reports: docs/stages/00-access.md through 08-control-freeze.md. Demo script: docs/DEMO.md.
 
-## Verified starting state — 2026-11-07
+## Actual verification commands and outcomes
 
-- Read `MASTER_CONTEXT.md` and `initial_checklist.json` before implementation.
-- Repository directory contained only those two files. `git status --short` reported that this is not a Git repository. No existing application or user edits were replaced.
-- No applicable ancestor `AGENTS.md` found. Python 3.12.6, Node 22.11.0, npm 11.0.0 and Git are available.
-- No provider key/model or organizer endpoint is present in the process environment. No `.env`, PDFs, saved DEV JSON, or recordings were present in this directory. No real transcript or live inference has been obtained.
-- User has been asked to configure the ignored `.env` or identify private local inputs. Implementation continues independently; missing access does not authorize synthetic live results.
-- Checked official OpenAI Responses structured-output documentation: `https://developers.openai.com/api/docs/guides/structured-outputs?api-mode=responses` and `https://developers.openai.com/api/reference/resources/responses/methods/create`. Adapter will use REST `text.format` with generated JSON Schema, `store: false`, no tools, and backend arithmetic. No model identifier or prices are assumed.
+- Initial rg/directory/ancestor AGENTS.md inspection: only MASTER_CONTEXT.md and initial_checklist.json existed; no ancestor AGENTS.md. git status initially reported no Git repository. Python 3.12.6, Node 22.11.0, npm 11.0.0 available.
+- Created .venv; installed pinned requirements.in; captured full requirements.lock. npm package-lock.json pins client dependencies.
+- .venv/Scripts/python.exe -m pytest -q: latest **74 passed**, one Starlette/AnyIO deprecation warning (not suppressed).
+- npm test: **7 passed / 1 opt-in paid live test skipped**. npm run build: TypeScript/Vite passed. npm audit: **0 vulnerabilities**. Initial vulnerable Vite/Vitest pins were upgraded to compatible 6.4.5/4.1.12.
+- npm run live-smoke: **1 passed** against the actual local API, actual DEV input, actual hosted provider and persistent database. Passed again with final gpt-4.1-mini/schema v2 (8.86s test duration). Adds substantive criterion, evaluates it, appeals/reviews original, reloads saved results. This is a real-network DOM integration test; later browser smoke was also completed.
+- Fresh clone of GitHub checkpoint 1b61f55 under ignored local_data/clean_start_1b61f55: ran its actual scripts/setup.ps1; fresh Python lock install, npm ci and build succeeded. Cold backend on port 8001 returned home/assets/health HTTP 200. Empty DB/initial eight criteria verified. Imported ten synthetic fixtures, then ten unchanged; missing-provider HTTP 503 and no fake assessment. Fresh environment: 67 backend tests then-current, 7 client passed/1 live skipped, pip check clean. Latest source recheck follows final code push.
+- Actual POST /api/import/organizer with DEV: HTTP 200, 65 validated, 0 new revisions, 65 unchanged. JSON and API share the parser.
+- scripts/select_reference.py: private selection of 15 actual DEV examples, 9 development/6 holdout, two calls. No labels; all human_reviewed false.
+- scripts/behavior_checks.py with gpt-5.4-mini: final prompt v5 run **10 succeeded / 13 of 13 provisional checks matched**. Expectations are agent-authored diagnostics, not human ground truth or accuracy. Earlier v3/v4 disagreements were documented, not hidden.
+- scripts/run_dev.py --budget-usd 4.00 --checklist 1 --only-missing: final report all 65 succeeded, no budget/provider stop. Existing successes retained their original model metadata.
+- Independent saved-data rescore: 65 validated, zero mismatches/issues. Private report local_data/final_DEV_verification.json.
+- .\start.ps1 -SkipBuild: actual launcher started the app on port 8000. After restart: 65 succeeded, 59 complete/6 needs review; original 100.00/effective 92.31/six decisions preserved; zero queued/running jobs. Owned servers were then stopped for teardown. Run .\start.ps1 to reopen.
+- compileall, pip check and git diff --check passed. Exact local key/signed URL/signature and tracked-private-path scans passed before checkpoint pushes; final scan repeated at final push.
 
-## Acceptance gates
+## Provider, cost and recovery provenance
 
-- Stage 0 access: BLOCKED for real data/provider; environment inspection complete.
-- Stage 1 domain: PASSED, 32 deterministic tests; see `docs/stages/01-domain.md`.
-- Stage 2 real vertical slice: NOT VERIFIED; depends on real data and provider credentials.
-- Later stages: not yet verified. No tests or live calls claimed as passed.
+Current local provider: OpenAI Responses, gpt-4.1-mini, no reasoning parameter, max output 6000, concurrency 2, prompt operator-context-evidence-v5, schema dynamic-disposition-evidence-v2. Full transcripts and saved rubric are supplied as untrusted conversation data. No tools, hidden reasoning request, model arithmetic, or silent truncation.
 
-## Commands actually run
+Latest DEV model distribution: 14 gpt-5.4-mini, 8 gpt-5-mini, 43 gpt-4.1-mini. This operational mix is NOT a single-model benchmark. Every assessment stores its own model, prompt/schema/settings, rates, usage and attempts.
 
-- `rg --files ...`, `Get-ChildItem -Force`, `Get-Content MASTER_CONTEXT.md`, `Get-Content initial_checklist.json`, ancestor `AGENTS.md` lookups.
-- `git status --short` → no Git repository.
-- `python --version`, `node --version`, `npm --version`, `python -m pip --version` → available.
-- `python -m pip show fastapi pydantic sqlalchemy httpx openai pytest uvicorn python-dotenv` → base environment has FastAPI/Pydantic/SQLAlchemy/httpx/uvicorn; other packages absent. Isolated environment will be used.
-- Environment inspection printed candidate variable names only, never secret values.
+Identified standard text rates verified from official model pages: gpt-5.4-mini $0.75/$4.50, gpt-5-mini $0.25/$2.00, gpt-4.1-mini $0.40/$1.60 per million input/output tokens. All input at uncached rate gives a conservative estimate, not an invoice.
+
+- Selected latest DEV assessments: $0.35675655 total, approximately $0.00549 per conversation across the actual model mix.
+- All recorded known application evaluation usage including pilots/diagnostics/repairs/latest live smoke: $0.68292515.
+- 36 historical jobs have unreported usage; conservative budget reservation is $2.38480875, NOT an asserted charge or zero cost. Plus $0.10 overhead reserve, the guard remained below $4 against the authorized $5 task budget. Unrelated account usage is outside this guard.
+
+Actual failures handled honestly:
+
+1. Initial organization ID was rejected as a credential. Later real key authenticated /v1/models, but inference returned credit_balance_exhausted/insufficient_quota. User funding restored access.
+2. Primary gpt-5.4-mini reached actual RPD 50 (Retry-After 1728s). First full pass: 14 succeeded, 19 failed rate-limited, 32 not started. Preserved report; did not fill scores. Fixed server-directed backoff and batch circuit breaker.
+3. gpt-5-mini passed real checks/KZ assessment but returned intermittent model_not_found. Preserved failures and one interrupted in-flight job during restart; configured available gpt-4.1-mini after a genuine successful RU assessment.
+4. Eleven gpt-4.1-mini assessments failed validation after one repair. Schema v2 encodes allowed per-criterion dispositions, consistent value/reason types, actual evidence-ID enums and resolved-evidence minimums; repair receives safe specific feedback. Retried only unfinished items; all 11 saved valid assessments. Old failures remain inspectable.
+5. Historical reservations use actual SENT attempts at ORIGINAL model rates/settings. At most two new jobs are submitted after reserving both worst-case four-attempt bounds. Unknown usage is not called free.
+
+## Semantic / external limitations
+
+- Structural/schema/evidence-ID validity does not prove judgment truth. First live pilot over-awarded needs and closing; original preserved, prompt clarified, explicitly agent-attributed demonstration reviews recorded.
+- Some remaining needs-review labels can be overconservative: one contact finding cites missing introduction, which the rubric could resolve as No from transcript facts. Review UI can resolve it. No independent human accuracy, policy verification or automatic disciplinary decision is claimed.
+- Real call recording links exist; player/link and transcript inspection implemented. Actual playback/seek alignment not verified.
+- Initial Windows Chrome Computer Use stopped on URL-confidence enforcement. Later the supported in-app browser became available, and app smoke/read-only account checks completed there. No bypass of the Windows block occurred.
+- Separate user-requested account check found complimentary-daily-token enrollment in the signed-in UI; exact allowance was not displayed. Account cost API returned 403. Private account observations are only in ignored local_data/account_check_private.json. User then requested logout: confirmed logout and verified a protected billing route showed the email sign-in form. No account privacy setting/payment/access changes were made.
+- No control data, official freeze, public deployment/publication or event submission is claimed.
 
 ## Next concrete step
 
-Create isolated dependencies, copy the original rubric unchanged to `config/initial_checklist.json`, implement strict scoring/import models, and run the arithmetic/validation gate before implementing evaluation.
-
-## Update — domain gate / GitHub / source documents
-
-- Created private repository `https://github.com/Dau27/DataChallenge` via the authenticated GitHub API (HTTP 201); credential was obtained in memory from Git Credential Manager and was not printed or written. Private visibility is the reversible default; no public submission claimed.
-- User supplied the three PDF paths in Downloads. Original PDFs remain outside the repository. Extracted text and links are stored under ignored `local_data/source_review/`. Guide and checklist contents agree with the initial seed. Background PDF extraction succeeded, but console printing hit a Windows encoding error; rerun with UTF-8 before relying on its contents.
-- Created `.venv`; `python -m pip install -r requirements.in` succeeded. Captured full dependency pins in `requirements.lock`.
-- Rubric source/copy SHA-256 are identical: `913445BC3A3BBBB486AD2C124BEEBBACCF493F23E868B4212EEC7EF648500747`.
-- Implemented strict rubric/import/assessment contracts and decimal scoring. First scoring run: 31 passed, 1 failed because a test compared `60.0` to the string `60`; arithmetic was correct. Changed assertion to Decimal equality; rerun pending.
-- Organizer DEV link was found in the guide annotation; private endpoint extraction and access check are next. No provider credential found yet.
-
-## Access/domain verified outcome
-
-- `.venv/Scripts/python.exe -m pytest backend/tests/test_scoring.py -q` → 32 passed in 0.12s after correcting the numeric-format assertion.
-- Actual organizer GET → HTTP 200, 65/65 records; language counts RU 35 / KZ 15 / EN 15; 60 chats / 5 calls. Stored under ignored `local_data/dev.json`; signed endpoint in ignored `.env`.
-- Read the background PDF after enabling UTF-8 output; it is company context only, not policy authority.
-- Stage reports: `docs/stages/00-access.md` (provider/display still pending), `docs/stages/01-domain.md` (passed).
-- Next: persistent immutable imports, generated-schema evaluation adapter, bounded jobs and transcript/result UI. Real evaluation remains blocked by missing OPENAI_API_KEY and OPENAI_MODEL.
-
-## Update — persistent backend and real import
-
-- First stage checkpoint committed/pushed to private GitHub `main`: `ec3cbb4`.
-- Actual DEV import using the implemented `ImportEnvelope`/`import_payload`: 65 created, 0 unchanged/dropped. RU/KZ/EN chat samples and a call inspected; timestamps preserved (including 7-digit ISO fractional seconds).
-- Implemented `config.py`, SQLAlchemy database, importer, provider adapter, jobs, review service, and FastAPI app factory/API. One local process, bounded thread concurrency; no Redis or mock endpoint.
-- `.venv/Scripts/python.exe -m pytest -q` → **50 passed in 5.38s**, one Starlette/AnyIO deprecation warning. Scoring + synthetic HTTP integration tests cover revisions, atomic failures, caching, retries, generated schemas, persistent appeals/reviews, restart, and absent credentials.
-- User put an organization ID in `OPENAI_API_KEY`; detected by prefix without exposing the value. No real provider request sent. `OPENAI_MODEL` remains empty.
-- User supplied a Brev organization-console link. Opened official NVIDIA docs. Brev credits fund GPU compute/storage; using them requires an actual inference server. Computer Use blocked console inspection because it could not verify Chrome's current URL; stopped browser interaction and sent its completion summary. No provisioning, access changes, billing actions, or credit use performed.
-- `docs/stages/02-evaluation-slice.md` records implemented scope and the blocked real-inference gate.
-- Frontend React/TypeScript views implemented; dependency installation/build and browser verification still pending. Next concrete step: run frontend build/tests, serve the application, verify real transcript display and configuration/review UI, document all remaining live-access limitations.
+Run .\start.ps1, select checklist v1 and dataset DEV, and review the six withheld totals with source evidence and appropriate authority. Then perform independent reference review and two timed presentation rehearsals. When organizers supply control/freeze inputs, import that exact group through the existing UI and record the actual final frozen commit; do not patch code/prompts after a real freeze. Keep private .env, payloads, recordings and SQLite untracked.

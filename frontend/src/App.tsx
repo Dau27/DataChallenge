@@ -11,7 +11,10 @@ export type Run = (operation: () => Promise<void>) => Promise<void>;
 export default function App() {
   const [route, setRoute] = useState(location.hash || '#conversations');
   const [versions, setVersions] = useState<ChecklistVersion[]>([]);
-  const [selectedVersion, setSelectedVersion] = useState(0);
+  const [selectedVersion, setSelectedVersion] = useState(() => {
+    try { const saved = Number(sessionStorage.getItem('cqa-selected-version')); return Number.isInteger(saved) && saved > 0 ? saved : 0; }
+    catch { return 0; }
+  });
   const [rows, setRows] = useState<Conversation[]>([]);
   const [access, setAccess] = useState<Access | null>(null);
   const [error, setError] = useState('');
@@ -30,8 +33,9 @@ export default function App() {
       api<ChecklistVersion[]>('/checklists'), api<Access>('/access'),
     ]);
     setRows(list); setVersions(rubric); setAccess(configuration);
-    if (!selectedVersion && rubric.length) setSelectedVersion(rubric[0].id);
+    if (rubric.length && !rubric.some(v => v.id === selectedVersion)) setSelectedVersion(rubric[rubric.length - 1].id);
   }, [selectedVersion]);
+  useEffect(() => { if (selectedVersion) { try { sessionStorage.setItem('cqa-selected-version', String(selectedVersion)); } catch { /* Session preferences are optional. */ } } }, [selectedVersion]);
 
   const run: Run = async operation => {
     setBusy(true); setError('');

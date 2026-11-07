@@ -10,7 +10,9 @@ The application uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite,
 - Domain, persistence, retry/cache/restart, appeals, and configuration behavior have automated tests with clearly synthetic inputs and injected HTTP test transports.
 - The real provider gate passed after the user resolved an honestly reported exhausted-credit block. `gpt-5.4-mini` produced saved real DEV assessments. A refined example used 3347 input / 1088 output tokens and cost an estimated $0.00740625 at identified standard rates.
 - Opt-in live React DOM/API test passed: add a substantive criterion → save new version → actual model evaluation; submit appeal → separate agent-attributed review → original/effective scores → reload. This is functional DOM integration, not visual/browser QA.
-- Ten explicitly synthetic hosted-model diagnostics currently match 13/13 provisional checks; these are agent-authored diagnostics, not human-reviewed accuracy. Full DEV processing is being verified; see CURRENT_CONTEXT.md for the final accounted states and application cost.
+- All **65 actual DEV executions succeeded**: **59 complete scored assessments / 6 needs review with no final total**. Every original was revalidated/rescored with zero contract/arithmetic mismatches. Initial failures remain in history; no mock/fabricated fallback was used.
+- Latest DEV assessment estimate: **$0.357 total / about $0.00549 per conversation**; all known application evaluation usage, including diagnostics/pilots/repairs, is about **$0.683**. Unknown failed-request usage is reported separately and conservatively reserved, not called free. Results retain their actual model/rate snapshots across operational provider-limit recovery.
+- Ten explicitly synthetic gpt-5.4-mini diagnostics match 13/13 provisional checks; these are agent-authored diagnostics, not human-reviewed accuracy. In-app browser smoke verified the main views/evidence; independent human review and presentation/control stages remain outstanding. See CURRENT_CONTEXT.md and per-stage reports.
 - See [CURRENT_CONTEXT.md](CURRENT_CONTEXT.md) for commands actually run, exact current outcomes, and blockers. Per-stage reports are in [docs/stages](docs/stages).
 
 ## Windows quick start
@@ -64,7 +66,7 @@ For frontend development, run `npm run dev` inside `frontend` with the backend o
 5. Appeal a criterion with a comment. In a separate action, review the appeal, confirm/replace the answer, and save a rationale. Valid replacements need evidence. Review changes recalculate locally without a model call and preserve the original.
 6. Edit a criterion or add a genuinely new requirement, save a new version, select it, and create another evaluation. Existing results retain their old snapshot. Changes invalidate incompatible cache reuse.
 
-The UI reports states for the selected checklist version: not evaluated, queued, running, complete, needs review, failed, interrupted. Successful HTTP inference and assessment completeness are separate concepts. Unsupported factual claims needing an unavailable authoritative source must request review, rather than invent company policy.
+The UI reports states for the selected checklist version: not evaluated, queued, running, complete, needs review, failed, interrupted. It initially selects the original saved checklist and retains later explicit selections in browser session storage. Select v1 to inspect the initial DEV run. Successful HTTP inference and assessment completeness are separate concepts. Unsupported factual claims needing an unavailable authoritative source must request review, rather than invent company policy.
 
 ## Scoring and evidence
 
@@ -81,7 +83,7 @@ Provider output is validated for exact criterion coverage, strict answer types, 
 - SQLite defaults to ignored `local_data/cqa.sqlite3`; WAL and serialized write transactions protect imports/reviews/job claims.
 - Identity includes dataset group and source ID. All evaluation-relevant fields are hashed. Changed content creates a revision; unchanged reimports reuse the immutable revision.
 - Checklist saves create immutable complete snapshots. Original judgments are never overwritten by reviews.
-- At most one output-repair call; each network request has at most two attempts. Refusals, malformed output, oversized input, outages and incomplete responses remain visible. Transcripts are never silently truncated.
+- At most one output-repair call; each network request has at most two attempts. Valid server Retry-After minimums are respected; delays over 30 seconds defer the job. Batch recovery stops on provider 4xx failures. Refusals, malformed output, oversized input, outages and incomplete responses remain visible. Transcripts are never silently truncated.
 - Configurable bounded concurrency defaults to 2. Abandoned running jobs become interrupted at startup; queued jobs resume. Retry preserves all attempts. Changed model/settings require a new evaluation.
 - Cache identity includes source content, complete checklist, prompt/schema/scoring versions, provider/model and generation settings. Only original model assessments are cached; reused results are labeled.
 - Token usage and request latency include all recorded attempts. Estimated cost needs actual complete usage plus configured input/output rates and an identified rate source. Otherwise it is unavailable. Unknown usage is not free usage.
@@ -126,7 +128,7 @@ Optional diagnostics after the real slice passes:
 
 Reference selection writes an ignored private manifest with development/holdout splits and `human_reviewed: false`. Behavioral checks submit the clearly synthetic multilingual fixtures to the actual hosted provider and can incur charges; expectations are provisional agent-authored checks, not independent labels or benchmark accuracy. Their report is private under `local_data/`. These diagnostics are not a substitute for actual DEV processing.
 
-The DEV runner caps its guard at $4 to leave headroom below the user's $5 balance. It includes earlier application evaluation costs, reserves four maximum attempts before a new job, retains a conservative reservation for unknown usage, and reports every record's actual state. This does not account for unrelated account usage. The opt-in `npm run live-smoke` (inside frontend) makes a real paid evaluation and saves real versions/appeals; ordinary `npm test` skips that test.
+The DEV runner caps its guard at $4 to leave headroom below the user's $5 balance. It includes earlier application evaluation costs, reserves four maximum attempts for each of at most two simultaneous jobs, and retains a conservative reservation for actual past attempts with unknown usage at their original model rates. `--only-missing` preserves already succeeded assessments; model changes create new evaluations for unfinished records, rather than relabeling old output as a fresh inference. Provider availability/rate caps may produce a documented multi-model DEV result set, which is not a single-model benchmark. This guard does not account for unrelated account usage. The opt-in `npm run live-smoke` (inside frontend) makes a real paid evaluation and saves real versions/appeals; ordinary `npm test` skips that test.
 
 ## Data handling and submission
 

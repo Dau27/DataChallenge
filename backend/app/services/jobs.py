@@ -6,7 +6,8 @@ from sqlalchemy import select
 
 from backend.app.db import ChecklistVersion, Conversation, Evaluation, now
 from backend.app.domain import Checklist
-from backend.app.services.evaluator import Provider, cache_key, evaluation_metadata
+from backend.app.services.evaluator import Provider, cache_key, evaluation_metadata, output_schema
+from backend.app.domain import content_hash
 from backend.app.services.scoring import score
 
 log = logging.getLogger(__name__)
@@ -90,6 +91,7 @@ class Jobs:
             row.state, row.updated_at = "running", now()
             conversation = deepcopy(session.get(Conversation, row.conversation_id).snapshot)
             checklist = Checklist.model_validate(session.get(ChecklistVersion, row.checklist_id).snapshot)
+            row.meta = {**row.meta, "request_schema_hash": content_hash(output_schema(checklist, [m["id"] for m in conversation["transcript"]]))}
 
         def record_attempt(update, index=None):
             with self.db.transaction() as session:

@@ -18,6 +18,14 @@ def test_exhausted_credit_does_not_trigger_repair_or_automatic_retry(tmp_path):
         assert result["original"] is None
 
 
+@pytest.mark.parametrize("code", ["organization_spend_limit_exceeded", "project_spend_limit_exceeded", "organization_usage_limit_exceeded"])
+def test_other_nonretryable_provider_limits_require_action(tmp_path, code):
+    client, calls, _ = client_and_calls(tmp_path, lambda _: httpx.Response(429, json={"error": {"code": code}}))
+    with client:
+        result = evaluate_one(client, import_one(client))
+        assert len(calls) == 1 and code in result["error"]
+
+
 def test_provider_access_route_reports_verified_structured_response(tmp_path):
     client, _, settings = client_and_calls(tmp_path, lambda _: httpx.Response(200, json=response_for({"ok": True})))
     with client:
@@ -47,6 +55,15 @@ def test_refusal_and_token_limit_do_not_save_assessments(tmp_path):
             assert result["original"] is None and "PRIVATE" not in result["error"]
 
 
+def test_long_retry_after_defers_without_retrying_early(tmp_path):
+    client, calls, _ = client_and_calls(tmp_path, lambda _: httpx.Response(429, headers={"retry-after": "1728"}, json={"error": {"code": "rate_limit_exceeded"}}))
+    with client:
+        result = evaluate_one(client, import_one(client))
+        assert result["state"] == "failed" and len(calls) == 1
+        assert result["attempts"][0]["retry_after_seconds"] == 1728
+        assert "Defer this job" in result["error"]
+
+
 @pytest.mark.parametrize("change", ["description", "name", "na_condition", "section", "weight", "scale", "remove", "rename_id", "model", "generation", "audio_hash"])
 def test_every_evaluation_relevant_change_invalidates_cache(checklist, tmp_path, change):
     from dataclasses import replace
@@ -74,3 +91,13 @@ def test_generated_schema_follows_removed_and_renamed_criteria(checklist):
     assert "CUSTOM_TEST_ID" in schema["properties"]
     assert "contact" not in schema["properties"] and "critical_errors" not in schema["properties"]
     assert set(schema["required"]) == set(schema["properties"])
+
+
+def test_model_schema_prevents_forbidden_na_and_inconsistent_dispositions(checklist):
+    properties = output_schema(checklist, ["m0001", "m0002"])["properties"]["results"]["properties"]
+    contact = properties["contact"]["anyOf"]
+    assert {b["properties"]["disposition"]["enum"][0] for b in contact} == {"assessed", "needs_review"}
+    assessed = next(b["properties"] for b in contact if b["properties"]["disposition"]["enum"] == ["assessed"])
+    assert assessed["value"] == {"type": "boolean"}
+    assert assessed["na_reason"] == {"type": "null"} and assessed["evidence"]["minItems"] == 1
+    assert assessed["evidence"]["items"]["properties"]["start_message_id"]["enum"] == ["m0001", "m0002"]
