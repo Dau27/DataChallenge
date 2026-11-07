@@ -21,8 +21,8 @@ from backend.app.services.jobs import Jobs
 from backend.app.services.reviews import decide, submit_appeal
 from backend.app.services.budget import BudgetError, request_bound
 from backend.app.services.checklists import preview_checklist
-from backend.app.services.saved_results import SavedResultNotFound, compare_saved, evaluation_snapshot, summary, version_view
-from backend.app.services.exports import csv_report, export_packet, json_report
+from backend.app.services.saved_results import SavedResultNotFound, compare_saved, evaluation_snapshot, source_view, summary, version_view
+from backend.app.services.exports import batch_csv_report, csv_report, export_batch, export_packet, json_report, simple_csv_report
 from backend.app.services.search import search_messages
 
 
@@ -91,6 +91,19 @@ class EvaluationSummary(Contract):
     updated_at: str
 
 
+class SearchHighlight(Contract):
+    start: int = Field(ge=0)
+    end: int = Field(ge=0)
+
+
+class SearchMatch(Contract):
+    id: str
+    speaker: str
+    timestamp: str
+    snippet: str
+    highlights: list[SearchHighlight] = Field(default_factory=list)
+
+
 class ConversationResponse(Contract):
     id: str
     group_id: str
@@ -106,7 +119,7 @@ class ConversationResponse(Contract):
     pending_appeals: int = 0
     pending_review_targets: list[dict[str, str]] = Field(default_factory=list)
     critical_findings: list[dict[str, str]] = Field(default_factory=list)
-    search_matches: list[dict[str, str]] = Field(default_factory=list)
+    search_matches: list[SearchMatch] = Field(default_factory=list)
     search_total_matches: int = 0
 
 
@@ -324,6 +337,18 @@ def create_app(settings=None, provider=None):
                     "content_hash": row.content_hash, "snapshot": row.snapshot,
                     "evaluations": [summary(e) for e in session.scalars(select(Evaluation).where(Evaluation.conversation_id == row.id).order_by(Evaluation.created_at.desc()))]}
 
+    @app.get("/api/conversations/{conversation_id}/matches")
+    def conversation_matches(conversation_id: str, q: str = Query("", max_length=200),
+                             speaker: Literal["all", "operator", "client", "bot", "system"] = "all",
+                             offset: int = Query(0, ge=0, le=1000000), limit: int = Query(5, ge=1, le=25)):
+        with db.read_snapshot() as session:
+            row = session.get(Conversation, conversation_id)
+            if not row:
+                raise HTTPException(404, "Conversation revision not found")
+            matches, total = search_messages(row.snapshot["transcript"], q, speaker, limit=limit, offset=offset)
+            return {"source": source_view(row), "query": q.strip(), "speaker": speaker, "offset": offset,
+                    "limit": limit, "total_matches": total, "matches": matches}
+
     @app.post("/api/evaluations", response_model=JobStartResponse, status_code=202)
     def start_evaluation(body: EvaluationStart):
         if not settings.provider_ready:
@@ -349,20 +374,33 @@ def create_app(settings=None, provider=None):
         with db.read_snapshot() as session:
             return compare_saved(session, left_id, right_id, left_basis, right_basis)
 
+    @app.get("/api/evaluations/export-batch")
+    def export_selected_evaluations(evaluation_id: list[str] = Query(...),
+                                    format: Literal["json", "csv", "simple_csv"] = "json", include_excerpts: bool = False):
+        with db.read_snapshot() as session:
+            packet = export_batch(session, evaluation_id, settings, include_excerpts)
+        serializer = json_report if format == "json" else simple_csv_report if format == "simple_csv" else batch_csv_report
+        filename = "cqa-selected-criteria.csv" if format == "simple_csv" else f"cqa-selected.{format}"
+        return Response(serializer(packet), media_type="application/json" if format == "json" else "text/csv; charset=utf-8",
+            headers={"Content-Disposition": f'attachment; filename="{filename}"', "Cache-Control": "no-store",
+                     "X-Content-Type-Options": "nosniff"})
+
     @app.get("/api/evaluations/{evaluation_id}", response_model=EvaluationDetail)
     def evaluation_detail(evaluation_id: str):
         with db.read_snapshot() as session:
             return evaluation_snapshot(session, evaluation_id)
 
     @app.get("/api/evaluations/{evaluation_id}/export")
-    def export_evaluation(evaluation_id: str, format: Literal["json", "csv"] = "json", include_excerpts: bool = False):
+    def export_evaluation(evaluation_id: str, format: Literal["json", "csv", "simple_csv"] = "json", include_excerpts: bool = False):
         with db.read_snapshot() as session:
             packet = export_packet(session, evaluation_id, settings, include_excerpts)
         # Names come from the stored identifier; no caller-supplied path/header fragments.
         safe_id = "".join(c for c in packet["evaluation"]["id"] if c.isascii() and (c.isalnum() or c in "_-"))[:80] or "saved"
-        return Response(json_report(packet) if format == "json" else csv_report(packet),
+        serializer = json_report if format == "json" else simple_csv_report if format == "simple_csv" else csv_report
+        filename = f"cqa-{safe_id}-criteria.csv" if format == "simple_csv" else f"cqa-{safe_id}.{format}"
+        return Response(serializer(packet),
             media_type="application/json" if format == "json" else "text/csv; charset=utf-8",
-            headers={"Content-Disposition": f'attachment; filename="cqa-{safe_id}.{format}"', "Cache-Control": "no-store",
+            headers={"Content-Disposition": f'attachment; filename="{filename}"', "Cache-Control": "no-store",
                      "X-Content-Type-Options": "nosniff"})
 
     @app.post("/api/evaluations/{evaluation_id}/retry", response_model=IdResponse, status_code=202)

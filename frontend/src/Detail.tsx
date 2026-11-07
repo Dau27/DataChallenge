@@ -100,10 +100,13 @@ export default function Detail({ id, initialEvaluation, initialCriterion = null,
       </article>)}</div><div className="transcript-foot">Source text and timestamp strings are preserved. Bot and system messages provide context.</div>
     </section><section className="assessment-panel" aria-label="Conversation assessment">
       <div className="assessment-heading"><h2>Assessment</h2><label className="evaluation-picker">Saved run<select aria-label="Saved evaluation" value={evaluationId} onChange={e => { setEvaluation(null); setEvaluationId(e.target.value); }}><option value="" disabled>No saved evaluation</option>{conversation.evaluations.map(e => <option key={e.id} value={e.id}>v{e.checklist_id} · {label(e.state)} · {new Date(e.created_at).toLocaleTimeString()}</option>)}</select></label></div>
-      <SavedComparison key={conversation.id} runs={conversation.evaluations} currentId={evaluationId} sourceId={conversation.id} onEvidence={navigateEvidence} />
+      <details className="assessment-tools">
+        <summary><span>Compare & export</span><span className="disclosure-hint">Saved runs and reports</span></summary>
+        <SavedComparison key={conversation.id} runs={conversation.evaluations} currentId={evaluationId} sourceId={conversation.id} onEvidence={navigateEvidence} />
+        {evaluation && <SavedExport key={evaluation.id} evaluationId={evaluation.id} />}
+      </details>
       {!evaluation && <div className="panel empty"><strong>No saved assessment selected</strong><p>Choose a saved checklist version and evaluate this conversation. Provider configuration is required for a live assessment.</p></div>}
       {evaluation && <>
-        <SavedExport key={evaluation.id} evaluationId={evaluation.id} />
         <div className="run-meta"><span className={`badge ${evaluation.state}`}>{evaluation.state}</span><span className="badge">Checklist v{evaluation.checklist_id}</span><span className="badge">{evaluation.cached_from ? 'Cached original assessment' : evaluation.metadata.mode}</span></div>
         {evaluation.error && <div className="banner error"><div><strong>Evaluation {evaluation.state}</strong><p>{evaluation.error}</p></div></div>}
         {['failed', 'interrupted'].includes(evaluation.state) && <button className="secondary" disabled={busy || !providerReady || !budget?.ready} onClick={() => void run(async () => { await api(`/evaluations/${evaluation.id}/retry`, {}); await saved(); })}>Retry saved job</button>}

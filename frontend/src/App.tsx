@@ -70,12 +70,13 @@ export default function App() {
   };
 
   return <div className="app-shell">
+    <a className="skip-link" href="#review-content" onClick={event => { event.preventDefault(); document.getElementById('review-content')?.focus(); }}>Skip to content</a>
     <aside className="sidebar">
       <a className="brand" href="#conversations"><span className="brand-mark">CQ</span><span>CQA<span className="brand-caption">REVIEW WORKSPACE</span></span></a>
       <div className="nav-caption">WORKSPACE</div>
       <nav aria-label="Main navigation">
-        <a href="#conversations" className={!route.startsWith('#checklist') ? 'active' : ''}><span>◫</span> Conversations <span className="nav-count">{rows.length}</span></a>
-        <a href="#checklists" className={route.startsWith('#checklist') ? 'active' : ''}><span>☷</span> Checklist versions</a>
+        <a href="#conversations" aria-current={!route.startsWith('#checklist') ? 'page' : undefined} className={!route.startsWith('#checklist') ? 'active' : ''}><span aria-hidden="true">◫</span> Conversations <span className="nav-count">{rows.length}</span></a>
+        <a href="#checklists" aria-current={route.startsWith('#checklist') ? 'page' : undefined} className={route.startsWith('#checklist') ? 'active' : ''}><span aria-hidden="true">☷</span> Checklist versions</a>
       </nav>
       <div className="sidebar-note"><span className="small-caps">REVIEW WITH CONTEXT</span><p>Every judgment links back to the conversation. Every revision keeps its history.</p></div>
       <div className="local-label"><span className="dot" /> Local workspace <small>Anonymous demo actions</small></div>
@@ -87,11 +88,11 @@ export default function App() {
           {versions.map(v => <option key={v.id} value={v.id}>v{v.id} · {v.snapshot.name}</option>)}
         </select></label>
       </header>
-      <main>
+      <main id="review-content" tabIndex={-1}>
         <BudgetSummary budget={budget} />
         {error && <div className="banner error" role="alert"><div><strong>Could not complete the action</strong><p className="pre-line">{error}</p></div><button className="text-button" onClick={() => setError('')} aria-label="Dismiss error">×</button></div>}
         {notice && <div className="banner success" role="status"><span>{notice}</span><button className="text-button" onClick={() => setNotice('')} aria-label="Dismiss notification">×</button></div>}
-        {access && (!access.provider_configured || access.last_provider_check?.succeeded === false) && <div className="banner warning"><div><strong>Live evaluation needs provider access</strong><p>{access.provider_status}. {access.provider_configured ? 'Resolve the provider access or billing issue, then test access again.' : 'Update the local .env configuration and restart the backend.'} Imported transcripts remain available.</p></div></div>}
+        {access && (!access.provider_configured || access.last_provider_check?.succeeded === false) && <details className="banner warning provider-disclosure"><summary><strong>Live evaluation needs provider access</strong><span>Saved reviews remain available</span></summary><p>{access.provider_status}. {access.provider_configured ? 'Resolve the provider access or billing issue, then test access again.' : 'Update the local .env configuration and restart the backend.'} Imported transcripts remain available.</p></details>}
         {route.startsWith('#checklist') && selected
           ? <ChecklistEditor key={selected.id} version={selected} versions={versions} busy={busy} run={run} onSave={async id => { await refresh(); setSelectedVersion(id); setNotice(`Saved immutable checklist v${id}. It is selected for future evaluations. Existing assessments retain their original version.`); }} />
           : detailId

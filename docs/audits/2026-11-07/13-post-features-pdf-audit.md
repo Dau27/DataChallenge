@@ -1,5 +1,7 @@
 # PDF audit after comparison, exports and saved search
 
+Repair follow-up: the later [comparison repair](../../improvements/07-comparison-refresh-and-differences.md) fixes the freshness issue found here. [Integrated refinement verification](../../improvements/10-refinements-verification.md) records 173 backend/58 client/build and actual copied-data/browser checks with preserved originals and zero inference. This audit's findings describe ad9f167 before that repair.
+
 Audit date: 7 November 2026. Audited application: **ad9f1671f41bebcf345801a561224b4ac01211ff**. This task changes documentation only. No model/provider request, organizer fetch, new judgment, main-app launch, recording review or demo work was performed. Added inference: **$0.00**; paid limit remains **0**.
 
 ## Verdict and current score

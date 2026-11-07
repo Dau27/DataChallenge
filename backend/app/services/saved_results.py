@@ -1,6 +1,8 @@
 """Read-only saved-result inspection. No job creation or provider access."""
 from copy import deepcopy
 from decimal import Decimal, InvalidOperation, localcontext
+import re
+import math
 from sqlalchemy import select
 
 from backend.app.db import Appeal, ChecklistVersion, Conversation, Evaluation, Review
@@ -65,11 +67,25 @@ def _side(snapshot, basis):
     # Only evaluation provenance belongs here; arbitrary stored metadata is not a credential channel.
     keys = {"provider", "model", "prompt_version", "schema_version", "scoring_version", "checklist_hash",
             "evidence_validation_version", "mode"}
-    metadata = {key: value for key, value in snapshot["metadata"].items() if key in keys}
+    metadata = {key: value for key, value in snapshot["metadata"].items() if key in keys and isinstance(value, (str, type(None)))}
+    for key in ("prompt_hash", "schema_hash"):
+        value = snapshot["metadata"].get(key)
+        if isinstance(value, str) and re.fullmatch(r"[0-9a-fA-F]{64}", value):
+            metadata[key] = value
+    # The provider stores only its response model identifier here. Do not expose arbitrary
+    # attempt payloads or nested metadata alongside this narrowly typed provenance field.
+    metadata["response_models"] = list(dict.fromkeys(a["response_model"] for a in snapshot["attempts"]
+        if isinstance(a.get("response_model"), str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:/-]{0,149}", a["response_model"])
+        and not a["response_model"].lower().startswith(("sk-", "nvapi-")) and "://" not in a["response_model"]))
     generation = snapshot["metadata"].get("generation") or {}
-    metadata["generation"] = {key: generation[key] for key in ("temperature", "max_output_tokens", "top_p") if key in generation}
+    if not isinstance(generation, dict):
+        generation = {}
+    metadata["generation"] = {key: generation[key] for key in ("temperature", "max_output_tokens", "top_p")
+        if key in generation and (generation[key] is None or type(generation[key]) in {int, float} and math.isfinite(generation[key]))}
     if isinstance(generation.get("reasoning"), dict):
-        metadata["generation"]["reasoning"] = {"effort": generation["reasoning"].get("effort")}
+        effort = generation["reasoning"].get("effort")
+        if isinstance(effort, str) and effort in {"none", "minimal", "low", "medium", "high", "xhigh"}:
+            metadata["generation"]["reasoning"] = {"effort": effort}
     return {"id": snapshot["id"], "basis": basis, "state": snapshot["state"], "error": snapshot["error"],
             "created_at": snapshot["created_at"], "updated_at": snapshot["updated_at"], "cached_from": snapshot["cached_from"],
             "checklist": snapshot["checklist"], "score": score,

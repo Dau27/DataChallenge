@@ -265,7 +265,8 @@ def test_literal_unicode_search_returns_exact_message_revision(saved, text, quer
     assert response.status_code == 200, response.text
     assert [r["id"] for r in response.json()] == [cid]
     match = response.json()[0]["search_matches"][0]
-    assert match == {"id": "m0002", "speaker": "operator", "timestamp": "00:00", "snippet": text}
+    assert {k: v for k, v in match.items() if k != "highlights"} == {"id": "m0002", "speaker": "operator", "timestamp": "00:00", "snippet": text}
+    assert match["highlights"] and all(0 <= span["start"] < span["end"] <= len(text) for span in match["highlights"])
     assert client.get("/api/conversations", params={"q": query, "speaker": "client"}).json() == []
     assert db_rows(db) == before
 

@@ -37,6 +37,8 @@ export type EvaluationSummary = {
   state: 'queued' | 'running' | 'succeeded' | 'failed' | 'interrupted'; completeness: string;
   total: string | null; error: string | null; cached_from: string | null; created_at: string; updated_at: string;
 };
+export type TranscriptMatch = { id: string; speaker: string; timestamp: string; snippet: string; highlights?: { start: number; end: number }[] };
+export type MatchPage = { source: { id: string; content_hash: string }; query: string; speaker: string; offset: number; limit: number; total_matches: number; matches: TranscriptMatch[] };
 export type Conversation = {
   id: string; group_id: string; source_id: string; revision: number; content_hash: string;
   language: string; channel: string; message_count: number; audio_available: boolean;
@@ -44,7 +46,7 @@ export type Conversation = {
   pending_appeals?: number;
   pending_review_targets?: { appeal_id: string; conversation_id: string; evaluation_id: string; criterion_id: string; criterion_name: string }[];
   critical_findings?: { evaluation_id: string; criterion_id: string; criterion_name: string }[];
-  search_matches?: { id: string; speaker: string; timestamp: string; snippet: string }[];
+  search_matches?: TranscriptMatch[];
   search_total_matches?: number;
 };
 export type FieldIssue = { location: (string | number)[]; message: string; label?: string };

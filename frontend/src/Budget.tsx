@@ -5,10 +5,15 @@ import type { BudgetStatus, EvaluationPreview } from './types';
 export function BudgetSummary({ budget }: { budget: BudgetStatus | null }) {
   if (!budget) return null;
   return <section className="panel budget-summary" aria-label="Shared spending budget">
+    <details className="budget-disclosure"><summary>
+      <span className={`budget-state ${budget.ready ? 'ready' : 'paused'}`}>{budget.ready ? 'Evaluation budget ready' : 'Paid requests paused'}</span>
     <strong>Shared spending limit: ${Number(budget.limit_usd).toFixed(2)}</strong>
+      <span className="disclosure-hint">Spending details</span>
+    </summary><div className="budget-details">
     <span>Accounted estimates: ${Number(budget.accounted_usd).toFixed(4)} · Reserved: ${Number(budget.reserved_usd).toFixed(4)} · Overhead reserve: ${Number(budget.overhead_usd).toFixed(2)}</span>
     <span>Available for new reservations: ${Number(budget.available_usd).toFixed(4)}</span>
     <small>{budget.blocked_reason || 'New paid work must fit this budget before it can start.'} Saved results and reviews remain available. These estimates and reservations are not an account balance.</small>
+    </div></details>
   </section>;
 }
 

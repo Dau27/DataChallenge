@@ -3,6 +3,26 @@ import { api } from './api';
 import { answerLabel, label, points } from './helpers';
 import type { ComparisonCell, ComparisonSide, EvaluationSummary, Evidence, SavedComparison as Comparison } from './types';
 
+type Difference = 'all' | 'answers' | 'points' | 'configuration' | 'details';
+const detailChanges = new Set(['explanation', 'evidence', 'na_reason', 'review_reason']);
+function matchesDifference(row: Comparison['criteria'][number], filter: Difference) {
+  if (filter === 'all') return true;
+  if (filter === 'answers') return row.changes.some(c => c === 'answer' || c === 'availability');
+  if (filter === 'configuration') return row.change === 'added' || row.change === 'removed' || row.changes.includes('configuration');
+  if (filter === 'points') return row.changes.includes('points');
+  return row.changes.length > 0 && row.changes.every(c => detailChanges.has(c));
+}
+
+function initialPair(runs: EvaluationSummary[], currentId: string) {
+  const target = runs.find(r => r.id === currentId) ?? runs[0];
+  if (!target) return { left: '', right: '' };
+  const time = Date.parse(target.created_at);
+  const earlier = runs.filter(r => r.id !== target.id && r.state === 'succeeded' && r.checklist_id === target.checklist_id
+    && Number.isFinite(time) && Date.parse(r.created_at) <= time)
+    .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+  return { left: earlier[0]?.id ?? runs.find(r => r.id !== target.id)?.id ?? target.id, right: target.id };
+}
+
 function Result({ cell, side, criterionId, onEvidence }: { cell: ComparisonCell; side: string; criterionId: string; onEvidence: (e: Evidence) => void }) {
   if (!cell.criterion) return <span>Criterion absent</span>;
   if (!cell.judgment) return <span>No saved answer</span>;
@@ -22,6 +42,9 @@ function Provenance({ side, title }: { side: ComparisonSide; title: string }) {
     <details><summary>{title} provenance</summary><p>Saved {new Date(side.created_at).toLocaleString()} · updated {new Date(side.updated_at).toLocaleString()}</p>
       <p>{side.review_count} saved review decision(s){side.cached_from ? ` · cached from ${side.cached_from}` : ''}</p>
       <p>Estimated cost: {side.usage.estimated_cost_usd == null ? 'Unavailable' : `$${side.usage.estimated_cost_usd}`}; {side.usage.request_attempts} attempt(s)</p>
+      <p>Prompt hash: {String(side.metadata.prompt_hash ?? 'Unavailable')}<br />Schema hash: {String(side.metadata.schema_hash ?? 'Unavailable')}</p>
+      <p>Recorded response model(s): {Array.isArray(side.metadata.response_models) && side.metadata.response_models.length
+        ? side.metadata.response_models.join(', ') : 'Unavailable'}</p>
       <pre>{JSON.stringify(side.metadata, null, 2)}</pre><p>Checklist hash: {side.checklist.content_hash}</p>
     </details>
   </section>;
@@ -34,28 +57,44 @@ export default function SavedComparison({ runs, currentId, sourceId, onEvidence 
   const [left, setLeft] = useState(''); const [right, setRight] = useState('');
   const [leftBasis, setLeftBasis] = useState<'original' | 'effective'>('effective');
   const [rightBasis, setRightBasis] = useState<'original' | 'effective'>('effective');
-  const [result, setResult] = useState<Comparison | null>(null); const [error, setError] = useState('');
-  const [pending, setPending] = useState(false); const [retry, setRetry] = useState(0); const [changedOnly, setChangedOnly] = useState(false);
-  const key = [left, right, leftBasis, rightBasis].join('|'); const [loadedKey, setLoadedKey] = useState('');
+  const [outcome, setOutcome] = useState<{ key: string; result: Comparison | null; error: string }>({ key: '', result: null, error: '' });
+  const [retry, setRetry] = useState(0); const [changedOnly, setChangedOnly] = useState(false); const [difference, setDifference] = useState<Difference>('all');
+  const selected = [left, right].map(id => runs.find(r => r.id === id));
+  // A review keeps the run ID but changes its revision. Keying the visible result by that
+  // revision hides it during the render before the effect starts the replacement GET.
+  const key = JSON.stringify([sourceId, left, right, leftBasis, rightBasis, retry,
+    ...selected.map(r => r ? [r.updated_at, r.state, r.completeness, r.total, r.cached_from] : null)]);
+  const result = outcome.key === key ? outcome.result : null;
+  const error = outcome.key === key ? outcome.error : '';
+  const pending = outcome.key !== key;
+  const selectionAvailable = selected.every(Boolean);
   useEffect(() => {
     if (!open || !left || !right) return;
-    let active = true; setPending(true); setError(''); setResult(null);
+    if (!selectionAvailable) { setOutcome({ key, result: null, error: 'A selected saved run is no longer available. Choose another saved run.' }); return; }
+    let active = true;
     const params = new URLSearchParams({ left_id: left, right_id: right, left_basis: leftBasis, right_basis: rightBasis });
     void api<Comparison>(`/evaluations/compare?${params}`).then(data => {
       if (data.source.id !== sourceId) throw new Error('Comparison source revision does not match this transcript.');
-      if (active) { setResult(data); setLoadedKey(key); }
-    }).catch(e => { if (active) setError(e instanceof Error ? e.message : 'Comparison failed.'); })
-      .finally(() => { if (active) setPending(false); });
+      if (active) setOutcome({ key, result: data, error: '' });
+    }).catch(e => { if (active) setOutcome({ key, result: null, error: e instanceof Error ? e.message : 'Comparison failed.' }); });
     return () => { active = false; };
-  }, [open, left, right, leftBasis, rightBasis, sourceId, key, retry]);
+  }, [open, left, right, leftBasis, rightBasis, sourceId, key, selectionAvailable]);
   const runLabel = (run: EvaluationSummary) => `v${run.checklist_id} · ${label(run.state)} · ${new Date(run.created_at).toLocaleString()} · ${run.id.slice(0, 8)}`;
+  const visible = result?.criteria.filter(r => (!changedOnly || r.change !== 'unchanged') && matchesDifference(r, difference)) ?? [];
   return <section className="panel saved-comparison">
     <button className="secondary" aria-expanded={open} onClick={() => {
-      if (!open) { setLeft(runs.find(r => r.id !== currentId)?.id ?? currentId); setRight(currentId || runs[0]?.id || ''); }
+      if (!open) {
+        const defaults = initialPair(runs, currentId);
+        if (!runs.some(r => r.id === left)) setLeft(defaults.left);
+        if (!runs.some(r => r.id === right)) setRight(defaults.right);
+        // Reopening also refreshes a previously loaded result, while retaining valid choices.
+        setRetry(r => r + 1);
+      }
       setOpen(!open);
     }} disabled={!runs.length}>Compare saved runs</button>
     {open && <div role="region" aria-label="Saved-run comparison">
       <p>Inspect stored answers without evaluating again. Both runs must use this exact source revision.</p>
+      <small>The initial baseline prefers the most recent earlier successful run with the same checklist. Your selections stay in place when results update.</small>
       <div className="comparison-controls">
         <label>Baseline saved run<select aria-label="Baseline saved run" value={left} onChange={e => setLeft(e.target.value)}>{runs.map(r => <option key={r.id} value={r.id}>{runLabel(r)}</option>)}</select></label>
         <label>Baseline answer set<select aria-label="Baseline answer set" value={leftBasis} onChange={e => setLeftBasis(e.target.value as typeof leftBasis)}><option value="effective">Effective</option><option value="original">Original</option></select></label>
@@ -63,16 +102,25 @@ export default function SavedComparison({ runs, currentId, sourceId, onEvidence 
         <label>Comparison answer set<select aria-label="Comparison answer set" value={rightBasis} onChange={e => setRightBasis(e.target.value as typeof rightBasis)}><option value="effective">Effective</option><option value="original">Original</option></select></label>
       </div>
       {error && <div role="alert"><p>{error}</p><button className="secondary" onClick={() => setRetry(retry + 1)}>Retry comparison</button></div>}
-      {(pending || (!error && loadedKey !== key)) && <p role="status">Loading saved comparison…</p>}
-      {result && loadedKey === key && !pending && <>
+      {pending && <p role="status">Loading saved comparison…</p>}
+      {result && <>
         <div className="comparison-totals"><Provenance side={result.left} title="Baseline" /><Provenance side={result.right} title="Comparison" /></div>
         <p>{result.total_comparable ? `Saved total difference: ${result.total_difference}` : 'No comparable total difference.'} {result.notice}</p>
+        {result.left.score && result.right.score && result.left.score.applicable_weight !== result.right.score.applicable_weight && <p>Applicable scored weight changed from {result.left.score.applicable_weight} to {result.right.score.applicable_weight}. Each saved contribution uses its own applicable-weight denominator.</p>}
         <label className="check-label"><input type="checkbox" checked={changedOnly} onChange={e => setChangedOnly(e.target.checked)} />Show changed criteria only</label>
+        <label>Difference filter<select aria-label="Comparison difference filter" value={difference} onChange={e => setDifference(e.target.value as Difference)}>
+          <option value="all">All criteria ({result.criteria.length})</option>
+          <option value="answers">Answers / dispositions ({result.criteria.filter(r => matchesDifference(r, 'answers')).length})</option>
+          <option value="points">Points ({result.criteria.filter(r => matchesDifference(r, 'points')).length})</option>
+          <option value="configuration">Definitions ({result.criteria.filter(r => matchesDifference(r, 'configuration')).length})</option>
+          <option value="details">Evidence / explanation only ({result.criteria.filter(r => matchesDifference(r, 'details')).length})</option>
+        </select></label><small>Answer, point and definition counts can overlap. Unavailable answers count as answer changes.</small>
         <div className="table-scroll"><table className="comparison-table"><thead><tr><th>Criterion / changes</th><th>Baseline answer</th><th>Comparison answer</th></tr></thead><tbody>
-          {result.criteria.filter(r => !changedOnly || r.change !== 'unchanged').map(r => <tr key={r.criterion_id}>
+          {visible.map(r => <tr key={r.criterion_id}>
             <td><strong>{r.right.criterion?.name ?? r.left.criterion?.name ?? r.criterion_id}</strong><small>{r.criterion_id} · {r.change}</small>
               <p>{r.changes.map(label).join(', ') || 'No saved difference'}</p>{!!r.configuration_changes.length && <p>Configuration: {r.configuration_changes.join(', ')}</p>}
               {!r.answer_comparable && <small>Answers unavailable or definitions differ.</small>}
+              {r.changes.includes('answer') && (r.right.criterion ?? r.left.criterion)?.answer_type === 'flag' && <small>This flag change is unscored.</small>}
               {r.points_difference != null && <small>Raw-point difference: {r.points_difference}</small>}
               {!!r.configuration_changes.length && <details><summary>Saved definitions</summary><pre>{JSON.stringify({ baseline: r.left.criterion, comparison: r.right.criterion }, null, 2)}</pre></details>}
             </td><td><Result cell={r.left} side="Baseline" criterionId={r.criterion_id} onEvidence={onEvidence} /></td>
@@ -80,6 +128,7 @@ export default function SavedComparison({ runs, currentId, sourceId, onEvidence 
           </tr>)}
         </tbody></table></div>
         {changedOnly && result.criteria.every(r => r.change === 'unchanged') && <p>No saved differences.</p>}
+        {!visible.length && !(changedOnly && result.criteria.every(r => r.change === 'unchanged')) && <p>No criteria match this difference filter.</p>}
       </>}
     </div>}
   </section>;
