@@ -31,7 +31,7 @@ Ten additional clearly labeled SYNTHETIC_TEST_ONLY diagnostic records exist loca
 - Stage 7 prepared: README, private GitHub source and five-minute script exist. Two timed human presentation rehearsals, public visibility/submission and independent human quality review are not performed.
 - Stage 8 not reached: no organizer control identifier or official event start/freeze instruction supplied. No guessed control ID/time or falsely labeled frozen commit.
 
-Per-stage Markdown reports: docs/stages/00-access.md through 08-control-freeze.md. Demo script: docs/DEMO.md.
+Per-stage Markdown reports and status index: [docs/stages/README.md](docs/stages/README.md). Demo script: docs/DEMO.md.
 
 ## Actual verification commands and outcomes
 
