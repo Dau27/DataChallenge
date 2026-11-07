@@ -4,6 +4,8 @@ Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
 
 **Latest PDF audit after corrections:** required prototype workflows and arithmetic pass; **64 DEV complete / one awaiting recording review**, with originals preserved. Fresh **127 backend / 15 client tests and build pass**, zero added inference. Informal readiness remains about **85/100**, not an official grade or accuracy percentage. [Current audit and remaining gaps](09-post-correction-pdf-audit.md); [correction history](08-zero-spend-scoring-corrections.md).
 
+**Recording follow-up:** fetched the actual dataset call and provided an unfiltered opening excerpt. Local recognition was inconclusive; the user also heard an unclear introduction. Contact remains needs_review, original Yes/92.31 preserved, no data changes or API spending. [Recording review](10-call-recording-review.md).
+
 | Audit stage | Completed work | Report |
 | --- | --- | --- |
 | 1 | Re-read/rendered source PDFs; mapped requirements; reran 74 backend tests, 7 client tests, build and dependency checks | [Requirements and regression](C:/Users/user/Desktop/DataChallenge/docs/audits/2026-11-07/01-requirements-and-regression.md) |
@@ -15,6 +17,7 @@ Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
 | 7 | Re-read all PDF sources after the three enhancements; fresh 125 backend/14 client/build checks, 130 saved snapshots and additional semantic spot-checks; zero model calls | [Updated PDF re-audit](07-updated-pdf-reaudit.md) |
 | 8 | Corrected three flagged effective judgments with original preservation; uncertain call keeps its appeal open and total withheld; 127 backend/15 client/build and 130-snapshot checks pass; zero model calls | [Zero-spend scoring corrections](08-zero-spend-scoring-corrections.md) |
 | 9 | Rechecked all PDF sources, corrected source cases, required workflows and delivery gaps; fresh 127 backend/15 client/build, 130 snapshots and 198 history replays pass; no data changes or model calls | [Post-correction PDF audit](09-post-correction-pdf-audit.md) |
+| 10 | Verified dataset recording access/provenance; extracted opening clip; local recognition and user listening did not establish an introduction; preserved every database row and pending appeal; no paid API calls | [Call recording review](10-call-recording-review.md) |
 
 Initial audit: 65 succeeded, 44 complete / 21 needs review, with concrete rubric defects. Reports 01–03 preserve that historical evidence.
 

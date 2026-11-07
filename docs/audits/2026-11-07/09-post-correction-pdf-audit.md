@@ -1,5 +1,7 @@
 # PDF audit after the zero-spend scoring corrections
 
+Follow-up: [call recording review](10-call-recording-review.md) verified the dataset audio and extracted its opening. The user's listening response and inconclusive local recognition did not establish an introduction, so the existing needs_review/withheld total remains unchanged.
+
 Audit date: 7 November 2026. Audited application commit: **3309844daf54c2a8b45a8aa291f68ecab99af741**. This audit changes documentation only. **No model request, organizer fetch, recording playback, judgment change or paid test was made.**
 
 ## Verdict and current score

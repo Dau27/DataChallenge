@@ -2,6 +2,8 @@
 
 Latest source correction: p4-ru-005 contact is needs_review, with its original Yes/92.31 preserved and effective total withheld. Review the noisy m0017 opening recording, then resolve its existing open appeal with evidence. The KZ needs/consultation corrections are explicitly agent-attributed; they do not mark any independent labels complete. [Correction report](audits/2026-11-07/08-zero-spend-scoring-corrections.md).
 
+[Recording follow-up](audits/2026-11-07/10-call-recording-review.md): the actual dataset audio was retrieved and a short unfiltered opening clip provided. The user reported the introduction is unclear; local recognition did not establish it. The appeal remains open. Obtain clearer audio or qualified interpretation before assigning Yes/No; the agent did not directly hear the recording and no independent packet label was marked complete.
+
 Status: packet prepared; human adjudication has not occurred. This is the principal remaining validation gap. Automated tests and 26 targeted agent diagnostics do not establish model accuracy.
 
 The private workspace packet is under `local_data/readiness_20261107/human_review/`:
