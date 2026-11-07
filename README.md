@@ -6,6 +6,7 @@ The application uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite,
 
 ## Current verified state
 
+- **Three requested improvements implemented:** shared server-side budget protection, checklist change preview with field errors, and pending-appeal/critical-finding filters. **125 backend / 14 client tests** pass; the paid opt-in test is skipped. Build, copied-data browser/HTTP, isolated-source and restart checks passed with **zero added model calls**. [Stage reports](docs/improvements/README.md).
 - **Latest scoring fix/re-audit:** all **65 DEV results are complete**, **26/26 targeted provisional checks** and **94 backend tests** pass. The evaluator now validates N/A/answer consistency and source closing evidence; old results remain preserved. The accepted set retains validated earlier runs plus selective reruns, with exact versions and costs disclosed in [audit reports](docs/audits/2026-11-07/README.md). Independent human accuracy is unverified; no market features were added.
 - Organizer DEV access works locally: actual response/import contained **65 records: 35 RU, 15 KZ, 15 EN; 60 chats and 5 calls**. Private payloads and the signed endpoint are excluded from Git.
 - Domain, persistence, retry/cache/restart, appeals, and configuration behavior have automated tests with clearly synthetic inputs and injected HTTP test transports.
@@ -38,6 +39,10 @@ ORGANIZER_API_URL=<actual signed organizer endpoint from the guide>
 ```
 
 No model name, model access, credit balance, or price is assumed. An organization ID, Brev console URL, or Brev compute balance does not authenticate an OpenAI model request. [Brev credits cover running GPU environments and storage](https://docs.nvidia.com/brev/guides/console-reference); using them for inference requires a separately configured model server. No Brev environment is created by this application.
+
+**Paid requests are paused by default:** BUDGET_LIMIT_USD=0. Saved results, draft preview and manual review remain available. Compatible cached reuse is free. This task left the real .env unchanged and made no model request. Before later authorized inference, deliberately configure a positive shared ceiling and identified rates; the budget is estimates/reservations, not a provider account balance.
+
+The current private workspace includes a reviewed ignored opening baseline at local_data/budget_baseline.json covering both prior databases and unknown usage. It is imported once into the persistent budget state. Missing/invalid coverage of recorded provider history blocks paid requests. A fresh database without provider history starts at zero recorded usage; other account use still needs explicit reconciliation. SQLite initialization adds budget_state and budget_reservations without changing old columns/results. See [budget details](docs/improvements/01-shared-budget.md).
 
 ```powershell
 .\start.ps1
@@ -104,7 +109,7 @@ cd ..
 .\.venv\Scripts\python.exe scripts\preflight.py
 ```
 
-Preflight prints configuration status only. It exits nonzero when a model cannot run. Keys and private endpoint values are never printed.
+Preflight prints configuration status and the configured spending ceiling only; it makes no provider request and does not verify budget affordability or inference. It exits nonzero for missing/unusable provider configuration. Keys and private endpoint values are never printed.
 
 Import saved private JSON (idempotent; no running server needed):
 
@@ -130,7 +135,7 @@ Optional diagnostics after the real slice passes:
 
 Reference selection writes an ignored private manifest with development/holdout splits and `human_reviewed: false`. Behavioral checks submit the clearly synthetic multilingual fixtures to the actual hosted provider and can incur charges; expectations are provisional agent-authored checks, not independent labels or benchmark accuracy. Their report is private under `local_data/`. These diagnostics are not a substitute for actual DEV processing.
 
-The DEV runner caps its guard at $4 to leave headroom below the user's $5 balance. It includes earlier application evaluation costs, reserves four maximum attempts for each of at most two simultaneous jobs, and retains a conservative reservation for actual past attempts with unknown usage at their original model rates. `--only-missing` preserves already succeeded assessments; model changes create new evaluations for unfinished records, rather than relabeling old output as a fresh inference. Provider availability/rate caps may produce a documented multi-model DEV result set, which is not a single-model benchmark. This guard does not account for unrelated account usage. The opt-in `npm run live-smoke` (inside frontend) makes a real paid evaluation and saves real versions/appeals; ordinary `npm test` skips that test.
+The DEV runner retains its additional $4 CLI ceiling and now preflights through the same persistent backend budget used by UI evaluations, retries and provider checks. The reviewed opening baseline includes prior isolated-audit costs and unknown-usage reservations; new operations reserve worst-case attempts atomically and reconcile actual/unknown usage. `--only-missing` preserves existing successes. Unrelated account activity is outside this ledger. The opt-in `npm run live-smoke` makes a real paid evaluation and saves versions/appeals; ordinary `npm test` skips it. The normal backend suite explicitly rejects real OpenAI HTTP transport. No opt-in paid test was run for these improvements.
 
 ## Data handling and submission
 

@@ -33,16 +33,18 @@ it('adds a genuinely new criterion through the editor and saves a complete new s
   const original = structuredClone(seed) as Checklist;
   const version: ChecklistVersion = { id: 1, snapshot: original, content_hash: 'SYNTHETIC_TEST_HASH', created_at: '2026-11-01T00:00:00Z' };
   const onSave = vi.fn(async () => {});
-  const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(JSON.stringify({ ...version, id: 2 }), { status: 201 }));
+  const fetchMock = vi.spyOn(globalThis, 'fetch').mockImplementation(async url => new Response(JSON.stringify(
+    String(url).endsWith('/preview') ? { valid: true, errors: [], changes: [] } : { ...version, id: 2 }), { status: String(url).endsWith('/preview') ? 200 : 201 }));
   render(<ChecklistEditor version={version} versions={[version]} busy={false} run={async action => { await action(); }} onSave={onSave} />);
   fireEvent.click(screen.getByRole('button', { name: /Add a criterion/ }));
   const names = screen.getAllByLabelText('Name');
   fireEvent.change(names[names.length - 1], { target: { value: 'SYNTHETIC: ticket reference' } });
   const definitions = screen.getAllByLabelText('Criterion definition');
   fireEvent.change(definitions[definitions.length - 1], { target: { value: 'The operator states a ticket reference before closing.' } });
+  await waitFor(() => expect((screen.getByRole('button', { name: /Save new version/ }) as HTMLButtonElement).disabled).toBe(false));
   fireEvent.click(screen.getByRole('button', { name: /Save new version/ }));
   await waitFor(() => expect(onSave).toHaveBeenCalledWith(2));
-  const posted = JSON.parse(fetchMock.mock.calls[0][1]!.body as string);
+  const posted = JSON.parse(fetchMock.mock.calls.find(call => String(call[0]) === '/api/checklists')![1]!.body as string);
   expect(posted.criteria).toHaveLength(9);
   expect(posted.criteria[8].description).toBe('The operator states a ticket reference before closing.');
   expect(posted.criteria[8].id).not.toBe('contact');

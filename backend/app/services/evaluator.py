@@ -284,6 +284,8 @@ class Provider:
         self.mode = "TEST/MOCK" if transport is not None else "LIVE"
 
     def request(self, payload, record_attempt):
+        if not getattr(record_attempt, "budget_guarded", False):
+            raise EvaluationFailure("A shared budget reservation is required; no provider request sent")
         for retry in range(2):
             index = record_attempt({"status": "started", "input_tokens": None, "output_tokens": None, "latency_ms": 0,
                                     "input_token_upper_bound": len(canonical_json(payload).encode("utf-8")) + 4096,
@@ -345,18 +347,12 @@ class Provider:
     def evaluate(self, conversation, checklist, record_attempt):
         if not self.settings.provider_ready:
             raise EvaluationFailure("Missing OPENAI_API_KEY or OPENAI_MODEL; no model request was sent")
-        # Audio URLs are for inspection only; no permission to fetch recordings or tools is granted.
-        transcript = {k: v for k, v in conversation.items() if k != "audio_url"}
-        payload = {"model": self.settings.model, "instructions": INSTRUCTIONS,
-                   "input": canonical_json({"saved_checklist": checklist.model_dump(mode="json"),
-                                            "operator_message_ids": [m["id"] for m in conversation["transcript"] if m["speaker"] == "operator"],
-                                            "operator_focus_untrusted": operator_focus(conversation),
-                                            "conversation_untrusted": transcript}),
-                   "text": {"format": {"type": "json_schema", "name": "conversation_assessment", "strict": True,
-                                        "schema": output_schema(checklist, [m["id"] for m in conversation["transcript"]])}},
-                   **generation_settings(self.settings)}
+        payload = evaluation_payload(self.settings, conversation, checklist)
         if len(canonical_json(payload)) > self.settings.max_input_characters:
             raise EvaluationFailure("Full request exceeds configured input safeguard; no transcript was truncated and no request sent")
+        return self.assess_payload(payload, conversation, checklist, record_attempt)
+
+    def assess_payload(self, payload, conversation, checklist, record_attempt):
         for repair in range(2):
             raw = self.request(payload, record_attempt)
             try:
@@ -374,8 +370,20 @@ class Provider:
                 record_attempt({"validation_error": feedback}, -1)
                 if repair:
                     raise EvaluationFailure("Structured assessment failed semantic/schema validation after one repair: " + feedback + "; no score saved") from None
-                # Repair repeats the full original input. Do not send/log potentially private provider error text.
                 payload["instructions"] = INSTRUCTIONS + "\nOUTPUT REPAIR: prior response failed validation: " + feedback + ". Return the complete corrected assessment. Check exact criterion coverage, strict values, disposition consistency, nonempty evidence, and ordered existing message IDs."
                 if len(canonical_json(payload)) > self.settings.max_input_characters:
                     raise EvaluationFailure("Full repair request exceeds configured input safeguard; no transcript was truncated")
         raise EvaluationFailure("Assessment repair exhausted")
+
+
+def evaluation_payload(settings, conversation, checklist):
+    """Same complete request for actual inference and conservative cost reservation."""
+    transcript = {k: v for k, v in conversation.items() if k != "audio_url"}
+    return {"model": settings.model, "instructions": INSTRUCTIONS,
+                   "input": canonical_json({"saved_checklist": checklist.model_dump(mode="json"),
+                                            "operator_message_ids": [m["id"] for m in conversation["transcript"] if m["speaker"] == "operator"],
+                                            "operator_focus_untrusted": operator_focus(conversation),
+                                            "conversation_untrusted": transcript}),
+                   "text": {"format": {"type": "json_schema", "name": "conversation_assessment", "strict": True,
+                                        "schema": output_schema(checklist, [m["id"] for m in conversation["transcript"]])}},
+                   **generation_settings(settings)}

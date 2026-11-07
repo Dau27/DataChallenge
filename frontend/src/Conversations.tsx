@@ -1,19 +1,24 @@
 import { useRef, useState } from 'react';
 import { api } from './api';
-import type { Access, Conversation } from './types';
+import type { Access, BudgetStatus, Conversation } from './types';
+import { EvaluationAction } from './Budget';
 import { label, statusOf } from './helpers';
 import type { Run } from './App';
 
-export default function Conversations({ rows, access, selectedVersion, completed, needsReview, busy, run, evaluate, refresh, notify }: {
+export default function Conversations({ rows, access, budget, selectedVersion, completed, needsReview, busy, run, evaluate, refresh, notify }: {
   rows: Conversation[]; access: Access | null; selectedVersion: number; completed: number; needsReview: number;
   busy: boolean; run: Run; evaluate: (ids: string[]) => Promise<void>; refresh: () => Promise<void>; notify: (message: string) => void;
+  budget?: BudgetStatus | null;
 }) {
   const [language, setLanguage] = useState(''); const [channel, setChannel] = useState('');
   const [status, setStatus] = useState(''); const [group, setGroup] = useState('');
   const [search, setSearch] = useState(''); const [groupToImport, setGroupToImport] = useState('DEV');
+  const [appeals, setAppeals] = useState(''); const [critical, setCritical] = useState('');
   const [checked, setChecked] = useState<string[]>([]); const fileRef = useRef<HTMLInputElement>(null);
   const filtered = rows.filter(r => (!language || r.language === language) && (!channel || r.channel === channel) && (!status || statusOf(r) === status)
-    && (!group || r.group_id === group) && r.source_id.toLowerCase().includes(search.toLowerCase()));
+    && (!group || r.group_id === group) && r.source_id.toLowerCase().includes(search.toLowerCase())
+    && (!appeals || ((r.pending_appeals ?? 0) > 0) === (appeals === 'pending'))
+    && (!critical || ((r.critical_findings?.length ?? 0) > 0) === (critical === 'flagged')));
   const groups = [...new Set(rows.map(r => r.group_id))];
   const count = (s: string) => rows.filter(r => statusOf(r) === s).length;
   const working = count('queued') + count('running'); const failed = count('failed') + count('interrupted');
@@ -45,7 +50,7 @@ export default function Conversations({ rows, access, selectedVersion, completed
         }} />
       </div>
       <div className="import-foot"><span>API: {access?.organizer_configured ? 'configured endpoint' : 'not configured'}</span><span>Provider: {access?.model || 'not configured'}</span>
-        <button className="text-button" disabled={busy || !access?.provider_configured} onClick={() => void run(async () => {
+        <button className="text-button" disabled={busy || !access?.provider_configured || !budget?.ready} onClick={() => void run(async () => {
           const result = await api<{ succeeded: boolean; error?: string }>('/access/check-provider', {});
           if (!result.succeeded) throw new Error(result.error || 'Provider check failed.');
           notify('A real structured provider access check succeeded. This is not a conversation assessment.'); await refresh();
@@ -55,13 +60,17 @@ export default function Conversations({ rows, access, selectedVersion, completed
     </section>
     <section className="panel table-panel">
       <div className="table-toolbar"><h2>Review queue <span className="muted">{filtered.length}</span></h2><div className="inline-actions">
-        <button className="primary" disabled={busy || !access?.provider_configured || !selectedVisible.length || !selectedVersion} onClick={() => void run(async () => { await evaluate(selectedVisible); setChecked([]); })}>Evaluate selected{selectedVisible.length ? ` (${selectedVisible.length})` : ''} →</button>
+        <EvaluationAction ids={selectedVisible} version={selectedVersion} providerReady={!!access?.provider_configured} busy={busy} refreshKey={JSON.stringify(budget)}
+          label={`Evaluate selected${selectedVisible.length ? ` (${selectedVisible.length})` : ''} →`}
+          start={() => void run(async () => { await evaluate(selectedVisible); setChecked([]); })} />
       </div></div>
       <div className="filters"><input aria-label="Search conversation ID" placeholder="Search conversation ID…" value={search} onChange={e => setSearch(e.target.value)} />
         <select aria-label="Dataset filter" value={group} onChange={e => setGroup(e.target.value)}><option value="">All datasets</option>{groups.map(g => <option key={g}>{g}</option>)}</select>
         <select aria-label="Language filter" value={language} onChange={e => setLanguage(e.target.value)}><option value="">All languages</option>{['RU', 'KZ', 'EN'].map(l => <option key={l}>{l}</option>)}</select>
         <select aria-label="Channel filter" value={channel} onChange={e => setChannel(e.target.value)}><option value="">All channels</option><option>agent chat</option><option>voice call</option></select>
         <select aria-label="Status filter" value={status} onChange={e => setStatus(e.target.value)}><option value="">All states</option>{['not_evaluated', 'queued', 'running', 'complete', 'needs_review', 'failed', 'interrupted'].map(s => <option value={s} key={s}>{label(s)}</option>)}</select>
+        <select aria-label="Pending appeals filter" value={appeals} onChange={e => setAppeals(e.target.value)}><option value="">Any appeal state</option><option value="pending">Pending appeals</option><option value="none">No pending appeals</option></select>
+        <select aria-label="Critical findings filter" value={critical} onChange={e => setCritical(e.target.value)}><option value="">Any critical state</option><option value="flagged">Critical findings</option><option value="none">No recorded critical findings</option></select>
       </div>
       <div className="table-scroll"><table><thead><tr>
         <th><input type="checkbox" aria-label="Select all visible conversations" checked={filtered.length > 0 && selectedVisible.length === filtered.length} onChange={e => setChecked(e.target.checked ? filtered.map(r => r.id) : [])} /></th>
@@ -70,7 +79,11 @@ export default function Conversations({ rows, access, selectedVersion, completed
         <td><input type="checkbox" aria-label={`Select ${row.source_id}`} checked={checked.includes(row.id)} onChange={e => setChecked(e.target.checked ? [...checked, row.id] : checked.filter(id => id !== row.id))} /></td>
         <td><a className="conversation-link" href={`#conversation/${row.id}`}>{row.source_id}</a><small>{row.group_id} · revision {row.revision} · {row.message_count} messages</small></td>
         <td><span className="language-chip">{row.language}</span></td><td>{row.channel === 'voice call' ? '◉ Call' : '◫ Chat'}<small>{row.channel === 'voice call' && (row.audio_available ? 'Recording link available' : 'Recording unavailable')}</small></td>
-        <td><span className={`badge ${statusOf(row)}`}>{label(statusOf(row))}</span>{row.evaluation?.cached_from && <small>Cached original</small>}</td>
+        <td><span className={`badge ${statusOf(row)}`}>{label(statusOf(row))}</span>{row.evaluation?.cached_from && <small>Cached original</small>}
+          {!!row.pending_appeals && <small>{row.pending_appeals} pending appeal(s)</small>}
+          {row.pending_review_targets?.map(target => <small key={target.appeal_id}><a href={`#conversation/${target.conversation_id}?evaluation=${target.evaluation_id}&criterion=${target.criterion_id}`}>Review {target.criterion_name}</a></small>)}
+          {row.critical_findings?.map(target => <small key={target.criterion_id}><a className="critical-link" href={`#conversation/${row.id}?evaluation=${target.evaluation_id}&criterion=${target.criterion_id}`}>⚑ {target.criterion_name}</a></small>)}
+        </td>
         <td className="score-cell">{row.evaluation?.total ?? '—'}</td><td><a className="open-link" href={`#conversation/${row.id}`}>Open ↗</a></td>
       </tr>)}</tbody></table></div>
       {!filtered.length && <div className="empty"><strong>{rows.length ? 'No conversations match these filters.' : 'Your review queue is empty.'}</strong><p>{rows.length ? 'Adjust a filter to see more conversations.' : 'Import the organizer dataset or upload its JSON response to get started.'}</p></div>}

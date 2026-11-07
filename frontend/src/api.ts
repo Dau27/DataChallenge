@@ -1,4 +1,8 @@
 // All service access is centralized for later Dynamics 365 HTML-component embedding.
+import type { FieldIssue } from './types';
+export class ApiError extends Error {
+  constructor(message: string, public status: number, public issues: FieldIssue[] = []) { super(message); }
+}
 export async function api<T>(path: string, body?: unknown): Promise<T> {
   let response: Response;
   try {
@@ -11,9 +15,10 @@ export async function api<T>(path: string, body?: unknown): Promise<T> {
   const result = await response.json().catch(() => null);
   if (!response.ok) {
     const detail = result?.detail;
-    throw new Error(Array.isArray(detail)
+    throw new ApiError(Array.isArray(detail)
       ? detail.map((e: { location?: string[]; message?: string; msg?: string }) => `${(e.location ?? []).join(' → ')}: ${e.message ?? e.msg}`).join('\n')
-      : typeof detail === 'string' ? detail : `Request failed (${response.status}).`);
+      : typeof detail === 'string' ? detail : `Request failed (${response.status}).`, response.status,
+      Array.isArray(detail) ? detail.map((e: FieldIssue) => ({ ...e, location: e.location?.[0] === 'body' ? e.location.slice(1) : e.location ?? [] })) : []);
   }
   return result as T;
 }

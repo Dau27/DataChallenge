@@ -2,6 +2,17 @@ import json
 from pathlib import Path
 
 import pytest
+import httpx
+
+
+@pytest.fixture(autouse=True)
+def no_live_model_http(monkeypatch):
+    original = httpx.HTTPTransport.handle_request
+    def guarded(transport, request):
+        if request.url.host == "api.openai.com":
+            raise AssertionError("Real model HTTP is forbidden in the ordinary test suite")
+        return original(transport, request)
+    monkeypatch.setattr(httpx.HTTPTransport, "handle_request", guarded)
 
 from backend.app.domain import Assessment, Checklist
 

@@ -87,20 +87,6 @@ if __name__ == "__main__":
         versions = checked(client.get("/api/checklists"))
         checklist = Checklist.model_validate(next(v["snapshot"] for v in versions if v["id"] == args.checklist))
         rows = [r for r in checked(client.get(f"/api/conversations?checklist_id={args.checklist}")) if r["group_id"] == "DEV"]
-        snapshots = {r["id"]: checked(client.get("/api/conversations/" + r["id"]))["snapshot"] for r in rows}
-        known_spend = Decimal(0)
-        unknown_reserved = Decimal(0)
-        # Include previous diagnostics/configuration demonstrations in the application-wide guard.
-        for previous in checked(client.get("/api/evaluations")):
-            result = checked(client.get("/api/evaluations/" + previous["id"]))
-            usage = result["usage"]
-            if usage["estimated_cost_usd"] is not None:
-                known_spend += Decimal(usage["estimated_cost_usd"])
-            elif usage["request_attempts"]:
-                snapshot = checked(client.get("/api/conversations/" + previous["conversation_id"]))["snapshot"]
-                unknown_reserved += historical_attempt_bound(settings, result, snapshot)
-        # Keep $0.10 for access checks and framing uncertainty outside evaluation job records.
-        overhead_reserve = Decimal("0.10")
         report = {"group": "DEV", "active_model": settings.model, "checklist_id": args.checklist,
                   "budget_usd": str(args.budget_usd), "cost_rate_source": settings.rate_source,
                   "records": [], "stopped_for_budget": False, "stopped_for_provider": False}
@@ -117,15 +103,23 @@ if __name__ == "__main__":
                 report["records"].append(result_record(row, result, True))
             else:
                 remaining.append(row)
-        bounds = {row["id"]: four_attempt_bound(settings, snapshots[row["id"]], checklist) for row in remaining}
         while remaining:
-            batch = affordable_batch(remaining, bounds, args.budget_usd - known_spend - unknown_reserved - overhead_reserve,
-                                     min(settings.concurrency, 2))
-            if not batch:
+            batch = remaining[:min(settings.concurrency, 2)]
+            preview = checked(client.post("/api/evaluations/preview", json={"conversation_ids": [row["id"] for row in batch], "checklist_id": args.checklist}))
+            status = preview["budget"]
+            required = Decimal(preview["required_reservation_usd"] or "0")
+            accounted = sum(Decimal(status[k]) for k in ["accounted_usd", "reserved_usd", "overhead_usd"])
+            if not preview["affordable"] or (required and accounted + required > args.budget_usd):
                 report["stopped_for_budget"] = True
+                report["budget_reason"] = preview["blocked_reason"] or "CLI ceiling would be exceeded"
                 report["records"].extend({"source_id": row["source_id"], "state": "not_started_budget_guard"} for row in remaining)
                 break
-            started = checked(client.post("/api/evaluations", json={"conversation_ids": [row["id"] for row in batch], "checklist_id": args.checklist}))
+            response = client.post("/api/evaluations", json={"conversation_ids": [row["id"] for row in batch], "checklist_id": args.checklist})
+            if response.status_code == 409 and response.json().get("code") == "BUDGET_BLOCKED":
+                report["stopped_for_budget"], report["budget_reason"] = True, response.json()["detail"]
+                report["records"].extend({"source_id": row["source_id"], "state": "not_started_budget_guard"} for row in remaining)
+                break
+            started = checked(response)
             pending = dict(zip(started["evaluation_ids"], batch))
             remaining = remaining[len(batch):]
             deadline = time.monotonic() + 600
@@ -135,11 +129,6 @@ if __name__ == "__main__":
                     result = checked(client.get("/api/evaluations/" + evaluation_id))
                     if result["state"] in {"queued", "running"}:
                         continue
-                    usage = result["usage"]
-                    if usage["estimated_cost_usd"] is not None:
-                        known_spend += Decimal(usage["estimated_cost_usd"])
-                    elif usage["request_attempts"]:
-                        unknown_reserved += historical_attempt_bound(settings, result, snapshots[row["id"]])
                     report["records"].append(result_record(row, result))
                     provider_block |= result["state"] == "failed" and any(400 <= a.get("http_status", 0) < 500 for a in result["attempts"])
                     del pending[evaluation_id]
@@ -147,8 +136,8 @@ if __name__ == "__main__":
                     raise SystemExit("Jobs remain persisted but exceeded the wait guard; no next batch started")
                 if pending:
                     time.sleep(1)
-            print(json.dumps({"processed": len(report["records"]), "of": len(rows), "known_application_estimate_usd": str(known_spend), "unknown_cost_reserved_usd": str(unknown_reserved)}), flush=True)
-            report.update(known_application_estimate_usd=str(known_spend), unknown_cost_reserved_usd=str(unknown_reserved))
+            print(json.dumps({"processed": len(report["records"]), "of": len(rows), "shared_budget": checked(client.get("/api/budget"))}), flush=True)
+            report["shared_budget"] = checked(client.get("/api/budget"))
             (ROOT / "local_data/dev_run.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
             if provider_block:
                 report["stopped_for_provider"] = True
@@ -157,6 +146,6 @@ if __name__ == "__main__":
         report["states"] = dict(Counter(r["state"] for r in report["records"]))
         report["completeness"] = dict(Counter(r.get("completeness", "not_started") for r in report["records"]))
         report["models"] = dict(Counter(r.get("model", "not_started") for r in report["records"]))
-        report.update(known_application_estimate_usd=str(known_spend), unknown_cost_reserved_usd=str(unknown_reserved))
+        report["shared_budget"] = checked(client.get("/api/budget"))
         (ROOT / "local_data/dev_run.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
         print(json.dumps({k: v for k, v in report.items() if k != "records"}, indent=2), flush=True)

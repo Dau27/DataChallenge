@@ -32,7 +32,16 @@ export type Conversation = {
   id: string; group_id: string; source_id: string; revision: number; content_hash: string;
   language: string; channel: string; message_count: number; audio_available: boolean;
   evaluation: EvaluationSummary | null;
+  pending_appeals?: number;
+  pending_review_targets?: { appeal_id: string; conversation_id: string; evaluation_id: string; criterion_id: string; criterion_name: string }[];
+  critical_findings?: { evaluation_id: string; criterion_id: string; criterion_name: string }[];
 };
+export type FieldIssue = { location: (string | number)[]; message: string; label?: string };
+export type ChecklistPreview = { valid: boolean; errors: FieldIssue[]; changes: { location: (string | number)[]; label: string; before: unknown; after: unknown }[] };
+export type BudgetStatus = { limit_usd: string; opening_accounted_usd: string; accounted_usd: string; reserved_usd: string;
+  overhead_usd: string; available_usd: string; ready: boolean; blocked_reason: string | null; estimate_only: true };
+export type EvaluationPreview = { required_reservation_usd: string | null; cached: number; active: number;
+  new_evaluations: number; affordable: boolean; blocked_reason: string | null; budget: BudgetStatus };
 export type Message = { id: string; timestamp: string; speaker: string; text: string };
 export type ConversationDetail = {
   id: string; group_id: string; source_id: string; revision: number; content_hash: string;

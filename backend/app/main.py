@@ -19,6 +19,8 @@ from backend.app.services.evaluator import EvaluationFailure, Provider, usage_su
 from backend.app.services.importer import fetch_organizer, import_payload
 from backend.app.services.jobs import Jobs
 from backend.app.services.reviews import decide, submit_appeal
+from backend.app.services.budget import BudgetError, request_bound
+from backend.app.services.checklists import preview_checklist
 
 
 class OrganizerImport(Contract):
@@ -98,6 +100,9 @@ class ConversationResponse(Contract):
     audio_available: bool
     evaluation: EvaluationSummary | None
     created_at: str
+    pending_appeals: int = 0
+    pending_review_targets: list[dict[str, str]] = Field(default_factory=list)
+    critical_findings: list[dict[str, str]] = Field(default_factory=list)
 
 
 class ConversationDetail(Contract):
@@ -195,6 +200,14 @@ def create_app(settings=None, provider=None):
     async def operation_invalid(_, error):
         return JSONResponse(status_code=422, content={"detail": str(error)})
 
+    @app.exception_handler(BudgetError)
+    async def spending_blocked(_, error):
+        return JSONResponse(status_code=409, content={"detail": str(error), "code": "BUDGET_BLOCKED"})
+
+    @app.get("/api/budget")
+    def budget_status() -> dict[str, Any]:
+        return jobs.budget.status()
+
     @app.get("/api/health")
     def health() -> dict[str, Any]:
         return {"status": "ok", "storage": "sqlite", "demo_roles": "anonymous; submission and review are separate actions"}
@@ -212,29 +225,28 @@ def create_app(settings=None, provider=None):
     def check_provider() -> dict[str, Any]:
         if not settings.provider_ready:
             raise HTTPException(503, settings.public_access()["provider_status"])
-        attempts = []
-
-        def record(update, index=None):
-            if index is None:
-                attempts.append(update)
-                return len(attempts) - 1
-            attempts[index].update(update)
-            return index
-
         payload = {"model": settings.model, "input": "Return the structured access-check result with ok true.", "store": False,
                    "max_output_tokens": 2048,
                    "text": {"format": {"type": "json_schema", "name": "access_check", "strict": True,
                             "schema": {"type": "object", "properties": {"ok": {"type": "boolean"}}, "required": ["ok"], "additionalProperties": False}}}}
+        with db.transaction() as session:
+            reservation_id = jobs.budget.reserve(session, "access_check", provider_identity, request_bound(settings, payload), 2)
+        record = jobs.budget.recorder(reservation_id)
         try:
             raw = jobs.provider.request(payload, record)
             if json.loads(raw) != {"ok": True}:
                 raise EvaluationFailure("Provider did not return the expected structured access-check result")
-            result = {"succeeded": True, "model": settings.model, "attempts": attempts}
+            result = {"succeeded": True, "model": settings.model}
         except (EvaluationFailure, ValueError) as error:
-            result = {"succeeded": False, "model": settings.model, "attempts": attempts, "error": str(error)}
+            result = {"succeeded": False, "model": settings.model, "error": str(error)}
+        except BaseException:
+            jobs.budget.settle(reservation_id)
+            raise
+        from backend.app.db import BudgetReservation
+        with db.sessions() as session:
+            result["attempts"] = session.get(BudgetReservation, reservation_id).attempts
         result["checked_at"] = now()
-        with db.transaction() as session:
-            session.merge(AccessCheck(identity_hash=provider_identity, report=result))
+        jobs.budget.settle(reservation_id, result)
         app.state.provider_check = result
         return result
 
@@ -259,11 +271,29 @@ def create_app(settings=None, provider=None):
             session.flush()
             return version_view(version)
 
+    @app.post("/api/checklists/{checklist_id}/preview")
+    def checklist_preview(checklist_id: int, draft: dict[str, Any]) -> dict[str, Any]:
+        with db.sessions() as session:
+            version = session.get(ChecklistVersion, checklist_id)
+            if version is None:
+                raise HTTPException(404, "Saved checklist version not found")
+            return preview_checklist(version.snapshot, draft)
+
     @app.get("/api/conversations", response_model=list[ConversationResponse])
     def conversations(checklist_id: int | None = None, latest_only: bool = True):
         with db.sessions() as session:
             records = list(session.scalars(select(Conversation).order_by(Conversation.group_id, Conversation.source_id, Conversation.revision.desc())))
             evaluations = list(session.scalars(select(Evaluation).order_by(Evaluation.created_at.desc())))
+            versions = {v.id: {c["id"]: c for c in v.snapshot["criteria"]} for v in session.scalars(select(ChecklistVersion))}
+            eligible = {e.id: e for e in evaluations if checklist_id is None or e.checklist_id == checklist_id}
+            identities = {r.id: (r.group_id, r.source_id) for r in records}
+            pending = {}
+            for appeal in session.scalars(select(Appeal).where(Appeal.status == "open").order_by(Appeal.created_at)):
+                e = eligible.get(appeal.evaluation_id)
+                if e:
+                    pending.setdefault(identities[e.conversation_id] if latest_only else e.conversation_id, []).append({"appeal_id": appeal.id,
+                        "conversation_id": e.conversation_id, "evaluation_id": e.id,
+                        "criterion_id": appeal.criterion_id, "criterion_name": versions[e.checklist_id][appeal.criterion_id]["name"]})
             latest = {}
             for evaluation in evaluations:
                 if checklist_id is None or checklist_id == evaluation.checklist_id:
@@ -274,10 +304,16 @@ def create_app(settings=None, provider=None):
                 if latest_only and identity in seen:
                     continue
                 seen.add(identity)
+                evaluation = latest.get(row.id)
+                flags = [{"evaluation_id": evaluation.id, "criterion_id": cid, "criterion_name": versions[evaluation.checklist_id][cid]["name"]}
+                         for cid, value in (evaluation.effective_score or {}).get("flags", {}).items() if value is True] if evaluation else []
                 items.append({"id": row.id, "group_id": row.group_id, "source_id": row.source_id, "revision": row.revision,
                               "content_hash": row.content_hash, "language": row.snapshot["language"], "channel": row.snapshot["channel"],
                               "message_count": len(row.snapshot["transcript"]), "audio_available": bool(row.snapshot["audio_url"]),
-                              "evaluation": summary(latest[row.id]) if row.id in latest else None, "created_at": row.created_at})
+                              "evaluation": summary(evaluation) if evaluation else None, "created_at": row.created_at,
+                              "pending_appeals": len(pending.get(identity if latest_only else row.id, [])),
+                              "pending_review_targets": pending.get(identity if latest_only else row.id, []),
+                              "critical_findings": flags})
             return items
 
     @app.get("/api/conversations/{conversation_id}", response_model=ConversationDetail)
@@ -295,6 +331,10 @@ def create_app(settings=None, provider=None):
         if not settings.provider_ready:
             raise HTTPException(503, settings.public_access()["provider_status"])
         return {"evaluation_ids": jobs.create(body.conversation_ids, body.checklist_id, body.reuse_cache)}
+
+    @app.post("/api/evaluations/preview")
+    def preview_evaluation(body: EvaluationStart) -> dict[str, Any]:
+        return jobs.preview(body.conversation_ids, body.checklist_id, body.reuse_cache)
 
     @app.get("/api/evaluations", response_model=list[EvaluationSummary])
     def evaluations(conversation_id: str | None = None):

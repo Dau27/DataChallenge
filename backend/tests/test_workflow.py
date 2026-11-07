@@ -6,6 +6,8 @@ from copy import deepcopy
 import json
 from pathlib import Path
 import time
+from decimal import Decimal
+from dataclasses import replace
 
 from fastapi.testclient import TestClient
 import httpx
@@ -49,9 +51,12 @@ def wait_for(client, evaluation_id):
     pytest.fail("Synthetic job did not reach a terminal state")
 
 
-def client_and_calls(tmp_path, handler=None):
+def client_and_calls(tmp_path, handler=None, **settings_overrides):
     calls = []
-    settings = Settings(database_path=tmp_path / "test.sqlite3", api_key="sk-TEST-ONLY-NOT-A-REAL-KEY", model="TEST_MOCK_MODEL")
+    settings = Settings(database_path=tmp_path / "test.sqlite3", api_key="sk-TEST-ONLY-NOT-A-REAL-KEY", model="TEST_MOCK_MODEL",
+                        input_rate=Decimal("0.4"), output_rate=Decimal("1.6"), rate_source="SYNTHETIC TEST RATE",
+                        budget_limit_usd=Decimal("100"))
+    settings = replace(settings, **settings_overrides)
 
     def transport(request):
         payload = json.loads(request.content)

@@ -1,19 +1,26 @@
 import { useCallback, useEffect, useState } from 'react';
 import { api } from './api';
-import type { ConversationDetail, Criterion, EvaluationDetail, Evidence } from './types';
+import type { BudgetStatus, ConversationDetail, Criterion, EvaluationDetail, Evidence } from './types';
+import { EvaluationAction } from './Budget';
 import { answerLabel, evidenceMessages, label, points } from './helpers';
 import type { Run } from './App';
 import ReviewForm from './ReviewForm';
 
-export default function Detail({ id, initialEvaluation, selectedVersion, busy, run, providerReady, evaluate, onChange }: {
+export default function Detail({ id, initialEvaluation, initialCriterion = null, selectedVersion, busy, run, providerReady, budget, evaluate, onChange }: {
   id: string; initialEvaluation: string | null; selectedVersion: number; busy: boolean; run: Run; providerReady: boolean;
   evaluate: (ids: string[]) => Promise<void>; onChange: () => Promise<void>;
+  initialCriterion?: string | null; budget?: BudgetStatus | null;
 }) {
   const [conversation, setConversation] = useState<ConversationDetail | null>(null);
   const [evaluationId, setEvaluationId] = useState(initialEvaluation ?? '');
   const [evaluation, setEvaluation] = useState<EvaluationDetail | null>(null);
   const [error, setError] = useState(''); const [highlight, setHighlight] = useState<string[]>([]);
   const [appealFor, setAppealFor] = useState(''); const [comment, setComment] = useState('');
+  useEffect(() => {
+    if (!evaluation || !initialCriterion || (initialEvaluation && evaluation.id !== initialEvaluation)) return;
+    const card = document.getElementById(`criterion-${initialCriterion}`);
+    card?.scrollIntoView({ block: 'center' }); card?.focus({ preventScroll: true });
+  }, [evaluation, initialCriterion, initialEvaluation]);
 
   useEffect(() => { if (initialEvaluation) setEvaluationId(initialEvaluation); }, [initialEvaluation]);
   const load = useCallback(async () => {
@@ -50,7 +57,7 @@ export default function Detail({ id, initialEvaluation, selectedVersion, busy, r
     const prior = evaluation!.original!.results[criterion.id];
     const row = calculated!.criteria.find(c => c.criterion_id === criterion.id);
     const changed = JSON.stringify(judgment) !== JSON.stringify(prior);
-    return <article className="panel result-card" key={criterion.id}>
+    return <article className={`panel result-card ${initialCriterion === criterion.id ? 'targeted-criterion' : ''}`} id={`criterion-${criterion.id}`} tabIndex={-1} key={criterion.id}>
       <div className="criterion-head"><div><span className="small-caps">{criterion.answer_type === 'flag' ? 'INDEPENDENT FLAG' : criterion.answer_type === 'scale' ? 'NUMERICAL SCALE' : 'BINARY CRITERION'}</span><h3>{criterion.name}</h3></div>
         <span className={`answer-pill ${judgment.disposition === 'needs_review' ? 'review' : criterion.answer_type === 'flag' && judgment.value === true ? 'flagged' : ''}`}>{answerLabel(judgment.value, judgment.disposition)}</span></div>
       <details className="rubric-definition"><summary>Saved definition & allowed answers</summary><p>{criterion.description}</p>{criterion.na_allowed && <p><strong>N/A:</strong> {criterion.na_condition}</p>}{criterion.scale.map(a => <p key={a.value}><strong>{a.value}</strong> · {a.description}</p>)}</details>
@@ -73,7 +80,7 @@ export default function Detail({ id, initialEvaluation, selectedVersion, busy, r
   return <>
     <a className="back-link" href="#conversations">← All conversations</a>
     <div className="page-heading detail-heading"><div><div className="eyebrow">CONVERSATION REVIEW</div><h1>{conversation.source_id}</h1><p>{conversation.group_id} · revision {conversation.revision} · {snapshot.language} · {snapshot.channel} · {snapshot.transcript.length} messages</p></div>
-      <button className="primary" disabled={busy || !providerReady || !selectedVersion} onClick={() => void run(() => evaluate([id]))}>Evaluate with v{selectedVersion} →</button></div>
+      <EvaluationAction ids={[id]} version={selectedVersion} providerReady={providerReady} busy={busy} refreshKey={JSON.stringify(budget)} label={`Evaluate with v${selectedVersion} →`} start={() => void run(() => evaluate([id]))} /></div>
     {error && <div className="banner error" role="alert">{error}</div>}
     <div className="detail-layout"><section className="panel transcript-panel" aria-label="Conversation transcript">
       <div className="transcript-heading"><h2>Transcript</h2><span className="badge">Source revision {conversation.revision}</span></div>
@@ -87,7 +94,7 @@ export default function Detail({ id, initialEvaluation, selectedVersion, busy, r
       {evaluation && <>
         <div className="run-meta"><span className={`badge ${evaluation.state}`}>{evaluation.state}</span><span className="badge">Checklist v{evaluation.checklist_id}</span><span className="badge">{evaluation.cached_from ? 'Cached original assessment' : evaluation.metadata.mode}</span></div>
         {evaluation.error && <div className="banner error"><div><strong>Evaluation {evaluation.state}</strong><p>{evaluation.error}</p></div></div>}
-        {['failed', 'interrupted'].includes(evaluation.state) && <button className="secondary" disabled={busy || !providerReady} onClick={() => void run(async () => { await api(`/evaluations/${evaluation.id}/retry`, {}); await saved(); })}>Retry saved job</button>}
+        {['failed', 'interrupted'].includes(evaluation.state) && <button className="secondary" disabled={busy || !providerReady || !budget?.ready} onClick={() => void run(async () => { await api(`/evaluations/${evaluation.id}/retry`, {}); await saved(); })}>Retry saved job</button>}
         {processing && <div className="panel empty" role="status"><strong>{evaluation.state === 'queued' ? 'Queued for evaluation' : 'Evaluating the complete transcript…'}</strong><p>Progress is persisted. You can navigate away and return.</p></div>}
         {effective && calculated && <>
           <div className="panel total-panel"><div><span className="small-caps">EFFECTIVE SCORE / 100</span><div className="total-value">{calculated.total ?? '—'}<small>{calculated.total ? '/ 100' : calculated.reason === 'UNRESOLVED_CRITERIA' ? 'Needs review' : 'No applicable scored weight'}</small></div></div>

@@ -24,6 +24,32 @@ class AccessCheck(Base):
     report: Mapped[dict] = mapped_column(JSON)
 
 
+class BudgetState(Base):
+    __tablename__ = "budget_state"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    opening_usd: Mapped[str] = mapped_column(String)
+    coverage: Mapped[dict] = mapped_column(JSON)
+    provenance: Mapped[str] = mapped_column(String)
+    created_at: Mapped[str] = mapped_column(String, default=now)
+
+
+class BudgetReservation(Base):
+    __tablename__ = "budget_reservations"
+    id: Mapped[str] = mapped_column(String, primary_key=True, default=uid)
+    kind: Mapped[str] = mapped_column(String)
+    source_id: Mapped[str] = mapped_column(String, index=True)
+    state: Mapped[str] = mapped_column(String, default="reserved")
+    reserved_usd: Mapped[str] = mapped_column(String)
+    accounted_usd: Mapped[str] = mapped_column(String, default="0")
+    rate: Mapped[dict] = mapped_column(JSON)
+    max_attempts: Mapped[int] = mapped_column(Integer)
+    attempt_offset: Mapped[int] = mapped_column(Integer, default=0)
+    attempts: Mapped[list] = mapped_column(JSON, default=list)
+    report_hash: Mapped[str | None] = mapped_column(String, nullable=True)
+    created_at: Mapped[str] = mapped_column(String, default=now)
+    updated_at: Mapped[str] = mapped_column(String, default=now)
+
+
 class Conversation(Base):
     __tablename__ = "conversation_revisions"
     __table_args__ = (UniqueConstraint("group_id", "source_id", "content_hash"), UniqueConstraint("group_id", "source_id", "revision"))

@@ -23,11 +23,15 @@ class Settings:
     input_rate: Decimal | None = None
     output_rate: Decimal | None = None
     rate_source: str | None = None
+    budget_limit_usd: Decimal = Decimal("0")
+    budget_overhead_usd: Decimal = Decimal("0.10")
+    budget_baseline_path: Path | None = None
 
     @classmethod
     def from_env(cls):
         load_dotenv(ROOT / ".env", override=False)
         path = Path(os.getenv("DATABASE_PATH", "local_data/cqa.sqlite3"))
+        baseline_path = Path(os.getenv("BUDGET_BASELINE_PATH") or str(ROOT / "local_data/budget_baseline.json"))
         rate = lambda name: Decimal(os.environ[name]) if os.getenv(name) else None
         settings = cls(database_path=path if path.is_absolute() else ROOT / path,
                        api_key=os.getenv("OPENAI_API_KEY", "").strip(), model=os.getenv("OPENAI_MODEL", "").strip(),
@@ -38,7 +42,10 @@ class Settings:
                        max_output_tokens=int(os.getenv("MAX_OUTPUT_TOKENS", "16000")),
                        reasoning_effort=os.getenv("REASONING_EFFORT") or None,
                        input_rate=rate("INPUT_USD_PER_MILLION"), output_rate=rate("OUTPUT_USD_PER_MILLION"),
-                       rate_source=os.getenv("COST_RATE_SOURCE") or None)
+                       rate_source=os.getenv("COST_RATE_SOURCE") or None,
+                       budget_limit_usd=Decimal(os.getenv("BUDGET_LIMIT_USD", "0")),
+                       budget_overhead_usd=Decimal(os.getenv("BUDGET_OVERHEAD_USD", "0.10")),
+                       budget_baseline_path=baseline_path if baseline_path.is_absolute() else ROOT / baseline_path)
         settings.validate()
         return settings
 
@@ -52,6 +59,9 @@ class Settings:
         for value in [self.input_rate, self.output_rate]:
             if value is not None and (not value.is_finite() or value < 0):
                 raise ValueError("Configured cost rates must be finite and nonnegative")
+        for value in [self.budget_limit_usd, self.budget_overhead_usd]:
+            if not value.is_finite() or value < 0:
+                raise ValueError("Budget limit and overhead must be finite and nonnegative")
         if self.organizer_url:
             parts = urlsplit(self.organizer_url)
             if parts.scheme != "https" or not parts.hostname or parts.username or parts.password or parts.fragment:
@@ -70,4 +80,5 @@ class Settings:
                 "provider_configured": self.provider_ready, "provider_verified": False,
                 "provider_status": issue,
                 "organizer_configured": bool(self.organizer_url), "concurrency": self.concurrency,
+                "budget_limit_usd": str(self.budget_limit_usd),
                 "cost_rate_available": all(v is not None for v in [self.input_rate, self.output_rate, self.rate_source])}
