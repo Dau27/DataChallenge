@@ -144,3 +144,38 @@ it.each(['duplicate_case', 'bad_statistic', 'bad_provenance', 'missing_counts', 
   if (kind === 'same_selector_different_runs') { request.right = { ...request.left }; result.right = request.right; }
   expect(cohortResultMatches(result, request)).toBe(false);
 });
+
+it.each(['null_answer', 'object_value', 'unknown_disposition', 'object_name', 'object_reason', 'object_state', 'object_provider', 'missing_run_id'])('rejects malformed render data: %s', kind => {
+  const result = cohortResultFixture();
+  const request = { dataset_group_id: result.dataset_group_id, left: result.left, right: result.right, basis: result.basis, limit: result.limit };
+  const malformed = result as unknown as { criteria: { right_name: unknown; transitions: { left: { disposition: unknown; value: unknown } | null }[] }[]; pairs: { reasons: unknown[]; left: Record<string, unknown> }[] };
+  if (kind === 'null_answer') malformed.criteria[0].transitions[0].left = null;
+  if (kind === 'object_value') malformed.criteria[0].transitions[0].left!.value = { invalid: 'SYNTHETIC' };
+  if (kind === 'unknown_disposition') malformed.criteria[0].transitions[0].left!.disposition = 'NOT_A_DISPOSITION';
+  if (kind === 'object_name') malformed.criteria[0].right_name = { invalid: 'SYNTHETIC' };
+  if (kind === 'object_reason') malformed.pairs[0].reasons = [{ invalid: 'SYNTHETIC' }];
+  if (kind === 'object_state') malformed.pairs[0].left.state = { invalid: 'SYNTHETIC' };
+  if (kind === 'object_provider') (malformed.pairs[0].left.provenance as Record<string, unknown>).provider = { invalid: 'SYNTHETIC' };
+  if (kind === 'missing_run_id') delete malformed.pairs[0].left.evaluation_id;
+  expect(cohortResultMatches(result, request)).toBe(false);
+});
+
+it('does not restore an old case filter or pair when reopening refreshes the cohort snapshot', async () => {
+  let comparisons = 0;
+  setup(cohortOptionsFixture(), async body => {
+    const result = cohortResultFixture(body);
+    if (++comparisons > 1) result.pairs[0].left!.evaluation_id = 'NEW_A_C1';
+    return json(result);
+  });
+  render(<CohortComparison onOpenPair={vi.fn()} />); open(); await compare();
+  const transitions = await screen.findByRole('region', { name: 'Cohort criterion transitions' });
+  fireEvent.click(within(transitions).getByRole('button', { name: /Yes → No/ }));
+  fireEvent.click(screen.getByRole('button', { name: 'Inspect exact pair SYNTHETIC_C1 revision 1' }));
+  await screen.findByRole('button', { name: 'Open these run IDs in review' });
+  const panel = document.querySelector('details.cohort-comparison') as HTMLDetailsElement;
+  panel.open = false; fireEvent(panel, new Event('toggle'));
+  open();
+  await screen.findByText('NEW_A_C1');
+  expect(screen.queryByRole('region', { name: 'Exact cohort pair' })).toBeNull();
+  expect(screen.queryByRole('button', { name: 'Show all cohort cases' })).toBeNull();
+});

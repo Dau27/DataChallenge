@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { afterEach, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { Component, type ReactNode } from 'react';
 import CohortPairPreview, { cohortAnswerLabel } from './CohortPairPreview';
 import { cohortResultFixture, exactPairFixture } from './cohortTestFixtures';
 
@@ -19,17 +20,42 @@ it('uses the selected original basis and exact source/run identity for preview a
   expect(onOpenPair).toHaveBeenCalledWith('A_C1', 'B_C1');
 });
 
-it.each(['left', 'right', 'revision', 'updated', 'basis'])('refuses a mismatched %s before allowing the review callback', async mismatch => {
+it.each(['left', 'right', 'revision', 'revision_number', 'checklist', 'updated', 'basis'])('refuses a mismatched %s before allowing the review callback', async mismatch => {
   const selected = pair(); const response = exactPairFixture(selected);
   if (mismatch === 'left') response.left.id = 'WRONG';
   if (mismatch === 'right') response.right.id = 'WRONG';
   if (mismatch === 'revision') response.source.content_hash = 'WRONG';
+  if (mismatch === 'revision_number') response.source.revision += 1;
+  if (mismatch === 'checklist') response.left.checklist.id += 1;
   if (mismatch === 'updated') response.right.updated_at = '2026-11-09';
   if (mismatch === 'basis') response.left.basis = 'original';
   vi.spyOn(globalThis, 'fetch').mockResolvedValue(json(response));
   const onOpenPair = vi.fn(); render(<CohortPairPreview pair={selected} basis="effective" onClose={vi.fn()} onOpenPair={onOpenPair} />);
   await screen.findByText(/Saved pair changed/);
   expect(screen.queryByRole('button', { name: 'Open these run IDs in review' })).toBeNull();
+  expect(onOpenPair).not.toHaveBeenCalled();
+});
+
+class MalformedPacketBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  render() { return this.state.failed ? <p role="alert">SYNTHETIC_RENDER_CRASH</p> : this.props.children; }
+}
+
+it.each(['evidence', 'value', 'changes', 'total'])('reports malformed pair %s without a renderer crash or review callback', async kind => {
+  const selected = pair(); const response = exactPairFixture(selected);
+  const malformed = response as unknown as { total_difference: unknown; criteria: { changes: unknown; left: { judgment: { evidence: unknown; value: unknown } } }[] };
+  if (kind === 'evidence') malformed.criteria[0].left.judgment.evidence = 'not an evidence array';
+  if (kind === 'value') malformed.criteria[0].left.judgment.value = { invalid: 'SYNTHETIC' };
+  if (kind === 'changes') malformed.criteria[0].changes = null;
+  if (kind === 'total') malformed.total_difference = { invalid: 'SYNTHETIC' };
+  vi.spyOn(console, 'error').mockImplementation(() => {});
+  vi.spyOn(globalThis, 'fetch').mockResolvedValue(json(response));
+  const onOpenPair = vi.fn();
+  render(<MalformedPacketBoundary><CohortPairPreview pair={selected} basis="effective" onClose={vi.fn()} onOpenPair={onOpenPair} /></MalformedPacketBoundary>);
+  const alert = await screen.findByRole('alert');
+  expect(alert.textContent).toContain('Saved pair data is invalid');
+  expect(screen.queryByText('SYNTHETIC_RENDER_CRASH')).toBeNull();
   expect(onOpenPair).not.toHaveBeenCalled();
 });
 

@@ -136,6 +136,21 @@ def _summary(values):
         return {"count": len(numbers), "sum": str(total), "mean": str(total / len(numbers))}
 
 
+def _finite_generation_value(value):
+    if value is None:
+        return True
+    if type(value) not in {int, float}:
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:
+        return False
+
+
+def _completeness(value):
+    return value if isinstance(value, str) and value in {"complete", "needs_review", "incomplete"} else "unknown"
+
+
 def _provenance(run):
     meta = run.meta if isinstance(run.meta, dict) else {}
     result = {key: _metadata_value(meta, key) for key in PROVENANCE_FIELDS}
@@ -148,10 +163,10 @@ def _provenance(run):
     if isinstance(generation, dict):
         for key in ("temperature", "max_output_tokens", "top_p"):
             value = generation.get(key)
-            if key in generation and (value is None or type(value) in {int, float} and math.isfinite(value)):
+            if key in generation and _finite_generation_value(value):
                 result["generation"][key] = value
         reasoning = generation.get("reasoning")
-        if isinstance(reasoning, dict) and reasoning.get("effort") in {"none", "minimal", "low", "medium", "high", "xhigh", "max", "ultra"}:
+        if isinstance(reasoning, dict) and isinstance(reasoning.get("effort"), str) and reasoning["effort"] in {"none", "minimal", "low", "medium", "high", "xhigh", "max", "ultra"}:
             result["generation"]["reasoning_effort"] = reasoning["effort"]
     result["generation_recorded"] = isinstance(generation, dict)
     attempts = run.attempts if isinstance(run.attempts, list) else []
@@ -179,8 +194,7 @@ def _side(run, basis, versions, cache_origins):
     return {"evaluation_id": run.id, "conversation_id": run.conversation_id, "checklist_id": run.checklist_id,
             "checklist_hash": versions[run.checklist_id].content_hash, "created_at": run.created_at, "updated_at": run.updated_at,
             "state": run.state if run.state in STATES else "unknown",
-            "completeness": saved_score.get("completeness") if saved_score.get("completeness") in {"complete", "needs_review", "incomplete"} else "unknown",
-            "run_completeness": run.completeness if run.completeness in {"complete", "needs_review", "incomplete"} else "unknown",
+            "completeness": _completeness(saved_score.get("completeness")), "run_completeness": _completeness(run.completeness),
             "original_available": _available(run, "original"), "effective_available": _available(run, "effective"),
             "basis_available": _available(run, basis), "total": str(total) if total is not None else None,
             "criterion_coverage_valid": coverage_valid,

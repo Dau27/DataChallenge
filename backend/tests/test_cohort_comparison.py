@@ -402,3 +402,25 @@ def test_equivalent_hex_hash_case_is_not_a_provenance_conflict(cohort):
         run = session.get(Evaluation, "B"); meta = deepcopy(run.meta); meta["checklist_hash"] = meta["checklist_hash"].upper(); run.meta = meta
     result = cohort.compare()
     assert result["coverage"]["matched"] == 1 and result["coverage"]["provenance_conflict_pairs"] == 0
+
+
+@pytest.mark.parametrize("generation", [{"reasoning": {"effort": []}}, {"reasoning": {"effort": {}}}, {"max_output_tokens": 10**400}])
+def test_malformed_generation_metadata_is_withheld_without_crashing(cohort, generation):
+    cohort.source(); cohort.add("A"); cohort.add("B", model="B")
+    with cohort.db.transaction() as session:
+        run = session.get(Evaluation, "A"); meta = deepcopy(run.meta); meta["generation"] = generation; run.meta = meta
+    before = db_rows(cohort.db)
+    result = cohort.compare()
+    assert result["pairs"][0]["left"]["provenance"]["generation"] == {}
+    assert db_rows(cohort.db) == before
+
+
+@pytest.mark.parametrize("completeness", [[], {}])
+def test_malformed_saved_completeness_stays_unknown_without_crashing(cohort, completeness):
+    cohort.source(); cohort.add("A"); cohort.add("B", model="B")
+    with cohort.db.transaction() as session:
+        run = session.get(Evaluation, "A"); saved_score = deepcopy(run.effective_score); saved_score["completeness"] = completeness; run.effective_score = saved_score
+    before = db_rows(cohort.db)
+    result = cohort.compare()
+    assert result["pairs"][0]["left"]["completeness"] == "unknown"
+    assert db_rows(cohort.db) == before

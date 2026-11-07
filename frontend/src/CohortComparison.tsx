@@ -105,7 +105,10 @@ export default function CohortComparison({ onOpenPair }: { onOpenPair: (leftEval
       </select></label>)}
     </fieldset>;
   };
-  return <details className="cohort-comparison insight-tools" onToggle={event => setOpen(event.currentTarget.open)}>
+  return <details className="cohort-comparison insight-tools" onToggle={event => {
+    const next = event.currentTarget.open; setOpen(next);
+    if (!next) { setCaseSelection(null); setSelectedPair(null); }
+  }}>
     <summary><span>Saved-run cohorts</span><span className="disclosure-hint">Compare historical configurations · no new evaluation</span></summary>
     {open && <div className="cohort-content">
       <p className="cohort-notice">Historical differences, not evaluator accuracy. Higher operator scores do not establish a better evaluator. Cached reuse is not an independent assessment.</p>

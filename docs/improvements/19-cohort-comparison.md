@@ -1,6 +1,57 @@
 # Stage 19 — saved-run cohort comparison
 
-**Builder handoff: ready for coordinator integration, 8 November 2026.** Implemented and tested in the coordinator-provided `sprint-cohorts-20261108` worktree, from audited baseline **d7d8a9d2a93ff5b537e34e689dd63b0e952f0fb3**. The canonical root handoff was confirmed **READY** before the first edit. No existing tracked file, shared route/screen/type/style, database/scoring implementation or `CURRENT_CONTEXT.md` was changed. No merge or push.
+**Builder handoff: ready for coordinator integration, 8 November 2026.** Implemented and tested in the coordinator-provided `sprint-cohorts-20261108` worktree, from audited baseline **d7d8a9d2a93ff5b537e34e689dd63b0e952f0fb3**. The canonical root handoff was confirmed **READY** before the first edit. No pre-sprint shared route/screen/type/style, database/scoring implementation or `CURRENT_CONTEXT.md` was changed; the follow-up below modifies owned cohort files only. No merge or push.
+
+## Resumed verification — READY FOR INTEGRATION
+
+Continued the existing **d3242efd76edcf0d98bd8c0f2109271784ee66c4** implementation on its assigned branch/worktree after rereading canonical root MASTER/CURRENT context, READY handoff and updated cohort prompt. The checkpoint initially repeated **50 backend / 27 client tests, TypeScript, 20 actual cohort response checks** successfully. Completed work was retained; no restart, rebase, dependency install/change, shared integration or preview server/browser was performed.
+
+Only reproduced owned-file defects were corrected:
+
+- Stored generation metadata with list/dict reasoning effort or an overflowing integer could raise `TypeError`/`OverflowError` while reading provenance. Invalid components are now withheld without changing stored metadata or supplying current defaults. A malformed list/dict saved completeness becomes `unknown` rather than raising. Existing shared-reader refusals still remain explicit invalid cases; no record is repaired or re-scored.
+- Nested malformed cohort answers, names, reasons, execution-state/provenance fields and missing run IDs could pass the client guard and reach rendering. The guard now rejects these packets using the existing error/retry flow. Invalid pair evidence/answers/change lists or numeric totals likewise produce a recoverable error instead of a renderer failure or `[object Object]` output. No invalid packet enables the review callback.
+- Pair preview identity checks now include the exact source revision number and both checklist IDs/hashes, in addition to source ID/hash, run IDs/update timestamps and selected basis. These fields also participate in its request key.
+- Closing/reopening the cohort disclosure could refresh the cohort manifest while restoring a case filter or pair from the previous snapshot. Closing now clears those snapshot-specific selections while retaining the chosen cohort filters.
+
+The added regressions were run **before fixes**: five backend cases failed with the stored-value exceptions; fourteen malformed/identity client cases and the reopening case failed by accepting bad data, renderer failure or stale selection. All pass after the changes.
+
+Changed from d3242ef (nine existing owned files; no new feature files):
+
+| File | Follow-up change |
+| --- | --- |
+| `backend/app/services/cohort_comparison.py` | Safe legacy generation/completeness reads |
+| `backend/tests/test_cohort_comparison.py` | Five reproduced stored-value regressions |
+| `backend/tests/test_cohort_saved_copy.py` | Additional private, reduced pair-render samples from existing saved comparisons |
+| `frontend/src/cohortTypes.ts` | Render-safe cohort and exact-pair packet checks |
+| `frontend/src/CohortPairPreview.tsx` | Complete source/checklist identity key and validated pair rendering |
+| `frontend/src/CohortComparison.tsx` | Clear stale case/pair selections on disclosure close |
+| `frontend/src/cohortComparison.test.tsx` | Malformed packet and disclosure-refresh regressions |
+| `frontend/src/cohortPairPreview.test.tsx` | Malformed rendering and source/checklist identity regressions |
+| `docs/improvements/19-cohort-comparison.md` | Resumed verification and unchanged integration contract |
+
+Final resumed commands used the same coordinator interpreter/offline wrapper and owned Vitest paths shown below: **55 backend passed** (20.32s; existing Starlette/AnyIO warning), **42 client passed** (4.65s), **TypeScript passed**. No full suite or production build was run in this lane. Dependencies and all non-owned tracked files remain unchanged.
+
+Copied-data acceptance repeated through SQLite `mode=ro`: **249 evaluations / 75 exact revisions / two datasets**, **20 scenarios**, **376 exact-pair checks** (226 between different IDs; 178 distinct ID pairs), all **15 tables and schema/index SQL unchanged**, zero provider attempts. The existing actual-response bridge accepted **20 responses / 1,080 source-pair records**. An additional local Node check compiled the owned `cohortTypes.ts` and passed its `cohortPairDataValid` guard over **376 actual pair render samples / 3,020 criterion rows**, with zero rejections. These reduced private samples contain only rendered definition/answer/evidence-ID/difference fields; no explanations, transcript, raw metadata/errors or recording URLs.
+
+Private resumed evidence adds `local_data/cohort_pair_render_samples.json` and `cohort_pair_contract_checks.json` alongside the existing cohort verification JSONs. The additional Node check reads that private JSON, invokes `cohortPairDataValid` using the same local TypeScript transpilation mechanism as `check_cohort_contract.mjs`, and writes only counts/failure count. No hosted request or browser control is involved.
+
+The additional check ran from the worktree after dot-sourcing `local_data/offline.ps1`, with the following JavaScript supplied on stdin to `node --input-type=module -`:
+
+```javascript
+import fs from 'node:fs/promises';
+import ts from './frontend/node_modules/typescript/lib/typescript.js';
+const source = await fs.readFile('./frontend/src/cohortTypes.ts', 'utf8');
+const compiled = ts.transpileModule(source, {compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
+const {cohortPairDataValid} = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
+const samples = JSON.parse(await fs.readFile('./local_data/cohort_pair_render_samples.json', 'utf8'));
+const failed = samples.map((sample,index)=>cohortPairDataValid(sample)?null:index).filter(index=>index!==null);
+if (failed.length) throw new Error(`Pair render guard rejected sample indices: ${failed.join(',')}`);
+const result = {actual_pair_render_samples:samples.length,actual_criterion_rows:samples.reduce((sum,sample)=>sum+sample.criteria.length,0),failed:failed.length};
+await fs.writeFile('./local_data/cohort_pair_contract_checks.json',JSON.stringify(result,null,2));
+process.stdout.write(JSON.stringify(result));
+```
+
+**Frozen integration is unchanged:** mount the existing router once; mount `CohortComparison({onOpenPair(leftEvaluationId, rightEvaluationId)})`; preserve both IDs even outside the first history page. The owned preview retains original/effective basis; the existing review screen controls its own basis selectors. Coordinator mounting/exact-ID hooks, combined suites/build and legitimate browser acceptance remain pending, as do the existing >200-revision and accuracy limitations below. The original checkpoint plus this owned-file follow-up are both required when integrating the branch. No merge/push, organizer fetch, provider check, new evaluation or demo work; added API spend **$0**.
 
 ## Owned files
 
@@ -73,7 +124,7 @@ Only the coordinator should make these shared-file changes:
 
 The exact pair preview reads only the existing **GET `/api/evaluations/compare?left_id=...&right_id=...&left_basis=...&right_basis=...`** endpoint. Evidence links target the exact source/run/criterion/message. Changed-run responses are refused and require cohort refresh. Case and pair closing restore keyboard focus; incoming scope/basis/selector changes immediately hide obsolete results. Late responses and errors cannot restore an earlier selection.
 
-## Actual checks and results
+## Initial implementation checks at d3242ef
 
 Commands ran only in the provided cohort worktree. `$python` below denotes the coordinator-provided absolute interpreter in the original repository's `.venv`; the offline wrapper establishes empty provider/organizer configuration, limit0 and the socket guard.
 
@@ -86,7 +137,7 @@ node node_modules/vitest/vitest.mjs run --maxWorkers=2 src/cohortComparison.test
 node node_modules/typescript/bin/tsc -b
 ```
 
-Targeted acceptance: **50 backend tests / 27 client tests passed; TypeScript passed.** Backend retains one existing Starlette/AnyIO deprecation warning. No full combined suite/build is claimed by this lane.
+Initial targeted acceptance: **50 backend tests / 27 client tests passed; TypeScript passed.** The resumed results above supersede these counts. Backend retains one existing Starlette/AnyIO deprecation warning. No full combined suite/build is claimed by this lane.
 
 Synthetic coverage includes exact old/new revisions and dataset namespaces; no-success fallback; identical and microsecond timestamp ordering; wildcard/null/exact filters; known answer, N/A, unresolved and flag transitions; original/effective review divergence; all-N/A null totals; added/removed/type/weight/definition changes; unknown scoring versions; cached/same-run lineage; missing/failed/pending overlaps; invalid totals/judgments/criterion coverage; privacy withholding; concurrent review snapshot isolation; strict API inputs; **200 complete pairs accepted and the 201st revision refused**. Client tests cover scope/basis changes, missing sides, explicit limits, stale/error responses, retries, invariant validation, identity drift, evidence routes and callback/focus behavior.
 

@@ -3,6 +3,7 @@ import { api } from './api';
 import type { SavedComparison } from './types';
 import { useLatestResource } from './useLatestResource';
 import type { CohortAnswer, CohortBasis, CohortPair } from './cohortTypes';
+import { cohortPairDataValid } from './cohortTypes';
 
 export function cohortAnswerLabel(answer: CohortAnswer, type?: string | null) {
   if (answer.disposition === 'not_applicable') return 'N/A';
@@ -16,16 +17,20 @@ export default function CohortPairPreview({ pair, basis, onClose, onOpenPair }: 
 }) {
   const panel = useRef<HTMLElement>(null);
   const left = pair.left; const right = pair.right;
-  const key = JSON.stringify([pair.source.conversation_id, pair.source.content_hash, left?.evaluation_id, left?.updated_at, right?.evaluation_id, right?.updated_at, basis]);
+  const key = JSON.stringify([pair.source.conversation_id, pair.source.revision, pair.source.content_hash,
+    left?.evaluation_id, left?.updated_at, left?.checklist_id, left?.checklist_hash, right?.evaluation_id, right?.updated_at, right?.checklist_id, right?.checklist_hash, basis]);
   const comparison = useLatestResource(key, async () => {
     if (!left || !right) throw new Error('Both exact saved runs are required.');
     const query = new URLSearchParams({ left_id: left.evaluation_id, right_id: right.evaluation_id, left_basis: basis, right_basis: basis });
     const result = await api<SavedComparison>(`/evaluations/compare?${query}`);
-    if (!result || !result.left || !result.right || !result.source || result.source.id !== pair.source.conversation_id || result.source.content_hash !== pair.source.content_hash
+    if (!result || !result.left || !result.right || !result.source || result.source.id !== pair.source.conversation_id || result.source.revision !== pair.source.revision || result.source.content_hash !== pair.source.content_hash
         || result.left.id !== left.evaluation_id || result.right.id !== right.evaluation_id || result.left.updated_at !== left.updated_at || result.right.updated_at !== right.updated_at
+        || result.left.checklist?.id !== left.checklist_id || result.right.checklist?.id !== right.checklist_id
+        || result.left.checklist?.content_hash !== left.checklist_hash || result.right.checklist?.content_hash !== right.checklist_hash
         || result.left.basis !== basis || result.right.basis !== basis || !Array.isArray(result.criteria)) {
       throw new Error('Saved pair changed. Refresh the cohort comparison before inspecting this pair.');
     }
+    if (!cohortPairDataValid(result)) throw new Error('Saved pair data is invalid. Retry or inspect another saved pair.');
     return result;
   });
   useEffect(() => { panel.current?.scrollIntoView({ block: 'nearest' }); panel.current?.focus({ preventScroll: true }); }, [key]);

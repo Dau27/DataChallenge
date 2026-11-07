@@ -1,3 +1,5 @@
+import type { ComparisonCell, SavedComparison } from './types';
+
 export const cohortFields = ['model', 'prompt_version', 'schema_version', 'evidence_validation_version'] as const;
 export type CohortField = typeof cohortFields[number];
 export type CohortBasis = 'original' | 'effective';
@@ -45,8 +47,10 @@ function resultMatches(data: CohortResult, request: CohortRequest) {
       || data.coverage.source_revisions !== data.pairs.length || !statisticValid(data.total_difference, data.pairs.length)) return false;
   const ids = new Set<string>();
   for (const pair of data.pairs) {
-    if (!pair.source || typeof pair.source.conversation_id !== 'string' || !pair.source.content_hash || pair.source.dataset_group_id !== request.dataset_group_id
-        || ids.has(pair.source.conversation_id) || !pairStatuses.includes(pair.status) || !Array.isArray(pair.criteria)) return false;
+    if (!pair.source || typeof pair.source.conversation_id !== 'string' || typeof pair.source.source_id !== 'string' || typeof pair.source.content_hash !== 'string' || !pair.source.content_hash
+        || !Number.isSafeInteger(pair.source.revision) || pair.source.revision < 1 || pair.source.dataset_group_id !== request.dataset_group_id
+        || ids.has(pair.source.conversation_id) || !pairStatuses.includes(pair.status) || !Array.isArray(pair.criteria) || !stringArray(pair.reasons)
+        || !pair.criteria.every(row => typeof row.criterion_id === 'string' && answerValid(row.left) && answerValid(row.right) && stringArray(row.changes))) return false;
     ids.add(pair.source.conversation_id);
     if (pair.left === undefined || pair.right === undefined || typeof pair.total_comparable !== 'boolean') return false;
     if (pair.status === 'missing_both' ? pair.left !== null || pair.right !== null
@@ -56,8 +60,13 @@ function resultMatches(data: CohortResult, request: CohortRequest) {
     if (cohortSelectorKey(request.left) === cohortSelectorKey(request.right)
       && (pair.left?.evaluation_id ?? null) !== (pair.right?.evaluation_id ?? null)) return false;
     for (const [side, selector] of [[pair.left, request.left], [pair.right, request.right]] as const) {
-      if (side && (!/^[a-zA-Z0-9_.-]{1,200}$/.test(side.evaluation_id) || side.conversation_id !== pair.source.conversation_id
+      if (side && (typeof side.evaluation_id !== 'string' || !/^[a-zA-Z0-9_.-]{1,200}$/.test(side.evaluation_id) || side.conversation_id !== pair.source.conversation_id
+          || typeof side.state !== 'string' || typeof side.completeness !== 'string' || typeof side.run_completeness !== 'string' || typeof side.checklist_hash !== 'string'
           || side.checklist_id !== selector.checklist_id || !side.provenance || !Array.isArray(side.provenance.unknown_fields) || !Array.isArray(side.provenance.response_models)
+          || !stringArray(side.provenance.unknown_fields) || !stringArray(side.provenance.response_models) || !generationValid(side.provenance.generation)
+          || !['provider', 'mode', ...cohortFields, 'scoring_version', 'prompt_hash', 'schema_hash', 'request_schema_hash', 'checklist_hash']
+            .every(field => nullableText(side.provenance[field as keyof CohortProvenance]))
+          || !nullableText(side.cached_from) || (side.total_state === 'numeric' ? !numericText(side.total) : side.total !== null)
           || !['numeric', 'missing', 'invalid'].includes(side.total_state) || typeof side.created_at !== 'string' || typeof side.updated_at !== 'string'
           || typeof side.cached !== 'boolean' || typeof side.provenance_conflict !== 'boolean' || typeof side.criterion_coverage_valid !== 'boolean'
           || typeof side.original_available !== 'boolean' || typeof side.effective_available !== 'boolean'
@@ -73,18 +82,57 @@ function resultMatches(data: CohortResult, request: CohortRequest) {
     && data.total_difference.count === data.pairs.filter(pair => pair.total_comparable).length
     && pairStatuses.every(status => Number.isSafeInteger(data.coverage[status]) && data.coverage[status] >= 0
       && data.coverage[status] === data.pairs.filter(pair => pair.status === status).length)
-    && data.criteria.every(row => Array.isArray(row.transitions) && row.denominator === data.pairs.length
+    && data.criteria.every(row => typeof row.criterion_id === 'string' && nullableText(row.left_name) && nullableText(row.right_name)
+      && [null, 'binary', 'scale', 'flag'].includes(row.left_type) && [null, 'binary', 'scale', 'flag'].includes(row.right_type)
+      && Array.isArray(row.transitions) && row.denominator === data.pairs.length
       && ['answer_comparable_count', 'answer_changed_count', 'disposition_changed_count', 'configuration_changed_count', 'definition_changed_count', 'details_only_count', 'unavailable_count']
         .every(key => Number.isSafeInteger(row[key as keyof CohortCriterion]) && Number(row[key as keyof CohortCriterion]) >= 0 && Number(row[key as keyof CohortCriterion]) <= data.pairs.length)
       && statisticValid(row.points_difference, row.answer_comparable_count)
-      && row.transitions.every(transition => transition.count === transition.conversation_ids.length
+      && row.transitions.every(transition => answerValid(transition.left) && answerValid(transition.right) && typeof transition.answer_comparable === 'boolean'
+        && transition.count === transition.conversation_ids.length
         && transition.conversation_ids.every(id => ids.has(id)))
       && row.transitions.reduce((count, transition) => count + transition.count, 0) === data.pairs.length
       && new Set(row.transitions.flatMap(transition => transition.conversation_ids)).size === data.pairs.length);
 }
 
 function statisticValid(value: CohortStatistic, maximum: number) {
-  const numeric = (text: string | null) => typeof text === 'string' && text.length <= 2100 && /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(text);
   return value && Number.isSafeInteger(value.count) && value.count >= 0 && value.count <= maximum
-    && (value.count === 0 ? value.sum === null && value.mean === null : numeric(value.sum) && numeric(value.mean));
+    && (value.count === 0 ? value.sum === null && value.mean === null : numericText(value.sum) && numericText(value.mean));
+}
+
+const numericText = (value: unknown) => typeof value === 'string' && value.length <= 2100 && /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(value);
+const nullableText = (value: unknown) => value === null || typeof value === 'string';
+const stringArray = (value: unknown) => Array.isArray(value) && value.every(item => typeof item === 'string');
+
+function answerValid(answer: CohortAnswer) {
+  if (!answer || !nullableText(answer.reason)) return false;
+  if (answer.disposition === 'assessed') return typeof answer.value === 'boolean' || numericText(answer.value);
+  return ['not_applicable', 'needs_review', 'unavailable'].includes(answer.disposition) && answer.value === null;
+}
+
+function generationValid(value: CohortProvenance['generation']) {
+  return value && typeof value === 'object' && !Array.isArray(value) && Object.entries(value).every(([key, item]) =>
+    key === 'reasoning_effort' ? typeof item === 'string' : ['temperature', 'max_output_tokens', 'top_p'].includes(key)
+      && (item === null || typeof item === 'number' && Number.isFinite(item)));
+}
+
+// Validate only the fields the preview renders, without grading or recalculating them.
+export function cohortPairDataValid(data: SavedComparison) {
+  try {
+    if (typeof data.total_comparable !== 'boolean' || (data.total_comparable ? !numericText(data.total_difference) : data.total_difference !== null)) return false;
+    const cellValid = (cell: ComparisonCell, criterionId: string) => {
+      if (!cell || cell.criterion !== null && (!cell.criterion || cell.criterion.id !== criterionId || typeof cell.criterion.name !== 'string'
+          || !['binary', 'scale', 'flag'].includes(cell.criterion.answer_type))) return false;
+      const judgment = cell.judgment;
+      if (judgment === null) return true;
+      if (!judgment || !cell.criterion || !['assessed', 'not_applicable', 'needs_review'].includes(judgment.disposition)) return false;
+      if (judgment.disposition === 'assessed' ? cell.criterion.answer_type === 'scale' ? typeof judgment.value !== 'number' || !Number.isFinite(judgment.value)
+        : typeof judgment.value !== 'boolean' : judgment.value !== null) return false;
+      return Array.isArray(judgment.evidence) && judgment.evidence.every(evidence => evidence && ['support', 'absence', 'context'].includes(evidence.kind)
+        && typeof evidence.start_message_id === 'string' && !!evidence.start_message_id && typeof evidence.end_message_id === 'string' && !!evidence.end_message_id);
+    };
+    return Array.isArray(data.criteria) && new Set(data.criteria.map(row => row.criterion_id)).size === data.criteria.length
+      && data.criteria.every(row => typeof row.criterion_id === 'string' && !!row.criterion_id && stringArray(row.changes)
+        && (row.points_difference === null || numericText(row.points_difference)) && cellValid(row.left, row.criterion_id) && cellValid(row.right, row.criterion_id));
+  } catch { return false; }
 }

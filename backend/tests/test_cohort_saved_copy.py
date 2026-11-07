@@ -47,6 +47,7 @@ def test_actual_saved_copy_matches_exact_pairs_and_preserves_all_rows_schema_and
     checked_pairs = different_pairs = scenarios_checked = 0
     distinct_pairs = set()
     contract_samples = []
+    pair_render_samples = []
     try:
         with TestClient(app) as client:
             options = client.get("/api/insights/cohorts/options").json()
@@ -86,6 +87,17 @@ def test_actual_saved_copy_matches_exact_pairs_and_preserves_all_rows_schema_and
                                     assert pair[label]["completeness"] == (expected_completeness if expected_completeness in {"complete", "needs_review", "incomplete"} else "unknown")
                             if not pair["left"] or not pair["right"]: continue
                             exact = compare_saved(session, pair["left"]["evaluation_id"], pair["right"]["evaluation_id"], basis, basis)
+                            # Only the preview's rendered fields: no explanations, transcript,
+                            # raw metadata/errors or recording URLs in this private bridge sample.
+                            preview = {"total_comparable": exact["total_comparable"], "total_difference": exact["total_difference"], "criteria": []}
+                            for row in exact["criteria"]:
+                                cell = {key: row[key] for key in ("criterion_id", "changes", "points_difference")}
+                                for side in ("left", "right"):
+                                    definition, judgment = row[side]["criterion"], row[side]["judgment"]
+                                    cell[side] = {"criterion": {key: definition[key] for key in ("id", "name", "answer_type")} if definition else None,
+                                        "judgment": {key: judgment[key] for key in ("disposition", "value", "evidence")} if judgment else None}
+                                preview["criteria"].append(cell)
+                            pair_render_samples.append(preview)
                             checked_pairs += 1
                             different_pairs += int(pair["left"]["evaluation_id"] != pair["right"]["evaluation_id"])
                             distinct_pairs.add((pair["left"]["evaluation_id"], pair["right"]["evaluation_id"]))
@@ -102,6 +114,7 @@ def test_actual_saved_copy_matches_exact_pairs_and_preserves_all_rows_schema_and
     assert fingerprint(path) == before
     assert not attempts
     (path.parent / "cohort_contract_samples.json").write_text(json.dumps(contract_samples), encoding="utf-8")
+    (path.parent / "cohort_pair_render_samples.json").write_text(json.dumps(pair_render_samples), encoding="utf-8")
     (path.parent / "cohort_saved_checks.json").write_text(json.dumps({"datasets": len(options["datasets"]), "source_revisions": 75,
         "saved_evaluations": 249, "scenarios_checked": scenarios_checked, "exact_pair_checks": checked_pairs,
         "different_run_pair_checks": different_pairs, "distinct_run_pairs": len(distinct_pairs), "tables_preserved": len(before["tables"]), "schema_unchanged": True,
