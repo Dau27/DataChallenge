@@ -2,6 +2,8 @@
 
 Completed 7 November 2026. The latest authorized stages add saved-run comparison, JSON/CSV exports and transcript search with saved filters. Existing budget protection, checklist preview and review filters are retained. Demo work remains deferred.
 
+Subsequent [PDF audit](../audits/2026-11-07/13-post-features-pdf-audit.md): regression/saved-data checks pass, but an open comparison can stay stale after a new review decision. The main result/history remain correct. Automatic comparison refresh is the next recommended fix; it was documented, not implemented by that audit. [Market-based refinements](../ADOPTED_FEATURE_REVIEW.md) are proposals, not completed changes.
+
 | Latest stage | Result | Report |
 | --- | --- | --- |
 | 4 — Saved-run comparison | Passed: exact revision, original/effective selectors, evidence and rule/answer/points/provenance differences; incompatible/null totals handled | [Comparison](04-saved-run-comparison.md) |

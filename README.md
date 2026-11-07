@@ -6,6 +6,8 @@ The application uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite,
 
 ## Current verified state
 
+- **Latest PDF audit:** informal readiness remains **about 85/100**, with **144 backend / 27 client tests and build passing**, 130 selected saved snapshots and 198 review histories rechecked. One new P2 UI gap was reproduced: an open saved comparison can stay stale after a reviewer updates a run. Main saved scores remain correct; close/reopen the comparison until it is fixed. DEV remains **64 complete / one needs review**. No API spending; demo deferred. [Audit and remaining gaps](docs/audits/2026-11-07/13-post-features-pdf-audit.md), [adopted-feature refinements](docs/ADOPTED_FEATURE_REVIEW.md).
+
 - **Saved-data features implemented:** compare saved runs and original/effective answers, download JSON/CSV reports, and search transcripts with named browser filter presets. **144 backend / 27 client tests and build passed**; 249 copied real runs passed comparison and both export formats with provider calls forbidden. Originals and private files preserved; **$0 added inference**. [Stage reports](docs/improvements/README.md). Demo remains deferred. [Earlier market research](docs/MARKET_FEATURE_OPTIONS.md) explains the selected scope.
 
 - **Delivery scope updated:** the manual reference-review exercise is removed from delivery and demo plans. Private evidence is retained. **Five-minute demo work is deferred at the user's request.** [Scope update](docs/audits/2026-11-07/12-delivery-scope-cleanup.md).
