@@ -1,0 +1,34 @@
+.cohort-comparison { margin-block: 14px; min-width: 0; }
+.cohort-comparison > summary { cursor: pointer; display: flex; flex-wrap: wrap; gap: 8px; padding: 14px 16px; }
+.cohort-comparison .cohort-content { padding: 0 16px 16px; min-width: 0; }
+.cohort-comparison .cohort-content p { line-height: 1.6; }
+.cohort-comparison .cohort-notice { padding: 12px; border-left: 3px solid #4a7664; background: #f2f6f3; }
+.cohort-comparison .cohort-section-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-block: 12px; }
+.cohort-comparison .cohort-scope-controls, .cohort-comparison .cohort-selectors { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; margin-block: 14px; }
+.cohort-comparison label { display: grid; gap: 6px; min-width: 0; font-size: 12px; }
+.cohort-comparison select { width: 100%; min-width: 0; max-width: 100%; }
+.cohort-comparison .cohort-selector { display: grid; gap: 10px; border: 1px solid var(--line,#dce4df); border-radius: 8px; padding: 12px; min-width: 0; margin: 0; }
+.cohort-comparison .cohort-selector legend { padding-inline: 6px; font-weight: 600; }
+.cohort-comparison .cohort-coverage { display: grid; grid-template-columns: repeat(auto-fit,minmax(145px,1fr)); gap: 8px; margin-block: 14px; }
+.cohort-comparison .cohort-coverage button { display: flex; justify-content: space-between; text-align: left; gap: 10px; white-space: normal; }
+.cohort-comparison .cohort-coverage strong { font-variant-numeric: tabular-nums; }
+.cohort-comparison .table-scroll { max-width: 100%; overflow: auto; border: 1px solid var(--line,#dce4df); border-radius: 8px; margin-block: 12px; }
+.cohort-comparison table { width: 100%; min-width: 640px; }
+.cohort-comparison th, .cohort-comparison td { vertical-align: top; white-space: normal; min-width: 140px; max-width: 360px; overflow-wrap: anywhere; }
+.cohort-comparison small { display: block; color: var(--muted,#606b66); line-height: 1.5; margin-top: 4px; }
+.cohort-comparison .cohort-transitions { display: grid; gap: 7px; }
+.cohort-comparison .cohort-transitions button { text-align: left; white-space: normal; display: grid; gap: 3px; }
+.cohort-comparison .cohort-transitions strong { font-variant-numeric: tabular-nums; }
+.cohort-comparison .cohort-cases, .cohort-comparison .cohort-pair-preview { min-width: 0; margin-top: 18px; scroll-margin-top: 18px; }
+.cohort-comparison .cohort-pair-preview { padding: 14px; background: #f8faf8; border: 1px solid var(--line,#dce4df); border-radius: 8px; }
+.cohort-comparison .cohort-identity, .cohort-comparison dd { overflow-wrap: anywhere; }
+.cohort-comparison dt { font-weight: 600; margin-top: 8px; }
+.cohort-comparison dd { margin: 3px 0 0; }
+.cohort-comparison .cohort-evidence { display: block; margin-top: 8px; line-height: 1.5; }
+.cohort-comparison .cohort-cases:focus, .cohort-comparison .cohort-pair-preview:focus { outline: 2px solid #39735a; outline-offset: 4px; }
+@media (max-width: 600px) {
+  .cohort-comparison .cohort-scope-controls, .cohort-comparison .cohort-selectors { grid-template-columns: minmax(0,1fr); }
+  .cohort-comparison .cohort-content { padding-inline: 12px; }
+  .cohort-comparison select { font-size: 16px; }
+  .cohort-comparison .cohort-coverage { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
