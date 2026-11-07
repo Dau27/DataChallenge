@@ -48,7 +48,7 @@ it('combines text, speaker and queue filters, saves/restores exact checklist-sco
   await screen.findByText('KZ source excerpt');
   fireEvent.click(screen.getByRole('button', { name: 'Delete saved filters' }));
   expect((screen.getByLabelText('Search transcript text') as HTMLInputElement).value).toBe('');
-  expect(JSON.parse(localStorage.getItem('cqa-filter-presets-v1')!).presets).toEqual([]);
+  expect(JSON.parse(localStorage.getItem('cqa-filter-presets-v2')!).presets).toEqual([]);
   expect(rows).toHaveLength(2);
   expect(urls.every(u => u.startsWith('/api/conversations?'))).toBe(true);
 });

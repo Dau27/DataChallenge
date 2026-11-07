@@ -30,8 +30,13 @@ input[type="file"].visually-hidden{width:1px;height:1px;padding:0;border:0;left:
 .saved-filter-controls label { display:grid; gap:6px; min-width:180px; }
 .saved-filter-controls small, .saved-filter-controls [role="alert"] { flex-basis:100%; }
 .saved-filter-controls input, .saved-filter-controls select { max-width:100%; }
+.saved-filter-controls > section { flex-basis:100%; min-width:0; overflow-wrap:anywhere; }
 .search-status { margin:12px 22px; }
 .search-snippets { max-width:420px; min-width:180px; margin-top:10px; }
 .search-snippets p { white-space:pre-wrap; overflow-wrap:anywhere; font-size:12px; margin:4px 0 12px; }
 .search-snippets a { font-size:12px; }
+.search-snippets mark { background:#f7e399; color:inherit; }
+.match-navigation { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
+.match-navigation .secondary { font-size:10px; padding:6px 8px; }
 .saved-export .check-label { margin-top:12px; }
+.saved-export .inline-actions { flex-wrap:wrap; }

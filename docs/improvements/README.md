@@ -1,16 +1,25 @@
 # Implemented workflow improvements
 
-Completed 7 November 2026. The latest authorized stages add saved-run comparison, JSON/CSV exports and transcript search with saved filters. Existing budget protection, checklist preview and review filters are retained. Demo work remains deferred.
+Completed 7 November 2026. The latest stages repair comparison freshness and refine comparison/export/search/browser presets. Existing budget protection, checklist preview and review filters are retained. Demo work remains deferred.
 
-Subsequent [PDF audit](../audits/2026-11-07/13-post-features-pdf-audit.md): regression/saved-data checks pass, but an open comparison can stay stale after a new review decision. The main result/history remain correct. Automatic comparison refresh is the next recommended fix; it was documented, not implemented by that audit. [Market-based refinements](../ADOPTED_FEATURE_REVIEW.md) are proposals, not completed changes.
+| Current stage | Result | Report |
+| --- | --- | --- |
+| 7 - Comparison consistency | Fixed either-side reviewed-run refresh; stable selections, late-response guards, difference filters/counts and recorded provenance | [Comparison repair](07-comparison-refresh-and-differences.md) |
+| 8 - Export usability | Simple criterion CSV, exact bounded selected-run exports, snapshot manifests and privacy/format guards | [Export refinements](08-simple-and-selected-exports.md) |
+| 9 - Retrieval and presets | Full message-match navigation/highlights, atomic v1-to-v2 storage migration, explicit edit operations and previewed portable presets | [Search/preset refinements](09-match-navigation-and-presets.md) |
+| 10 - Integrated verification | 173 backend/58 client/build; actual saved-data, browser downloads and preserved originals, with zero inference | [Final verification](10-refinements-verification.md) |
 
-| Latest stage | Result | Report |
+Current full checks: **173 backend / 58 client passed, one paid opt-in skipped; build and pip check passed**. Actual copied data: 249 saved comparisons and JSON/archival CSV/simple CSV exports, 100-run batches in all three formats, 187 match pages and cold reopen passed. Browser controls/downloads and original-data/protected-file checks passed. **Zero provider requests / $0.00**. No new semantic accuracy or official-grade claim.
+
+The earlier [PDF audit](../audits/2026-11-07/13-post-features-pdf-audit.md) found the comparison freshness issue. Stage 7 repairs it. The [market follow-up](../ADOPTED_FEATURE_REVIEW.md) records the original recommendations; stages 7-10 implement the selected refinement set while leaving other optional ideas separate.
+
+| Previous feature stage | Result | Report |
 | --- | --- | --- |
 | 4 — Saved-run comparison | Passed: exact revision, original/effective selectors, evidence and rule/answer/points/provenance differences; incompatible/null totals handled | [Comparison](04-saved-run-comparison.md) |
 | 5 — JSON/CSV exports | Passed: actual downloads, both score sets/history, typed records, opt-in excerpts and credential/URL/formula protection | [Exports](05-saved-report-exports.md) |
 | 6 — Transcript search and saved filters | Passed: literal Unicode text/speaker search, exact links, combined filters, checklist-scoped presets and stale/error handling | [Search and final verification](06-transcript-search-saved-filters.md) |
 
-Latest full checks: **144 backend / 27 client passed**, **one paid opt-in skipped**, build and pip check passed. Copied actual data: **249 comparisons / 249 JSON exports / 249 CSV exports**, six multilingual searches and cold reopen passed with provider calls forbidden. Actual browser downloads/preset reload/evidence links passed; narrow layout fits 699 px. Main rows, credentials, rubric, budget baseline and archived private evidence preserved. **Zero model calls / $0.00 added inference**. These are usability improvements, not an accuracy or official score claim. Stage 6 records commands and limitations.
+At stages 4-6: **144 backend / 27 client passed**, **one paid opt-in skipped**, build and pip check passed. Copied actual data: **249 comparisons / 249 JSON exports / 249 CSV exports**, six multilingual searches and cold reopen passed with provider calls forbidden. Actual browser downloads/preset reload/evidence links passed; narrow layout fit 699 px. Main rows, credentials, rubric, budget baseline and archived private evidence preserved. Stage 6 records those historical commands and limitations.
 
 ## Earlier enhancement checkpoint
 

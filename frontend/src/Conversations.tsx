@@ -5,6 +5,8 @@ import { EvaluationAction } from './Budget';
 import { label, statusOf } from './helpers';
 import type { Run } from './App';
 import { useSavedFilters } from './SavedFilters';
+import TranscriptMatches from './TranscriptMatches';
+import QueueExport from './QueueExport';
 
 export default function Conversations({ rows, access, budget, selectedVersion, completed, needsReview, busy, run, evaluate, refresh, notify }: {
   rows: Conversation[]; access: Access | null; selectedVersion: number; completed: number; needsReview: number;
@@ -48,6 +50,7 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
   const count = (s: string) => rows.filter(r => statusOf(r) === s).length;
   const working = count('queued') + count('running'); const failed = count('failed') + count('interrupted');
   const selectedVisible = checked.filter(id => filtered.some(r => r.id === id));
+  const selectedRunIds = filtered.filter(row => selectedVisible.includes(row.id) && row.evaluation).map(row => row.evaluation!.id);
 
   const importResult = async (request: Promise<{ actual_records: number; created: number; unchanged: number; group_id: string }>) => {
     const result = await request;
@@ -89,6 +92,7 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
           label={`Evaluate selected${selectedVisible.length ? ` (${selectedVisible.length})` : ''} →`}
           start={() => void run(async () => { await evaluate(selectedVisible); setChecked([]); })} />
       </div></div>
+      <QueueExport evaluationIds={selectedRunIds} />
       {controls}
       <div className="filters"><input aria-label="Search conversation ID" placeholder="Search conversation ID…" maxLength={2000} value={search} onChange={e => setField('search', e.target.value)} />
         <input aria-label="Search transcript text" placeholder="Literal transcript text…" maxLength={200} value={text} onChange={e => setField('text', e.target.value)} />
@@ -108,9 +112,7 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
       </tr></thead><tbody>{filtered.map(row => <tr key={row.id}>
         <td><input type="checkbox" aria-label={`Select ${row.source_id}`} checked={checked.includes(row.id)} onChange={e => setChecked(e.target.checked ? [...checked, row.id] : checked.filter(id => id !== row.id))} /></td>
         <td><a className="conversation-link" href={`#conversation/${row.id}`}>{row.source_id}</a><small>{row.group_id} · revision {row.revision} · {row.message_count} messages</small>
-          {searching && <div className="search-snippets"><small>{row.search_total_matches} matching message(s); showing up to 5</small>{row.search_matches?.map(m => <div key={m.id}>
-            <a href={`#conversation/${row.id}?message=${encodeURIComponent(m.id)}${row.evaluation ? `&evaluation=${encodeURIComponent(row.evaluation.id)}` : ''}`}>{m.id} · {m.speaker} · {m.timestamp}</a><p>{m.snippet}</p>
-          </div>)}</div>}
+          {searching && <TranscriptMatches key={JSON.stringify([row.id, row.content_hash, query, speaker])} row={row} query={query} speaker={speaker} />}
         </td>
         <td><span className="language-chip">{row.language}</span></td><td>{row.channel === 'voice call' ? '◉ Call' : '◫ Chat'}<small>{row.channel === 'voice call' && (row.audio_available ? 'Recording link available' : 'Recording unavailable')}</small></td>
         <td><span className={`badge ${statusOf(row)}`}>{label(statusOf(row))}</span>{row.evaluation?.cached_from && <small>Cached original</small>}
