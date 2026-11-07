@@ -2,7 +2,7 @@
 
 Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
 
-**Latest correction:** the PDF audit's KZ N/A and consultation findings are corrected through attributed reviews; the unsupported call self-introduction is now needs_review with its total withheld. Originals remain unchanged. **64 DEV complete / one awaiting source review; 127 backend / 15 client tests pass**, no added inference. See [zero-spend correction report](08-zero-spend-scoring-corrections.md). The earlier informal readiness estimate of about 85/100 is not an official grade or accuracy measurement.
+**Latest PDF audit after corrections:** required prototype workflows and arithmetic pass; **64 DEV complete / one awaiting recording review**, with originals preserved. Fresh **127 backend / 15 client tests and build pass**, zero added inference. Informal readiness remains about **85/100**, not an official grade or accuracy percentage. [Current audit and remaining gaps](09-post-correction-pdf-audit.md); [correction history](08-zero-spend-scoring-corrections.md).
 
 | Audit stage | Completed work | Report |
 | --- | --- | --- |
@@ -14,6 +14,7 @@ Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
 | 6 | Corrected the recording control; fresh setup/94 backend/nine client checks, copied-data review/version restart, private human-review packet, demo/control preparation and verified private GitHub checkpoint; zero added inference | [Zero-spend readiness](06-zero-spend-readiness.md) |
 | 7 | Re-read all PDF sources after the three enhancements; fresh 125 backend/14 client/build checks, 130 saved snapshots and additional semantic spot-checks; zero model calls | [Updated PDF re-audit](07-updated-pdf-reaudit.md) |
 | 8 | Corrected three flagged effective judgments with original preservation; uncertain call keeps its appeal open and total withheld; 127 backend/15 client/build and 130-snapshot checks pass; zero model calls | [Zero-spend scoring corrections](08-zero-spend-scoring-corrections.md) |
+| 9 | Rechecked all PDF sources, corrected source cases, required workflows and delivery gaps; fresh 127 backend/15 client/build, 130 snapshots and 198 history replays pass; no data changes or model calls | [Post-correction PDF audit](09-post-correction-pdf-audit.md) |
 
 Initial audit: 65 succeeded, 44 complete / 21 needs review, with concrete rubric defects. Reports 01–03 preserve that historical evidence.
 

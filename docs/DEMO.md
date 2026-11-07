@@ -4,7 +4,7 @@ Status, 7 November 2026: concrete examples and script prepared; current source i
 
 ## Presenter card
 
-Select **DEV** and **checklist v1**. The full workspace also contains ten labeled synthetic records; do not describe its 75-row total as the DEV count. DEV has 65 complete accepted assessments. They retain their actual model/prompt provenance; the accepted set is not 65 calls of the final prompt.
+Select **DEV** and **checklist v1**. The full workspace also contains ten labeled synthetic records; do not describe its 75-row total as the DEV count. DEV has **64 complete results / one needs review**, with the uncertain call's total withheld. The 65 source records include 60 organizer-synthetic chats and five real calls. Outputs retain actual model/prompt provenance; none is a live v13 result. See the [current audit](audits/2026-11-07/09-post-correction-pdf-audit.md).
 
 | Time | Show and say |
 | --- | --- |

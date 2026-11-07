@@ -1,5 +1,7 @@
 # Source-grounded scoring corrections without inference
 
+Follow-up: [post-correction PDF audit](09-post-correction-pdf-audit.md) freshly rechecks criteria, tests, saved scores and remaining delivery gaps. This report preserves the correction-stage evidence.
+
 Completed 7 November 2026, following [PDF audit 07](07-updated-pdf-reaudit.md). Scope: its three N/A, consultation and self-introduction findings. **No paid request, new evaluation or organizer fetch was made. Originals are preserved.**
 
 ## Saved corrections
