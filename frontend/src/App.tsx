@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { api } from './api';
-import type { Access, BudgetStatus, ChecklistVersion, Conversation } from './types';
+import type { Access, BudgetStatus, ChecklistVersion, Conversation, EvaluationSummary } from './types';
 import { BudgetSummary } from './Budget';
 import { statusOf } from './helpers';
 import Conversations from './Conversations';
@@ -13,6 +13,7 @@ export type Run = (operation: () => Promise<void>) => Promise<void>;
 export default function App() {
   const [route, setRoute] = useState(location.hash || '#conversations');
   const currentRoute = useRef(route); const queueScroll = useRef(0);
+  const pairNavigation = useRef(0);
   const [versions, setVersions] = useState<ChecklistVersion[]>([]);
   const [selectedVersion, setSelectedVersion] = useState(() => {
     try { const saved = Number(sessionStorage.getItem('cqa-selected-version')); return Number.isInteger(saved) && saved > 0 ? saved : 0; }
@@ -26,6 +27,7 @@ export default function App() {
 
   useEffect(() => {
     const onHash = () => {
+      pairNavigation.current += 1;
       if (!currentRoute.current.startsWith('#conversation/') && !currentRoute.current.startsWith('#checklist')) queueScroll.current = window.scrollY;
       currentRoute.current = location.hash || '#conversations';
       setRoute(currentRoute.current);
@@ -79,6 +81,7 @@ export default function App() {
   const initialEvaluation = new URLSearchParams(route.split('?')[1]).get('evaluation');
   const initialCriterion = new URLSearchParams(route.split('?')[1]).get('criterion');
   const initialMessage = new URLSearchParams(route.split('?')[1]).get('message');
+  const initialBaseline = new URLSearchParams(route.split('?')[1]).get('baseline');
   const completed = rows.filter(r => statusOf(r) === 'complete').length;
   const needsReview = rows.filter(r => statusOf(r) === 'needs_review').length;
 
@@ -87,6 +90,24 @@ export default function App() {
     setNotice(`Started ${result.evaluation_ids.length} evaluation(s) with checklist v${selectedVersion}. Compatible original assessments may be reused and labeled cached.`);
     await refresh();
     if (ids.length === 1) location.hash = `conversation/${ids[0]}?evaluation=${result.evaluation_ids[0]}`;
+  };
+
+  const openCohortPair = (leftId: string, rightId: string) => {
+    const token = ++pairNavigation.current;
+    const active = () => pairNavigation.current === token;
+    void run(async () => {
+      let pair: EvaluationSummary[];
+      try {
+        pair = await Promise.all([leftId, rightId].map(id => api<EvaluationSummary>(`/evaluations/${encodeURIComponent(id)}`)));
+      } catch (error) { if (active()) throw error; return; }
+      if (!active()) return;
+      const [left, right] = pair;
+      if (!left || !right || left.id !== leftId || right.id !== rightId || typeof left.conversation_id !== 'string' || !left.conversation_id || left.conversation_id !== right.conversation_id) {
+        throw new Error('The selected cohort runs do not belong to the same exact source revision. Refresh the cohorts.');
+      }
+      const params = new URLSearchParams({ evaluation: rightId, baseline: leftId });
+      location.hash = `conversation/${right.conversation_id}?${params}`;
+    });
   };
 
   return <div className="app-shell">
@@ -117,12 +138,12 @@ export default function App() {
         {access && (!access.provider_configured || access.last_provider_check?.succeeded === false) && <details className="banner warning provider-disclosure"><summary><strong>Live evaluation needs provider access</strong><span>Saved reviews remain available</span></summary><p>{access.provider_status}. {access.provider_configured ? 'Resolve the provider access or billing issue, then test access again.' : 'Update the local .env configuration and restart the backend.'} Imported transcripts remain available.</p></details>}
         <div hidden={!showingQueue} className="queue-workspace">
           {!queue.value || !selected ? <div className="empty" role="status">{queue.error ? <><p>Conversations could not be loaded for this checklist.</p><button className="secondary" onClick={() => void refresh().catch(() => {})}>Retry conversations</button></> : 'Loading conversations…'}</div>
-            : <Conversations key={selected.id} rows={rows} access={access} budget={budget} selectedVersion={selectedVersion} completed={completed} needsReview={needsReview} busy={busy} run={run} evaluate={evaluate} refresh={refresh} notify={setNotice} />}
+            : <Conversations key={selected.id} rows={rows} access={access} budget={budget} selectedVersion={selectedVersion} completed={completed} needsReview={needsReview} busy={busy} run={run} evaluate={evaluate} refresh={refresh} notify={setNotice} onOpenPair={openCohortPair} />}
         </div>
         {route.startsWith('#checklist') && selected
           ? <ChecklistEditor key={selected.id} version={selected} versions={versions} busy={busy} run={run} onSave={async id => { await refresh(); setSelectedVersion(id); setNotice(`Saved immutable checklist v${id}. It is selected for future evaluations. Existing assessments retain their original version.`); }} />
           : detailId
-            ? <Detail key={detailId} id={detailId} initialEvaluation={initialEvaluation} initialCriterion={initialCriterion} initialMessage={initialMessage} selectedVersion={selectedVersion} busy={busy} run={run} providerReady={!!access?.provider_configured} budget={budget} evaluate={evaluate} onChange={refresh} />
+            ? <Detail key={detailId} id={detailId} initialEvaluation={initialEvaluation} initialBaseline={initialBaseline} initialCriterion={initialCriterion} initialMessage={initialMessage} selectedVersion={selectedVersion} busy={busy} run={run} providerReady={!!access?.provider_configured} budget={budget} evaluate={evaluate} onChange={refresh} />
             : null}
       </main>
       <footer>CQA prototype <span>Persistent local review · Source transcript evidence · Versioned checklists</span></footer>

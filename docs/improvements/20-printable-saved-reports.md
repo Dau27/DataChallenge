@@ -1,5 +1,7 @@
 # Stage 20 — printable saved-evaluation reports
 
+**Coordinator acceptance, 8 November:** latest handoff **be951f3** is mounted beside saved exports. Combined 403 backend / 182 client checks and production build passed; 252 actual packets passed the renderer. Browser report opening and native ten-page print preview were observed. A4/Letter selection, long multilingual paper pagination and complete reviewed/unresolved visual acceptance remain unverified after native input control stopped. No physical print/save or API spending; demo deferred. [Combined integration report](22-cohort-print-integration.md). Earlier pending-integration statements below are historical handoff records.
+
 **CODE READY FOR INTEGRATION — VISUAL ACCEPTANCE PENDING.** Resumed verification on 8 November 2026 passed with code unchanged from implementation checkpoint `7a6d2a7a9b667dcfaf1f7e4605cd349aac88e4a1`. The limited earlier desktop observations remain historical; paper, narrow-screen and multilingual stress visual acceptance is still pending after the Computer Use stop. No shared mounting, merge, push, provider request, demo or publication was performed by this builder.
 
 ## Worktree and ownership

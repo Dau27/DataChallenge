@@ -1,6 +1,8 @@
 # Implemented workflow improvements
 
-Latest offline stage: [21 — private backup/recovery](21-backup-recovery.md), with a verified actual-data fresh-path round trip and preservation checks. The [common baseline and two builder worktrees are READY](../plans/2026-11-08-three-chat-handoff.md); cohort/print features are separately owned and not claimed integrated here. No API spending; demo deferred.
+Latest offline stage: [22 — cohort/print integration](22-cohort-print-integration.md). [19 — cohort comparison](19-cohort-comparison.md) and [20 — printable saved reports](20-printable-saved-reports.md) are mounted with exact-ID review navigation, retained history/UI and preserved originals. Combined **403 backend / 182 client passed, one paid opt-in skipped; production build and pip check passed**. Actual copied data: 20 cohort scenarios, 376 pairs, 252 rendered packets; browser exact-pair/narrow/native-print-preview checks passed. A4/Letter and long multilingual paper pagination remain unverified. No API spending; demo deferred.
+
+[21 — private backup/recovery](21-backup-recovery.md) remains available, with its verified actual-data fresh-path round trip. The [canonical handoff](../plans/2026-11-08-three-chat-handoff.md) records accepted builder commits and the completed shared integration. Counts in earlier audit/stage records below are historical.
 
 Current combined-source verification: [8 November PDF audit](../audits/2026-11-08/01-integrated-pdf-audit.md) covers these stages together with completed history/index/design work. It repairs extreme-weight validation and records 309 backend/118 client/build checks, preserved originals and zero added inference. Earlier stage counts below remain historical.
 

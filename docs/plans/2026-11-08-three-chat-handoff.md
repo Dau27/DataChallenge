@@ -1,6 +1,6 @@
 # Three-chat implementation handoff
 
-**Status: READY — baseline acceptance passed, 8 November 2026.** Both builders may start in their assigned worktrees using the frozen interfaces below. Recovery implementation is continuing independently.
+**Status: INTEGRATED — combined acceptance completed, 8 November 2026.** The original READY baseline and recovery checkpoint 91be713 are preserved. Latest cohort **28818fa** and print **be951f3** handoffs were merged locally without conflicts, mounted and tested together. **403 backend / 182 client passed, one paid opt-in skipped; production build and pip check passed.** [Integration report and visual limits](../improvements/22-cohort-print-integration.md). A4/Letter and long multilingual paper pagination remain unverified after native input control stopped. No API spend, remote publication or demo work.
 
 The coordinator must update this file to **READY** before the two builders edit code. Until then, builders can inspect existing code read-only and propose interfaces.
 
@@ -13,6 +13,8 @@ The coordinator must update this file to **READY** before the two builders edit 
 | Coordinator integration branch/worktree | sprint-integration-20261108; C:\Users\user\Desktop\DataChallenge\local_data\sprint_20261108\integration |
 | Cohort builder branch/worktree | sprint-cohorts-20261108; C:\Users\user\Desktop\DataChallenge\local_data\sprint_20261108\cohorts |
 | Print builder branch/worktree | sprint-print-20261108; C:\Users\user\Desktop\DataChallenge\local_data\sprint_20261108\print |
+| Cohort implementation handoff | 28818fa includes d3242ef and owned repairs; builder 55 backend / 42 client / TypeScript passed; coordinator mounting/exact-pair/narrow acceptance passed |
+| Print implementation handoff | be951f3 includes 7a6d2a7; builder 29 tests / TypeScript passed; coordinator mounting/252-packet renderer/native print-preview passed; paper-size/stress visuals remain unverified |
 | Private verification-copy paths | Each worktree's local_data/review.sqlite3; 249 evaluations / 75 sources / 15 tables; no .env copied |
 | Source/data/protected fingerprints | local_data/sprint_20261108/baseline.json and baseline.sqlite3; 195 source/MD files, 30 protected files, all 15 tables/schema; prior audit parity confirmed |
 | Cohort route/DTO | Contract below; owned new router only, coordinator mounts it |
@@ -40,7 +42,7 @@ From your worktree use the absolute interpreter C:\Users\user\Desktop\DataChalle
 - Invalidate immediately on ID/update/options changes. Guard late responses by all those values and reject a mismatched packet's run ID/update identity. Null, failed and missing snapshots must remain explicit. No new routes, dependencies or shared export modifications.
 - New print stylesheet must scope itself to an explicitly active preview; it must not hide or print the rest of the app during unrelated print actions. No automatic print dialog, remote assets or source HTML injection.
 
-Builder work may start once this file is READY. Return owned changes/commit and stage report; do not merge or push. The coordinator's recovery work proceeds independently. The demo remains deferred.
+Both builder chats were checked idle with clean assigned worktrees and their latest handoffs were accepted by the coordinator. [Status and remaining acceptance](2026-11-08-other-chat-status.md). The [cohort prompt](2026-11-08-chat-cohort-comparison.md) and [print prompt](2026-11-08-chat-printable-reports.md) remain historical continuation instructions; do not restart completed lanes. Shared integration now includes exact two-ID navigation and the printable component with its live timestamp. No push/publication; demo deferred.
 
 ## Fixed ownership
 

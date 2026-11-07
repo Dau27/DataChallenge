@@ -1,21 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api } from './api';
-import type { BudgetStatus, Criterion, EvaluationDetail, Evidence } from './types';
+import type { BudgetStatus, Criterion, EvaluationDetail, EvaluationSummary, Evidence } from './types';
 import { EvaluationAction } from './Budget';
 import { answerLabel, evidenceMessages, label, points } from './helpers';
 import type { Run } from './App';
 import ReviewForm from './ReviewForm';
 import SavedComparison from './SavedComparison';
 import SavedExport from './SavedExport';
+import PrintableEvaluation from './PrintableEvaluation';
 import { useLatestResource } from './useLatestResource';
 import { useSavedRunPages, type PagedConversation } from './SavedRunPages';
 import ReviewLink from './ReviewLink';
 import { savedRunLabel } from './savedRunLabel';
 
-export default function Detail({ id, initialEvaluation, initialCriterion = null, initialMessage = null, selectedVersion, busy, run, providerReady, budget, evaluate, onChange }: {
+export default function Detail({ id, initialEvaluation, initialBaseline = null, initialCriterion = null, initialMessage = null, selectedVersion, busy, run, providerReady, budget, evaluate, onChange }: {
   id: string; initialEvaluation: string | null; selectedVersion: number; busy: boolean; run: Run; providerReady: boolean;
   evaluate: (ids: string[]) => Promise<void>; onChange: () => Promise<void>;
-  initialCriterion?: string | null; initialMessage?: string | null; budget?: BudgetStatus | null;
+  initialCriterion?: string | null; initialMessage?: string | null; initialBaseline?: string | null; budget?: BudgetStatus | null;
 }) {
   const [selection, setSelection] = useState({ sourceId: id, route: initialEvaluation, runId: initialEvaluation ?? '' });
   const selectedId = selection.sourceId === id && selection.route === initialEvaluation ? selection.runId : initialEvaluation ?? '';
@@ -36,8 +37,22 @@ export default function Detail({ id, initialEvaluation, initialCriterion = null,
   const evaluation = assessment.value ?? null;
   const error = source.error || assessment.error;
   const history = useSavedRunPages(conversation, evaluation, source.reload, source.pending);
+  const baseline = useLatestResource(JSON.stringify([id, initialBaseline, initialEvaluation]), async (): Promise<EvaluationSummary | null> => {
+    if (!initialBaseline || !initialEvaluation) return null;
+    const result = await api<EvaluationDetail>(`/evaluations/${encodeURIComponent(initialBaseline)}`);
+    if (result.id !== initialBaseline || result.conversation_id !== id) throw new Error('Cohort baseline belongs to another saved run or source revision.');
+    const { id: runId, conversation_id, checklist_id, state, completeness, total, error, cached_from, created_at, updated_at } = result;
+    return { id: runId, conversation_id, checklist_id, state, completeness, total, error, cached_from, created_at, updated_at };
+  });
+  const comparisonRuns = [...history.knownRuns];
+  if (baseline.value) {
+    const index = comparisonRuns.findIndex(run => run.id === baseline.value!.id);
+    if (index < 0) comparisonRuns.push(baseline.value);
+    else if (baseline.value.updated_at >= comparisonRuns[index].updated_at) comparisonRuns[index] = baseline.value;
+  }
   const [highlight, setHighlight] = useState<string[]>([]);
   const assessmentTools = useRef<HTMLDetailsElement>(null);
+  useEffect(() => { if (initialBaseline && initialEvaluation && assessmentTools.current) assessmentTools.current.open = true; }, [initialBaseline, initialEvaluation, conversation?.id]);
   const [appealFor, setAppealFor] = useState(''); const [comment, setComment] = useState('');
   useEffect(() => {
     if (!selectedId && evaluation) setSelection({ sourceId: id, route: initialEvaluation, runId: evaluation.id });
@@ -58,7 +73,8 @@ export default function Detail({ id, initialEvaluation, initialCriterion = null,
   const load = useCallback(async () => {
     await source.reload();
     await assessment.reload();
-  }, [source.reload, assessment.reload]);
+    await baseline.reload();
+  }, [source.reload, assessment.reload, baseline.reload]);
   const processing = evaluation && ['queued', 'running'].includes(evaluation.state);
   useEffect(() => {
     if (!processing) return;
@@ -125,8 +141,12 @@ export default function Detail({ id, initialEvaluation, initialCriterion = null,
       {history.controls}
       <details ref={assessmentTools} className="assessment-tools">
         <summary><span>Compare & export</span><span className="disclosure-hint">Saved runs and reports</span></summary>
-        <SavedComparison key={conversation.id} runs={history.knownRuns} currentId={evaluationId} sourceId={conversation.id} onEvidence={navigateEvidence} />
+        {baseline.error && <div role="alert"><p>{baseline.error}</p><button className="secondary" onClick={() => void baseline.reload().catch(() => {})}>Retry cohort baseline</button></div>}
+        {initialBaseline && baseline.pending && <p role="status">Loading exact cohort baseline…</p>}
+        <SavedComparison key={JSON.stringify([conversation.id, initialBaseline, initialEvaluation])} runs={comparisonRuns} currentId={evaluationId} sourceId={conversation.id} onEvidence={navigateEvidence}
+          initialPair={initialBaseline && initialEvaluation ? { left: initialBaseline, right: initialEvaluation } : undefined} />
         {evaluation && <SavedExport key={evaluation.id} evaluationId={evaluation.id} onError={() => { if (assessmentTools.current) assessmentTools.current.open = true; }} />}
+        {evaluation && <PrintableEvaluation key={`print-${evaluation.id}`} evaluationId={evaluation.id} updatedAt={evaluation.updated_at} />}
       </details>
       {!evaluation && <div className="panel empty" role={assessment.pending ? 'status' : undefined}>
         <strong>{assessment.pending ? 'Loading saved assessment…' : error ? 'Saved assessment unavailable' : 'No saved assessment selected'}</strong>

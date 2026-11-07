@@ -11,11 +11,13 @@ import QueueFilters from './QueueFilters';
 import QueueViewTools, { useQueueDensity } from './QueueViewTools';
 import CriterionBreakdown from './CriterionBreakdown';
 import { useReviewPriority } from './ReviewPriority';
+import CohortComparison from './CohortComparison';
 
-export default function Conversations({ rows, access, budget, selectedVersion, completed, needsReview, busy, run, evaluate, refresh, notify }: {
+export default function Conversations({ rows, access, budget, selectedVersion, completed, needsReview, busy, run, evaluate, refresh, notify, onOpenPair }: {
   rows: Conversation[]; access: Access | null; selectedVersion: number; completed: number; needsReview: number;
   busy: boolean; run: Run; evaluate: (ids: string[]) => Promise<void>; refresh: () => Promise<void>; notify: (message: string) => void;
   budget?: BudgetStatus | null;
+  onOpenPair?: (leftEvaluationId: string, rightEvaluationId: string) => void;
 }) {
   const { filters, setField, controls, warning: filterWarning, external: filtersChangedElsewhere, selectedName, dirty: filtersDirty } = useSavedFilters(selectedVersion);
   const [density, setDensity] = useQueueDensity();
@@ -115,6 +117,7 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
         <QueueExport evaluationIds={selectedRunIds} onError={() => { if (queueTools.current) queueTools.current.open = true; }} />
       </details>
       <CriterionBreakdown rows={filtered} checklistId={selectedVersion} />
+      {onOpenPair && <CohortComparison onOpenPair={onOpenPair} />}
       {searchPending && <p role="status" className="search-status">Searching saved transcripts…</p>}
       {searchError && <div role="alert" className="search-status"><p>{searchError}</p><button className="secondary" onClick={() => setRetrySearch(retrySearch + 1)}>Retry transcript search</button></div>}
       {priority.pending && <p role="status" className="search-status">Loading priority view…</p>}

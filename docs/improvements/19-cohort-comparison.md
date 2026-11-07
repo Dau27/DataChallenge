@@ -1,5 +1,7 @@
 # Stage 19 — saved-run cohort comparison
 
+**Coordinator acceptance, 8 November:** latest builder commit **28818fa** is now integrated. Router/UI mounting and exact two-ID review/history navigation passed the combined 403 backend / 182 client checks, production build and actual copied-data/browser acceptance. No saved results or rubric were changed; no API spending; demo deferred. [Combined integration and remaining limits](22-cohort-print-integration.md). Builder-only pending-integration statements below are historical handoff records.
+
 **Builder handoff: ready for coordinator integration, 8 November 2026.** Implemented and tested in the coordinator-provided `sprint-cohorts-20261108` worktree, from audited baseline **d7d8a9d2a93ff5b537e34e689dd63b0e952f0fb3**. The canonical root handoff was confirmed **READY** before the first edit. No pre-sprint shared route/screen/type/style, database/scoring implementation or `CURRENT_CONTEXT.md` was changed; the follow-up below modifies owned cohort files only. No merge or push.
 
 ## Resumed verification — READY FOR INTEGRATION
