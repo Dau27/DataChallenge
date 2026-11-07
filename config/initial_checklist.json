@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "name": "Чек-лист качества чатов",
+  "initial_version_label": "1",
+  "source": {
+    "file": "CQA_Chat_Quality_Checklist 1.pdf",
+    "pages": [
+      1,
+      2,
+      3
+    ]
+  },
+  "sections": [
+    {
+      "id": "start",
+      "title": "Начало и понимание запроса"
+    },
+    {
+      "id": "resolution",
+      "title": "Безопасность и решение"
+    },
+    {
+      "id": "management",
+      "title": "Ведение и завершение диалога"
+    },
+    {
+      "id": "violations",
+      "title": "Грубые нарушения"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "contact",
+      "name": "Установление контакта",
+      "section_id": "start",
+      "answer_type": "binary",
+      "weight": 10,
+      "description": "Да — оператор поздоровался на языке клиента и представился в первом ответе.",
+      "na_allowed": false,
+      "na_condition": null,
+      "scale": []
+    },
+    {
+      "id": "needs",
+      "name": "Выявление потребности",
+      "section_id": "start",
+      "answer_type": "binary",
+      "weight": 15,
+      "description": "Да — оператор учёл известные детали и уточнил недостающее до ответа.",
+      "na_allowed": true,
+      "na_condition": "Данных для ответа хватало с самого начала.",
+      "scale": []
+    },
+    {
+      "id": "identification",
+      "name": "Идентификация",
+      "section_id": "resolution",
+      "answer_type": "binary",
+      "weight": 20,
+      "description": "Да — проверка личности подтверждена до раскрытия данных или защищённого действия.",
+      "na_allowed": true,
+      "na_condition": "Запрос не требовал идентификации.",
+      "scale": []
+    },
+    {
+      "id": "consultation",
+      "name": "Корректная и полная консультация",
+      "section_id": "resolution",
+      "answer_type": "scale",
+      "weight": 20,
+      "description": "Оцените ответ или следующий шаг по указанной шкале.",
+      "na_allowed": true,
+      "na_condition": "Чат закончился до того, как клиент сформулировал запрос.",
+      "scale": [
+        {
+          "value": 20,
+          "description": "Все существенные вопросы закрыты или дан корректный следующий шаг."
+        },
+        {
+          "value": 15,
+          "description": "Основной вопрос решён, пропущена второстепенная деталь."
+        },
+        {
+          "value": 10,
+          "description": "Часть запроса закрыта, существенный вопрос остался открытым."
+        },
+        {
+          "value": 5,
+          "description": "Есть общая подсказка, но клиенту всё ещё непонятно, как действовать."
+        },
+        {
+          "value": 0,
+          "description": "Ответа по существу нет или ключевая рекомендация ошибочна."
+        }
+      ]
+    },
+    {
+      "id": "empathy",
+      "name": "Эмпатия и клиентоориентированность",
+      "section_id": "management",
+      "answer_type": "binary",
+      "weight": 15,
+      "description": "Да — оператор вежлив и, если клиент выразил недовольство или описал неудобство, отреагировал на конкретную проблему.",
+      "na_allowed": false,
+      "na_condition": null,
+      "scale": []
+    },
+    {
+      "id": "dialogue_management",
+      "name": "Управление диалогом, скорость и грамотность",
+      "section_id": "management",
+      "answer_type": "scale",
+      "weight": 15,
+      "description": "Оцените ясность, порядок ответов и предупреждение об ожидании по указанной шкале.",
+      "na_allowed": false,
+      "na_condition": null,
+      "scale": [
+        {
+          "value": 10,
+          "description": "Ответы ясные и связные. Если было явное ожидание, оператор предупредил."
+        },
+        {
+          "value": 7,
+          "description": "Один заметный сбой, но клиент может понять ответ и продолжить."
+        },
+        {
+          "value": 4,
+          "description": "Клиенту приходится переспрашивать из-за формулировок или порядка ответов."
+        },
+        {
+          "value": 0,
+          "description": "Из-за бессвязных или противоречивых реплик ход диалога непонятен."
+        }
+      ]
+    },
+    {
+      "id": "closing",
+      "name": "Завершение",
+      "section_id": "management",
+      "answer_type": "binary",
+      "weight": 5,
+      "description": "Да — оператор подвёл итог или предложил дальнейшую помощь и попрощался.",
+      "na_allowed": true,
+      "na_condition": "Чат оборвался до возможности его завершить.",
+      "scale": []
+    },
+    {
+      "id": "critical_errors",
+      "name": "Грубые ошибки",
+      "section_id": "violations",
+      "answer_type": "flag",
+      "weight": null,
+      "description": "Да — выявлено оскорбление клиента, предложение платной услуги в обход компании или раскрытие конфиденциальной информации. Нет — ни одно из трёх не выявлено.",
+      "na_allowed": false,
+      "na_condition": null,
+      "scale": []
+    }
+  ],
+  "scoring_policy": {
+    "binary_yes_fraction": 1,
+    "binary_no_fraction": 0,
+    "scale_normalization": "value_divided_by_maximum_scale_value",
+    "na_handling": "exclude_and_renormalize_applicable_scored_weights_to_100",
+    "flag_handling": "separate_from_numeric_score",
+    "final_decimal_places": 2,
+    "empty_applicable_weight": "not_calculated"
+  },
+  "source_notes": [
+    "Один и тот же чек-лист применяется к чатам на русском, казахском и английском.",
+    "N/A разрешён только при выполнении указанного условия неприменимости.",
+    "Если проверка личности требовалась перед защищённым действием и не подтверждена в чате, ставьте «Нет».",
+    "Для пропущенного действия укажите место, где оно ожидалось. Для N/A объясните условие неприменимости.",
+    "Консультация оценивает правильность и полноту решения; ведение диалога — понятность и последовательность общения.",
+    "Для предложения платной услуги в обход компании достаточно самого предложения; согласие клиента или перевод денег не требуются.",
+    "Порог первой реакции в 3 минуты, теги и вложения в оценку не входят."
+  ]
+}
