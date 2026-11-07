@@ -48,4 +48,6 @@ Private backups, copied reports, network guards and preservation evidence are un
 
 ## Next concrete step
 
+`git push origin 930f18b:refs/heads/main` succeeded and `git ls-remote origin refs/heads/main` matched **930f18b661aac66d8078445011e5a547416b9781**. This publishes the tested c49da39 merge plus its five-file documentation update. The publication note itself is a documentation-only follow-up; no later concurrent implementation is included by this task's push.
+
 Complete the owning chats' separate UI/validation acceptance checks against this merged baseline, then review their final changes before inclusion. Independent accuracy, live current-prompt and organizer-held control/replacement validation remain outside this zero-spend merge. Public visibility, event submission and official freeze were not changed. **Keep paid requests paused and the demo deferred.**
