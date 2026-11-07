@@ -1,5 +1,7 @@
 # Improving the market-inspired features already implemented
 
+Latest research: [current market comparison and ranked follow-ons](MARKET_COMPARISON_2026-11-07.md) accounts for the completed refinements and concurrent fixes. It recommends criterion/coverage breakdowns, explained review priority and weight-only simulation next; it does not repeat implemented comparison/export/search features as new work.
+
 Implementation follow-up: [stages 7-10](improvements/10-refinements-verification.md) now repair comparison freshness and implement the selected comparison/export/match-navigation/preset refinements with zero inference spend. The analysis below preserves the earlier checkpoint and proposals; deeper queue optimization, unknown-flag filtering and other optional advisories remain separate.
 
 Research and repository review: **7 November 2026, Asia/Almaty**, application **ad9f167**. This follows the [PDF audit](audits/2026-11-07/13-post-features-pdf-audit.md). No application code, judgment, database result or provider configuration was changed. Model spend **$0.00**. Demo remains deferred.

@@ -13,7 +13,9 @@ from pydantic import Field, ValidationError, field_validator
 from sqlalchemy import select
 
 from backend.app.config import ROOT, Settings
-from backend.app.db import AccessCheck, Appeal, ChecklistVersion, Conversation, Database, Evaluation, Review, now
+from backend.app.api_history import HistoryNavigation, evaluation_history_page, router as history_router
+from backend.app.limits import IMPORT_BYTE_LIMIT, RequestBodyLimit
+from backend.app.db import AccessCheck, ChecklistVersion, Conversation, Database, now
 from backend.app.domain import Checklist, Contract, ImportEnvelope, Judgment, Text, content_hash, nonblank
 from backend.app.services.evaluator import EvaluationFailure, Provider, usage_summary
 from backend.app.services.importer import fetch_organizer, import_payload
@@ -21,9 +23,11 @@ from backend.app.services.jobs import Jobs
 from backend.app.services.reviews import decide, submit_appeal
 from backend.app.services.budget import BudgetError, request_bound
 from backend.app.services.checklists import preview_checklist
-from backend.app.services.saved_results import SavedResultNotFound, compare_saved, evaluation_snapshot, source_view, summary, version_view
+from backend.app.services.saved_results import SavedResultNotFound, compare_saved, evaluation_snapshot, saved_summaries, source_view, version_view
+from backend.app.services.queue import conversation_queue
 from backend.app.services.exports import batch_csv_report, csv_report, export_batch, export_packet, json_report, simple_csv_report
-from backend.app.services.search import search_messages
+from backend.app.services.transcript_index import indexed_message_page
+from backend.app.insights_api import router as insights_router
 
 
 class OrganizerImport(Contract):
@@ -133,6 +137,10 @@ class ConversationDetail(Contract):
     evaluations: list[EvaluationSummary]
 
 
+class PagedConversationDetail(ConversationDetail):
+    history_page: HistoryNavigation
+
+
 class EvaluationDetail(EvaluationSummary):
     original: dict[str, Any] | None
     original_score: dict[str, Any] | None
@@ -169,6 +177,7 @@ def create_app(settings=None, provider=None):
 
     app = FastAPI(title="Conversation Quality Analytics", version="0.1.0", lifespan=lifespan)
     app.state.db, app.state.jobs, app.state.settings = db, jobs, settings
+    app.include_router(history_router)
     provider_identity = content_hash({"provider": "openai-responses", "model": settings.model, "credential": settings.api_key})
     with db.sessions() as session:
         last_check = session.get(AccessCheck, provider_identity)
@@ -181,12 +190,11 @@ def create_app(settings=None, provider=None):
             origin = request.headers.get("origin")
             if origin and origin not in {"http://127.0.0.1:8000", "http://localhost:8000", "http://127.0.0.1:5173", "http://localhost:5173"}:
                 return JSONResponse(status_code=403, content={"detail": "Cross-origin write is not allowed"})
-            try:
-                if int(request.headers.get("content-length", "0")) > 25_000_000:
-                    return JSONResponse(status_code=413, content={"detail": "JSON upload exceeds 25 MB safeguard"})
-            except ValueError:
-                return JSONResponse(status_code=400, content={"detail": "Invalid content length"})
         return await call_next(request)
+
+    # The byte boundary runs before parsers and the HTTP dispatch middleware; an
+    # interrupted upload never reaches an endpoint or causes a missing-response error.
+    app.add_middleware(RequestBodyLimit, max_bytes=IMPORT_BYTE_LIMIT)
 
     @app.exception_handler(RequestValidationError)
     async def request_invalid(_, error):
@@ -290,52 +298,28 @@ def create_app(settings=None, provider=None):
     def conversations(checklist_id: int | None = None, latest_only: bool = True,
                       q: str = Query("", max_length=200), speaker: Literal["all", "operator", "client", "bot", "system"] = "all"):
         with db.read_snapshot() as session:
-            records = list(session.scalars(select(Conversation).order_by(Conversation.group_id, Conversation.source_id, Conversation.revision.desc())))
-            evaluations = list(session.scalars(select(Evaluation).order_by(Evaluation.created_at.desc())))
-            versions = {v.id: {c["id"]: c for c in v.snapshot["criteria"]} for v in session.scalars(select(ChecklistVersion))}
-            eligible = {e.id: e for e in evaluations if checklist_id is None or e.checklist_id == checklist_id}
-            identities = {r.id: (r.group_id, r.source_id) for r in records}
-            pending = {}
-            for appeal in session.scalars(select(Appeal).where(Appeal.status == "open").order_by(Appeal.created_at)):
-                e = eligible.get(appeal.evaluation_id)
-                if e:
-                    pending.setdefault(identities[e.conversation_id] if latest_only else e.conversation_id, []).append({"appeal_id": appeal.id,
-                        "conversation_id": e.conversation_id, "evaluation_id": e.id,
-                        "criterion_id": appeal.criterion_id, "criterion_name": versions[e.checklist_id][appeal.criterion_id]["name"]})
-            latest = {}
-            for evaluation in evaluations:
-                if checklist_id is None or checklist_id == evaluation.checklist_id:
-                    latest.setdefault(evaluation.conversation_id, evaluation)
-            seen, items = set(), []
-            for row in records:
-                identity = (row.group_id, row.source_id)
-                if latest_only and identity in seen:
-                    continue
-                seen.add(identity)
-                matches, match_count = search_messages(row.snapshot["transcript"], q, speaker)
-                if (q.strip() or speaker != "all") and not match_count:
-                    continue
-                evaluation = latest.get(row.id)
-                flags = [{"evaluation_id": evaluation.id, "criterion_id": cid, "criterion_name": versions[evaluation.checklist_id][cid]["name"]}
-                         for cid, value in (evaluation.effective_score or {}).get("flags", {}).items() if value is True] if evaluation else []
-                items.append({"id": row.id, "group_id": row.group_id, "source_id": row.source_id, "revision": row.revision,
-                              "content_hash": row.content_hash, "language": row.snapshot["language"], "channel": row.snapshot["channel"],
-                              "message_count": len(row.snapshot["transcript"]), "audio_available": bool(row.snapshot["audio_url"]),
-                              "evaluation": summary(evaluation) if evaluation else None, "created_at": row.created_at,
-                              "pending_appeals": len(pending.get(identity if latest_only else row.id, [])),
-                              "pending_review_targets": pending.get(identity if latest_only else row.id, []),
-                              "critical_findings": flags, "search_matches": matches, "search_total_matches": match_count})
-            return items
+            return conversation_queue(session, checklist_id, latest_only, q, speaker)
 
-    @app.get("/api/conversations/{conversation_id}", response_model=ConversationDetail)
-    def conversation_detail(conversation_id: str):
-        with db.sessions() as session:
+    @app.get("/api/conversations/{conversation_id}", response_model=ConversationDetail | PagedConversationDetail)
+    def conversation_detail(conversation_id: str, history_limit: int | None = Query(None, ge=1, le=100),
+                            history_cursor: str | None = Query(None, min_length=1, max_length=2048)):
+        with db.read_snapshot() as session:
             row = session.get(Conversation, conversation_id)
             if not row:
                 raise HTTPException(404, "Conversation revision not found")
-            return {"id": row.id, "group_id": row.group_id, "source_id": row.source_id, "revision": row.revision,
+            result = {"id": row.id, "group_id": row.group_id, "source_id": row.source_id, "revision": row.revision,
                     "content_hash": row.content_hash, "snapshot": row.snapshot,
-                    "evaluations": [summary(e) for e in session.scalars(select(Evaluation).where(Evaluation.conversation_id == row.id).order_by(Evaluation.created_at.desc()))]}
+                    "evaluations": []}
+            if history_limit is not None:
+                page = evaluation_history_page(session, row.id, history_limit, history_cursor)
+                result['evaluations'] = page.pop('items')
+                page.pop('source')
+                result['history_page'] = page
+            else:
+                if history_cursor:
+                    raise ValueError('history_limit is required when using a history cursor')
+                result['evaluations'] = saved_summaries(session, row.id)
+            return result
 
     @app.get("/api/conversations/{conversation_id}/matches")
     def conversation_matches(conversation_id: str, q: str = Query("", max_length=200),
@@ -345,7 +329,7 @@ def create_app(settings=None, provider=None):
             row = session.get(Conversation, conversation_id)
             if not row:
                 raise HTTPException(404, "Conversation revision not found")
-            matches, total = search_messages(row.snapshot["transcript"], q, speaker, limit=limit, offset=offset)
+            matches, total = indexed_message_page(session, row, q, speaker, limit=limit, offset=offset)
             return {"source": source_view(row), "query": q.strip(), "speaker": speaker, "offset": offset,
                     "limit": limit, "total_matches": total, "matches": matches}
 
@@ -362,10 +346,7 @@ def create_app(settings=None, provider=None):
     @app.get("/api/evaluations", response_model=list[EvaluationSummary])
     def evaluations(conversation_id: str | None = None):
         with db.sessions() as session:
-            query = select(Evaluation).order_by(Evaluation.created_at.desc())
-            if conversation_id:
-                query = query.where(Evaluation.conversation_id == conversation_id)
-            return [summary(e) for e in session.scalars(query)]
+            return saved_summaries(session, conversation_id)
 
     @app.get("/api/evaluations/compare")
     def compare_evaluations(left_id: str, right_id: str,
@@ -416,6 +397,7 @@ def create_app(settings=None, provider=None):
     def review(appeal_id: str, body: DecisionRequest):
         return {"id": decide(db, appeal_id, body.action, body.rationale, body.judgment, body.expected_updated_at)}
 
+    app.include_router(insights_router)
     dist = ROOT / "frontend/dist"
     if dist.is_dir():
         app.mount("/", StaticFiles(directory=dist, html=True), name="frontend")

@@ -93,15 +93,16 @@ class Budget:
                 session.add(BudgetState(id=1, opening_usd="0", coverage={"evaluations": {}, "access_checks": {}},
                                         provenance="Fresh database; no recorded provider attempts"))
 
-    def history_error(self, session, state):
+    def history_error(self, session, state, reservations=None):
         """No historical request can silently disappear or be counted twice."""
-        reservations = list(session.scalars(select(BudgetReservation).order_by(BudgetReservation.created_at, BudgetReservation.id)))
+        if reservations is None:
+            reservations = list(session.scalars(select(BudgetReservation).order_by(BudgetReservation.created_at, BudgetReservation.id)))
         grouped = {}
         for reservation in reservations:
             grouped.setdefault(reservation.source_id, []).append(reservation)
         try:
             covered_amount = ZERO
-            for evaluation in session.scalars(select(Evaluation)):
+            for evaluation in session.execute(select(Evaluation.id, Evaluation.meta, Evaluation.attempts)):
                 baseline = state.coverage["evaluations"].get(evaluation.id)
                 cursor = 0
                 if baseline:
@@ -143,13 +144,14 @@ class Budget:
 
     def status(self, session=None):
         if session is None:
-            with self.db.sessions() as current:
+            with self.db.read_snapshot() as current:
                 return self.status(current)
         state = session.get(BudgetState, 1)
-        reason = self.bootstrap_error or (self.history_error(session, state) if state else "Budget baseline is unavailable")
+        reservations = list(session.scalars(select(BudgetReservation).order_by(BudgetReservation.created_at, BudgetReservation.id)))
+        reason = self.bootstrap_error or (self.history_error(session, state, reservations) if state else "Budget baseline is unavailable")
         opening = money(state.opening_usd) if state else ZERO
         settled, held = ZERO, ZERO
-        for entry in session.scalars(select(BudgetReservation)):
+        for entry in reservations:
             if entry.state == "reserved":
                 held += max(money(entry.reserved_usd), attempt_accounting(entry.attempts, entry.rate)[0])
             else:

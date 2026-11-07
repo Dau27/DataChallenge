@@ -6,6 +6,7 @@ from sqlalchemy import func, select
 
 from backend.app.db import Conversation
 from backend.app.domain import ImportEnvelope, content_hash
+from backend.app.limits import IMPORT_BYTE_LIMIT
 
 
 def import_payload(db, envelope: ImportEnvelope) -> dict:
@@ -48,12 +49,15 @@ def fetch_organizer(settings, group_id):
         raise ValueError("ORGANIZER_API_URL is not configured")
     try:
         with httpx.Client(timeout=settings.timeout, follow_redirects=False) as client:
-            response = client.get(organizer_url(settings.organizer_url, group_id))
-        if response.status_code != 200:
-            raise ValueError(f"Organizer HTTP {response.status_code}; no data imported")
-        if len(response.content) > 25_000_000:
-            raise ValueError("Organizer response exceeds the 25 MB import safeguard")
-        envelope = ImportEnvelope.model_validate_json(response.content)
+            with client.stream("GET", organizer_url(settings.organizer_url, group_id)) as response:
+                if response.status_code != 200:
+                    raise ValueError(f"Organizer HTTP {response.status_code}; no data imported")
+                body = bytearray()
+                for chunk in response.iter_bytes(chunk_size=65536):
+                    if len(body) + len(chunk) > IMPORT_BYTE_LIMIT:
+                        raise ValueError("Organizer response exceeds the 25 MB import safeguard")
+                    body.extend(chunk)
+        envelope = ImportEnvelope.model_validate_json(body)
     except httpx.HTTPError:
         raise ValueError("Organizer network/timeout failure; endpoint and response are hidden") from None
     if envelope.data.dataset_group_id != group_id:

@@ -85,7 +85,7 @@ def test_insufficient_closing_evidence_uses_bounded_repair(tmp_path):
         nonlocal count
         count += 1
         rubric = Checklist.model_validate(json.loads(payload["input"])["saved_checklist"])
-        result = full_assessment(rubric).model_dump(mode="json")
+        result = full_assessment(rubric, message_id="m0002").model_dump(mode="json")
         judgment = result["results"]["closing"]
         judgment["evidence"] = [{"kind": "support", "start_message_id": "m0002", "end_message_id": "m0002"}]
         judgment["value"] = count == 1

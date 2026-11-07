@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { downloadSelectedReports } from './api';
 import type { ReportFormat } from './api';
 
-export default function QueueExport({ evaluationIds }: { evaluationIds: string[] }) {
+export default function QueueExport({ evaluationIds, onError }: { evaluationIds: string[]; onError?: () => void }) {
   const [excerpts, setExcerpts] = useState(false); const [pending, setPending] = useState(false); const [error, setError] = useState('');
   const mounted = useRef(true); const sequence = useRef(0);
   const selection = JSON.stringify(evaluationIds); const latestSelection = useRef(selection); latestSelection.current = selection;
@@ -15,7 +15,7 @@ export default function QueueExport({ evaluationIds }: { evaluationIds: string[]
     const active = () => mounted.current && latestSelection.current === selection && sequence.current === token;
     setPending(true); setError('');
     try { await downloadSelectedReports([...evaluationIds], format, excerpts, active); }
-    catch (e) { if (active()) setError(e instanceof Error ? e.message : 'Selected-run export failed.'); }
+    catch (e) { if (active()) { setError(e instanceof Error ? e.message : 'Selected-run export failed.'); onError?.(); } }
     finally { if (active()) setPending(false); }
   };
   return <section className="saved-export" aria-label="Selected saved-run export">

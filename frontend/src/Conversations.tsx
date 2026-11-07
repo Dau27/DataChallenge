@@ -8,6 +8,9 @@ import { useSavedFilters } from './SavedFilters';
 import TranscriptMatches from './TranscriptMatches';
 import QueueExport from './QueueExport';
 import QueueFilters from './QueueFilters';
+import QueueViewTools, { useQueueDensity } from './QueueViewTools';
+import CriterionBreakdown from './CriterionBreakdown';
+import { useReviewPriority } from './ReviewPriority';
 
 export default function Conversations({ rows, access, budget, selectedVersion, completed, needsReview, busy, run, evaluate, refresh, notify }: {
   rows: Conversation[]; access: Access | null; selectedVersion: number; completed: number; needsReview: number;
@@ -15,9 +18,11 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
   budget?: BudgetStatus | null;
 }) {
   const { filters, setField, controls, warning: filterWarning, external: filtersChangedElsewhere, selectedName, dirty: filtersDirty } = useSavedFilters(selectedVersion);
+  const [density, setDensity] = useQueueDensity();
   const { language, channel, status, group, search, appeals, critical, text, speaker } = filters;
   const [groupToImport, setGroupToImport] = useState('DEV');
   const [checked, setChecked] = useState<string[]>([]); const fileRef = useRef<HTMLInputElement>(null);
+  const queueTools = useRef<HTMLDetailsElement>(null); const selectAll = useRef<HTMLInputElement>(null);
   const [retrySearch, setRetrySearch] = useState(0);
   const [searchResult, setSearchResult] = useState<{ key: string; rows: Conversation[]; error: string }>({ key: '', rows: [], error: '' });
   const query = text.trim(); const searching = !!query || speaker !== 'all';
@@ -43,14 +48,19 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
   // Use current queue status/appeals, attaching matches only to the exact returned revision/hash.
   const candidates = !searching ? rows : searchPending || searchError ? [] : rows.filter(r => hits.get(r.id)?.content_hash === r.content_hash)
     .map(r => ({ ...r, search_matches: hits.get(r.id)!.search_matches, search_total_matches: hits.get(r.id)!.search_total_matches }));
-  const filtered = candidates.filter(r => (!language || r.language === language) && (!channel || r.channel === channel) && (!status || statusOf(r) === status)
-    && (!group || r.group_id === group) && r.source_id.toLowerCase().includes(search.toLowerCase())
-    && (!appeals || ((r.pending_appeals ?? 0) > 0) === (appeals === 'pending'))
+  const scoped = candidates.filter(r => (!language || r.language === language) && (!channel || r.channel === channel)
+    && (!group || r.group_id === group) && r.source_id.toLowerCase().includes(search.toLowerCase()));
+  const baseFiltered = scoped.filter(r => (!status || statusOf(r) === status) && (!appeals || ((r.pending_appeals ?? 0) > 0) === (appeals === 'pending'))
     && (!critical || ((r.critical_findings?.length ?? 0) > 0) === (critical === 'flagged')));
+  const priority = useReviewPriority(baseFiltered, selectedVersion);
+  const filtered = priority.rows;
   const groups = [...new Set(rows.map(r => r.group_id))];
   const count = (s: string) => rows.filter(r => statusOf(r) === s).length;
   const working = count('queued') + count('running'); const failed = count('failed') + count('interrupted');
   const selectedVisible = checked.filter(id => filtered.some(r => r.id === id));
+  const allSelected = filtered.length > 0 && selectedVisible.length === filtered.length;
+  const partiallySelected = selectedVisible.length > 0 && !allSelected;
+  useEffect(() => { if (selectAll.current) selectAll.current.indeterminate = partiallySelected; }, [partiallySelected]);
   const selectedRunIds = filtered.filter(row => selectedVisible.includes(row.id) && row.evaluation).map(row => row.evaluation!.id);
 
   const importResult = async (request: Promise<{ actual_records: number; created: number; unchanged: number; group_id: string }>) => {
@@ -89,7 +99,7 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
         {access?.last_provider_check && <span>{access.last_provider_check.succeeded ? 'Last check succeeded' : 'Last check failed'}</span>}
       </div>
     </section></details>
-    <section className="panel table-panel">
+    <section className="panel table-panel" data-density={density}>
       <div className="table-toolbar"><h2>Review queue <span className="queue-count">{filtered.length}</span></h2><div className="inline-actions">
         {!!selectedVisible.length && <><span className="selection-count" role="status">{selectedVisible.length} selected</span><button className="text-button" onClick={() => setChecked([])}>Clear selection</button></>}
         <EvaluationAction ids={selectedVisible} version={selectedVersion} providerReady={!!access?.provider_configured} busy={busy} refreshKey={JSON.stringify(budget)}
@@ -97,15 +107,20 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
           start={() => void run(async () => { await evaluate(selectedVisible); setChecked([]); })} />
       </div></div>
       <QueueFilters filters={filters} groups={groups} setField={setField} />
-      <details className="queue-tools" open={!!filterWarning || filtersChangedElsewhere}>
+      <QueueViewTools rows={scoped} filters={filters} setField={setField} density={density} onDensity={setDensity} unavailable={searchPending || !!searchError} />
+      {priority.controls}
+      <details ref={queueTools} className="queue-tools" open={!!filterWarning || filtersChangedElsewhere}>
         <summary><span>Saved views & exports</span><span className="disclosure-hint">{selectedName ? `${selectedName}${filtersDirty ? ' · edited' : ''}` : 'Save or restore filters'}{selectedRunIds.length ? ` · ${selectedRunIds.length} saved runs selected` : ''}</span></summary>
         {controls}
-        <QueueExport evaluationIds={selectedRunIds} />
+        <QueueExport evaluationIds={selectedRunIds} onError={() => { if (queueTools.current) queueTools.current.open = true; }} />
       </details>
+      <CriterionBreakdown rows={filtered} checklistId={selectedVersion} />
       {searchPending && <p role="status" className="search-status">Searching saved transcripts…</p>}
       {searchError && <div role="alert" className="search-status"><p>{searchError}</p><button className="secondary" onClick={() => setRetrySearch(retrySearch + 1)}>Retry transcript search</button></div>}
+      {priority.pending && <p role="status" className="search-status">Loading priority view…</p>}
+      {priority.error && <div role="alert" className="search-status"><p>Priority view unavailable. {priority.error}</p><button className="secondary" onClick={priority.reset}>Show normal queue</button></div>}
       <div className="table-scroll" role="region" aria-label="Conversation review queue" tabIndex={0}><table><thead><tr>
-        <th><input type="checkbox" aria-label="Select all visible conversations" checked={filtered.length > 0 && selectedVisible.length === filtered.length} onChange={e => setChecked(e.target.checked ? filtered.map(r => r.id) : [])} /></th>
+        <th><input ref={selectAll} type="checkbox" aria-label="Select all visible conversations" aria-checked={partiallySelected ? 'mixed' : allSelected} checked={allSelected} onChange={e => setChecked(e.target.checked ? filtered.map(r => r.id) : [])} /></th>
         <th>Conversation</th><th>Language</th><th>Channel</th><th>Assessment</th><th>Score / 100</th><th></th>
       </tr></thead><tbody>{filtered.map(row => <tr key={row.id}>
         <td><input type="checkbox" aria-label={`Select ${row.source_id}`} checked={checked.includes(row.id)} onChange={e => setChecked(e.target.checked ? [...checked, row.id] : checked.filter(id => id !== row.id))} /></td>
@@ -117,10 +132,11 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
           {!!row.pending_appeals && <small>{row.pending_appeals} pending appeal(s)</small>}
           {row.pending_review_targets?.map(target => <small key={target.appeal_id}><a href={`#conversation/${target.conversation_id}?evaluation=${target.evaluation_id}&criterion=${target.criterion_id}`}>Review {target.criterion_name}</a></small>)}
           {row.critical_findings?.map(target => <small key={target.criterion_id}><a className="critical-link" href={`#conversation/${row.id}?evaluation=${target.evaluation_id}&criterion=${target.criterion_id}`}>⚑ {target.criterion_name}</a></small>)}
+          {priority.renderReasons(row.id)}
         </td>
         <td className="score-cell">{row.evaluation?.total ?? '—'}</td><td><a className="open-link" href={`#conversation/${row.id}`}>Open ↗</a></td>
       </tr>)}</tbody></table></div>
-      {!filtered.length && !searchPending && !searchError && <div className="empty"><strong>{rows.length ? 'No conversations match these filters.' : 'Your review queue is empty.'}</strong><p>{rows.length ? 'Adjust a filter to see more conversations.' : 'Import the organizer dataset or upload its JSON response to get started.'}</p></div>}
+      {!filtered.length && !searchPending && !searchError && !priority.pending && !priority.error && <div className="empty"><strong>{rows.length ? 'No conversations match these filters.' : 'Your review queue is empty.'}</strong><p>{rows.length ? 'Adjust a filter to see more conversations.' : 'Import the organizer dataset or upload its JSON response to get started.'}</p></div>}
       <div className="table-foot">{filtered.length} of {rows.length} conversations <span className="table-scroll-hint">Scroll the table sideways for more columns.</span><span>States refer to the selected checklist version. No score means no resolved result.</span></div>
     </section>
   </>;

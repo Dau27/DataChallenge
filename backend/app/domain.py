@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import re
 from datetime import datetime
 from decimal import Decimal
@@ -25,6 +26,10 @@ def nonblank(value: str) -> str:
     return value
 
 
+def placeholder_reason(value: str) -> bool:
+    return value.strip().strip(" /-\t\r\n").strip().casefold() in {"none", "null", "n/a", "na", "not applicable"}
+
+
 def numeric(value: Any) -> Any:
     if isinstance(value, bool) or not isinstance(value, (int, float, Decimal, str)):
         raise ValueError("Expected a finite number, not a boolean")
@@ -36,6 +41,14 @@ class Anchor(Contract):
     description: Text
     _numeric = field_validator("value", mode="before")(numeric)
     _text = field_validator("description")(nonblank)
+
+    @field_validator("value")
+    @classmethod
+    def representable(cls, value):
+        wire = float(value)
+        if not math.isfinite(wire) or Decimal(str(wire)) != value:
+            raise ValueError("Scale anchor precision cannot be represented by the numeric evaluation format; use a shorter decimal")
+        return value
 
 
 class Section(Contract):
@@ -56,6 +69,16 @@ class Criterion(Contract):
     scale: list[Anchor] = Field(max_length=50)
     _numeric = field_validator("weight", mode="before")(lambda v: None if v is None else numeric(v))
     _text = field_validator("name", "description", "section_id")(nonblank)
+
+    @field_validator("weight")
+    @classmethod
+    def supported_weight_magnitude(cls, value):
+        # Engineering arithmetic bounds, not rubric weights. Keep zero valid and
+        # ample headroom for fractional/relative weights without Decimal overflow
+        # or underflow when scoring, normalizing and serializing a saved draft.
+        if value is not None and value.is_finite() and value > 0 and not Decimal("1e-100") <= value <= Decimal("1e100"):
+            raise ValueError("Positive weights must be between 1e-100 and 1e100 for supported scoring arithmetic; zero is also allowed")
+        return value
 
     @model_validator(mode="after")
     def valid_configuration(self):
@@ -209,10 +232,12 @@ def validate_judgment(criterion: Criterion, judgment: Judgment, message_ids: lis
     elif judgment.disposition == "not_applicable":
         if not criterion.na_allowed or judgment.value is not None or not (judgment.na_reason or "").strip() or judgment.review_reason is not None:
             raise ValueError(f"{criterion.id}: N/A is forbidden or lacks an explicit condition justification")
+        if placeholder_reason(judgment.na_reason):
+            raise ValueError(f"{criterion.id}: a placeholder is not an N/A justification; name the actual saved applicability condition and source event")
     else:
         if judgment.value is not None or not (judgment.review_reason or "").strip() or judgment.na_reason is not None:
             raise ValueError(f"{criterion.id}: unresolved answers require a missing-basis reason and null value")
-        if judgment.review_reason.strip(" /-\t\r\n").casefold() in {"none", "null", "n/a", "na", "not applicable"}:
+        if placeholder_reason(judgment.review_reason):
             raise ValueError(f"{criterion.id}: a placeholder is not a missing-basis reason; assess observable facts or name the missing authority")
     if judgment.disposition != "needs_review" and not judgment.evidence:
         raise ValueError(f"{criterion.id}: resolved decisions need evidence, including for absence and N/A")

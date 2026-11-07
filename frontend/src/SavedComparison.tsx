@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from './api';
 import { answerLabel, label, points } from './helpers';
 import type { ComparisonCell, ComparisonSide, EvaluationSummary, Evidence, SavedComparison as Comparison } from './types';
+import { savedRunLabel } from './savedRunLabel';
 
 type Difference = 'all' | 'answers' | 'points' | 'configuration' | 'details';
 const detailChanges = new Set(['explanation', 'evidence', 'na_reason', 'review_reason']);
@@ -18,8 +19,8 @@ function initialPair(runs: EvaluationSummary[], currentId: string) {
   if (!target) return { left: '', right: '' };
   const time = Date.parse(target.created_at);
   const earlier = runs.filter(r => r.id !== target.id && r.state === 'succeeded' && r.checklist_id === target.checklist_id
-    && Number.isFinite(time) && Date.parse(r.created_at) <= time)
-    .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+    && Number.isFinite(time) && (r.created_at < target.created_at || (r.created_at === target.created_at && r.id < target.id)))
+    .sort((a, b) => a.created_at === b.created_at ? a.id === b.id ? 0 : a.id > b.id ? -1 : 1 : a.created_at > b.created_at ? -1 : 1);
   return { left: earlier[0]?.id ?? runs.find(r => r.id !== target.id)?.id ?? target.id, right: target.id };
 }
 
@@ -79,7 +80,7 @@ export default function SavedComparison({ runs, currentId, sourceId, onEvidence 
     }).catch(e => { if (active) setOutcome({ key, result: null, error: e instanceof Error ? e.message : 'Comparison failed.' }); });
     return () => { active = false; };
   }, [open, left, right, leftBasis, rightBasis, sourceId, key, selectionAvailable]);
-  const runLabel = (run: EvaluationSummary) => `v${run.checklist_id} · ${label(run.state)} · ${new Date(run.created_at).toLocaleString()} · ${run.id.slice(0, 8)}`;
+  const runLabel = savedRunLabel;
   const visible = result?.criteria.filter(r => (!changedOnly || r.change !== 'unchanged') && matchesDifference(r, difference)) ?? [];
   return <section className="panel saved-comparison">
     <button className="secondary" aria-expanded={open} onClick={() => {
@@ -94,7 +95,7 @@ export default function SavedComparison({ runs, currentId, sourceId, onEvidence 
     }} disabled={!runs.length}>Compare saved runs</button>
     {open && <div role="region" aria-label="Saved-run comparison">
       <p>Inspect stored answers without evaluating again. Both runs must use this exact source revision.</p>
-      <small>The initial baseline prefers the most recent earlier successful run with the same checklist. Your selections stay in place when results update.</small>
+      <small>The initial baseline prefers the most recent earlier successful run with the same checklist among loaded runs. Browse saved-run pages to make older runs available. Your selections stay in place when results update.</small>
       <div className="comparison-controls">
         <label>Baseline saved run<select aria-label="Baseline saved run" value={left} onChange={e => setLeft(e.target.value)}>{runs.map(r => <option key={r.id} value={r.id}>{runLabel(r)}</option>)}</select></label>
         <label>Baseline answer set<select aria-label="Baseline answer set" value={leftBasis} onChange={e => setLeftBasis(e.target.value as typeof leftBasis)}><option value="effective">Effective</option><option value="original">Original</option></select></label>

@@ -65,7 +65,7 @@ def client_and_calls(tmp_path, handler=None, **settings_overrides):
             return handler(payload)
         input_data = json.loads(payload["input"])
         checklist = Checklist.model_validate(input_data["saved_checklist"])
-        result = full_assessment(checklist).model_dump(mode="json")
+        result = full_assessment(checklist, message_id=input_data["operator_message_ids"][0]).model_dump(mode="json")
         result["results"][checklist.criteria[0].id]["value"] = False
         return httpx.Response(200, json=response_for(result))
 

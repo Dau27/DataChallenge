@@ -1,0 +1,3 @@
+.history-pagination { display: grid; gap: .5rem; padding: .65rem 0; }
+.history-pagination .inline-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.history-pagination > small { line-height: 1.5; }

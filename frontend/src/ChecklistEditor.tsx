@@ -3,6 +3,7 @@ import { api, ApiError } from './api';
 import type { Checklist, ChecklistVersion, Criterion, FieldIssue } from './types';
 import { ChangePreview, FieldErrors, fieldId, useChecklistPreview } from './ChecklistPreview';
 import type { Run } from './App';
+import WeightImpact from './WeightImpact';
 
 export default function ChecklistEditor({ version, versions, busy, run, onSave }: {
   version: ChecklistVersion; versions: ChecklistVersion[]; busy: boolean; run: Run; onSave: (id: number) => Promise<void>;
@@ -33,6 +34,7 @@ export default function ChecklistEditor({ version, versions, busy, run, onSave }
       catch (error) { if (error instanceof ApiError) setSaveErrors({ draft: JSON.stringify(draft), issues: error.issues }); throw error; }
     })}>Save new version →</button></div>
     <ChangePreview {...validation} />
+    <WeightImpact version={version} draft={draft} />
     <div className="editor-layout"><div id={fieldId(['criteria'])} tabIndex={-1}>{errors(['criteria'])}
       <section className="panel editor-meta"><div className="inline-actions"><span className="badge">Based on v{version.id}</span><span className={`badge ${dirty ? 'needs_review' : 'complete'}`}>{dirty ? 'Unsaved draft' : 'Saved snapshot'}</span></div>
         <label>Checklist name<input {...field(['name'], 'Checklist name')} value={draft.name} onChange={e => setDraft({ ...draft, name: e.target.value })} />{errors(['name'])}</label>

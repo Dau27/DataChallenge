@@ -45,7 +45,7 @@ def test_necessary_details_and_correct_next_step_recompute_without_replacing_ori
     def historical_output(payload):
         import json
         checklist = Checklist.model_validate(json.loads(payload["input"])["saved_checklist"])
-        result = full_assessment(checklist).model_dump(mode="json")
+        result = full_assessment(checklist, message_id="m0002").model_dump(mode="json")
         result["results"]["needs"] = judgment(disposition="not_applicable", reason="SYNTHETIC erroneous sufficiency")
         result["results"]["identification"] = judgment(disposition="not_applicable", reason="General guidance only")
         result["results"]["consultation"] = judgment(10)

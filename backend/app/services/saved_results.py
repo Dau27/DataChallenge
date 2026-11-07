@@ -21,6 +21,20 @@ def summary(evaluation):
             "error": evaluation.error, "created_at": evaluation.created_at, "updated_at": evaluation.updated_at}
 
 
+def summary_columns():
+    """Read list/detail headers without materializing judgments, metadata or attempts."""
+    return (Evaluation.id, Evaluation.conversation_id, Evaluation.checklist_id, Evaluation.state,
+            Evaluation.completeness, Evaluation.cached_from, Evaluation.effective_score["total"].as_string().label("total"),
+            Evaluation.error, Evaluation.created_at, Evaluation.updated_at)
+
+
+def saved_summaries(session, conversation_id=None):
+    query = select(*summary_columns()).order_by(Evaluation.created_at.desc(), Evaluation.id.desc())
+    if conversation_id:
+        query = query.where(Evaluation.conversation_id == conversation_id)
+    return [dict(row) for row in session.execute(query).mappings()]
+
+
 def version_view(version):
     return {"id": version.id, "content_hash": version.content_hash, "snapshot": version.snapshot, "created_at": version.created_at}
 
