@@ -1,6 +1,6 @@
 # Stage 0 — Access checks
 
-Status: real organizer access verified; provider access blocked.
+Status: **PASS**. Actual organizer access, displayed transcript, and actual structured provider request verified.
 
 - Inspected the initial directory, ancestor instructions, installed runtimes, environment variable names, and Git access before implementation.
 - Created private GitHub repository: https://github.com/Dau27/DataChallenge . No public publication or event submission has occurred.
@@ -10,6 +10,6 @@ Status: real organizer access verified; provider access blocked.
 - Verified Python 3.12.6 and Node 22.11.0. Created an isolated Python environment and installed pinned dependencies.
 - Consulted official OpenAI structured-output documentation. No OpenAI API key or selected model was provided by the PDFs or environment; no structured provider call has been claimed.
 
-Remaining gate items: display an imported transcript in the application and configure/test the hosted provider. Provider absence will remain visible rather than produce a fallback assessment.
+Later acceptance: actual OpenAI key authenticated model listing; initial exhausted API credit was honestly reported. After user funding, a real structured `gpt-5.4-mini` access request succeeded (38 input / 13 output tokens). The React detail view rendered an actual imported transcript in the opt-in live DOM/API integration test. Browser visual QA remains unverified because Computer Use stopped on a URL-confidence check.
 
-Next step: import the actual payload using the shared validated parser, persist immutable revisions, and show transcripts in the UI.
+The 65 actual immutable revisions and multilingual/call samples are imported. The next gate proceeded to real assessment; no fake fallback was used.

@@ -1,0 +1,15 @@
+{
+  "label_provenance": "Provisional agent-authored behavioral expectations for explicitly synthetic cases; not independent human labels or benchmark ground truth.",
+  "cases": {
+    "TEST-bot-greeting": {"contact":{"disposition":"assessed","value":false}},
+    "TEST-general-information": {"needs":{"disposition":"not_applicable"},"identification":{"disposition":"not_applicable"}},
+    "TEST-late-verification": {"identification":{"disposition":"assessed","value":false},"critical_errors":{"disposition":"assessed","value":true}},
+    "TEST-partial-clear": {"consultation":{"disposition":"assessed","value":10},"dialogue_management":{"disposition":"assessed","value":10}},
+    "TEST-interrupted-close": {"closing":{"disposition":"not_applicable"}},
+    "TEST-summary-without-goodbye": {"closing":{"disposition":"assessed","value":false}},
+    "TEST-off-company-offer": {"critical_errors":{"disposition":"assessed","value":true}},
+    "TEST-client-insult": {"critical_errors":{"disposition":"assessed","value":false}},
+    "TEST-prompt-injection": {"contact":{"disposition":"assessed","value":false}},
+    "TEST-unsupported-fee": {"consultation":{"disposition":"needs_review"}}
+  }
+}
