@@ -1,6 +1,6 @@
 # Stage 20 — printable saved-evaluation reports
 
-**Builder handoff: implementation and targeted acceptance passed; desktop app preview checked; remaining paper/narrow/stress visual acceptance is pending because Computer Use stopped.** 8 November 2026. No shared-file integration, merge, push, provider request, demo or publication was performed by this builder.
+**CODE READY FOR INTEGRATION — VISUAL ACCEPTANCE PENDING.** Resumed verification on 8 November 2026 passed with code unchanged from implementation checkpoint `7a6d2a7a9b667dcfaf1f7e4605cd349aac88e4a1`. The limited earlier desktop observations remain historical; paper, narrow-screen and multilingual stress visual acceptance is still pending after the Computer Use stop. No shared mounting, merge, push, provider request, demo or publication was performed by this builder.
 
 ## Worktree and ownership
 
@@ -50,11 +50,11 @@ The component imports its scoped stylesheet. The renderer also embeds that trust
 - Known provenance, cache lineage and request accounting are displayed; missing metadata remains unavailable. Cache reuse is not described as an independent assessment. Estimates are not invoices.
 - The report relies on the existing backend export's credential/recording-URL redaction, requires its explicit exclusion policy, and renders allowlisted fields only. Arbitrary metadata, request payloads, recording fields or credentials are not serialized into HTML. Excerpts remain an explicit export-policy option. Explanations/review comments can quote private text: the report is not anonymous.
 - Dynamic source/checklist/judgment/review values are HTML-escaped text, never active markup, attributes or links. The preview is sandboxed without script permission, has a no-referrer policy and a restrictive CSP. No remote fonts/assets, PDF service or new dependency is used.
-- System fonts support RU/KZ/EN, paragraphs preserve newlines, long words wrap, headings stay with following content and table headings repeat on printed pages. Long explanations/excerpts can split across pages rather than being placed in an unsplittable giant table row.
+- Styles request system fonts, preserved paragraph newlines, long-word wrapping, headings kept with following content and repeated print table headings. Long explanations/excerpts can split across pages rather than being placed in an unsplittable giant table row. Automated serialization checks cover the content and style rules; multilingual glyphs and actual paper pagination still need visual acceptance.
 
 ## Actual validation
 
-Commands from the assigned worktree, with `local_data/offline.ps1` first; frontend commands run in its `frontend` directory:
+Initial implementation commands (historical results below). The install and Vitest commands run in the assigned worktree's `frontend` directory; TypeScript below runs from the worktree root after dot-sourcing `local_data/offline.ps1`:
 
 ```powershell
 npm ci --offline --no-audit --no-fund
@@ -90,6 +90,39 @@ Observed desktop app checks: keyboard Enter opened the preview and focused its h
 **Computer Use then stopped when it could not determine the native Chrome URL confidently enough to enforce policy.** No further UI input, alternate browser retry or policy bypass was attempted. Native paper preview, A4/Letter pagination/repeated headers, narrow-screen rendering and synthetic long-text visual inspection remain **not run**. Source text/long multilingual serialization passed automated tests, which do not establish paper layout.
 
 The coordinator should finish those remaining visual checks after mounting the component above. Inspect the unresolved Russian case, all three languages' long text, A4/Letter page breaks and repeated headings, a narrow screen and the clearly labeled synthetic stress report. Activate Print / Save as PDF explicitly and cancel after checking paper preview; do not submit a print job or publish. Record actual outcomes here or in the final integration report. An additional product screenshot or print-preview pass is not claimed from the interrupted native action.
+
+## Resumed code audit and verification — 8 November 2026
+
+Read the updated canonical root CURRENT_CONTEXT, READY handoff, printable-report prompt and MASTER_CONTEXT, then verified the assigned branch and clean implementation checkpoint before work. Audited the existing component, renderer, owned DTO/styles/tests and the existing sanitized-export/read-resource contracts. No reproducible owned-code defect was found; **all eight code/style/type/fixture/test files remain byte-for-byte unchanged from `7a6d2a7`**. This continuation changes only this report, including correction of the ambiguous command working directories above. It does not rebuild the feature or widen scope.
+
+Preserved the previous private QA directory and helper copies under ignored `local_data/print_resume_20261108/before_qa` before rerunning existing helpers. From the assigned worktree root, the actual rerun commands were:
+
+```powershell
+. ./local_data/offline.ps1
+& 'C:/Users/user/Desktop/DataChallenge/.venv/Scripts/python.exe' local_data/prepare_print_qa.py
+Push-Location frontend
+node node_modules/vitest/vitest.mjs run --maxWorkers=2 src/printEvaluation.test.ts src/PrintableEvaluation.test.tsx local_data/actualPrint.test.ts
+Pop-Location
+node frontend/node_modules/typescript/bin/tsc -b frontend --pretty false
+& 'C:/Users/user/Desktop/DataChallenge/.venv/Scripts/python.exe' local_data/final_print_check.py
+git diff --exit-code 7a6d2a7 -- frontend/src
+```
+
+Fresh outcomes: **29 tests passed in three files, 18.39 seconds** (17 owned renderer/component tests and12 private actual-packet/stress serialization tests); **TypeScript passed, exit0**. Fresh read-only export preparation checked249 plain saved runs plus three excerpt-enabled actual cases with empty credentials, zero budget and all sockets forbidden. The renderer again checked252 packets,2,014 criterion entries,3,212 original/effective judgments,12 reviewer judgments and497 excerpt-message occurrences, retaining exact saved values. The long synthetic case checks serialization only. No dependency install/change, full combined suite, production build, preview server or Computer Use action was performed in this continuation.
+
+Fresh preservation checks passed: all15 main tables and schema/index, all30 protected files, the supplied builder copy and original business tables in the retained disposable preview copy match the baseline. The supplied copy remains SHA-256 `2d396e55e597f0e94d055268b0b2602e976c18061f52670427f50a77e576a20f`. All249 saved evaluations remain intact. The worktree was clean and frontend source diff empty during validation. The old helper's untracked-file count is0 because the implementation is committed; it is not a count of missing deliverables. Ports5189/8141 were closed. Fresh logs/manifests are retained in ignored `local_data/print_resume_20261108`; previous evidence is preserved. Added hosted/provider/organizer requests and API spend: **0 / $0.00**.
+
+The coordinator owns the existing shared mount above, combined suites/build and all remaining visual acceptance. The exact remaining cases are:
+
+| Pending case | Saved identity or fixture | Required observation |
+| --- | --- | --- |
+| A4 and Letter, excerpts off/on | EN `p1-en-001`, run `9bf8f8a13bde4629bc5ca32b2936eb6e`; original/effective92.31 | Readable paper breaks, repeated table headers, full explanations/evidence IDs, no clipping or unrelated app content; explicit print action only. |
+| Reviewed multilingual report | KZ `p1-kz-012`, run `ecc881c390b74a42a85632938dad7c7a`; original84.62/effective100.00, two decisions | Readable Kazakh/Russian glyphs, preserved original/effective distinctions and complete review/excerpt text on paper. |
+| Unresolved Russian call | RU `p4-ru-005`, run `46385f6e3b0742ccae19cd0b2c806a74`; original92.31/effective null, one decision | Effective needs-review/null remains explicit; no invented zero; N/A membership, unscored flags, review reason and evidence remain legible. |
+| Narrow controls and report | The same actual saved cases at320px and390px widths | Keyboard access/focus, checkbox/action wrapping, no clipped controls/content or horizontal overflow; retry remains reachable. |
+| Long multilingual stress | Existing clearly labeled `syntheticPrintPacket` stress case retained in private QA helpers | Long RU/KZ/EN paragraphs, newlines and unbroken tokens wrap without clipped glyphs; prose can span pages with readable headings. |
+
+All rows remain **PENDING / NOT VISUALLY VERIFIED in this continuation**. The retained standalone HTML is evidence, not permission to reopen a blocked local-file URL. Do not bypass or retry the previous Computer Use stop through another tool/path. The coordinator must use an authorized acceptance workflow and record observed results; cancel print preview without submitting a print job or publishing a report.
 
 ## Preservation and teardown
 
