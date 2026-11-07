@@ -18,7 +18,7 @@ from pydantic import ValidationError
 from backend.app.domain import Assessment, Checklist, canonical_json, content_hash, validate_assessment
 from backend.app.services.scoring import SCORING_VERSION
 
-PROMPT_VERSION = "literal-rubric-evidence-v12"
+PROMPT_VERSION = "literal-rubric-evidence-v13"
 SCHEMA_VERSION = "validated-applicability-exclusive-decision-v7"
 PROVIDER = "openai-responses"
 EVIDENCE_VALIDATION_VERSION = "source-closing-courtesy-v1"
@@ -49,6 +49,10 @@ Interpretation of the supplied INITIAL definitions (a changed saved definition o
   extra requirements. "Hello, I'm Lee" / "Здравствуйте, я Анна" / "Сәлеметсіз бе, мен Айым" meet both.
   The client's language is established by their text; a client need not greet first. No human
   greeting/introduction means No, even if a bot greeted. Do not penalise a pre-handover wait here.
+  A company/department greeting or "How can I help?" alone is not a personal self-introduction.
+  Never invent a name from corrupted speech-to-text. If genuinely unintelligible opening words
+  prevent determining whether the operator introduced themselves, choose needs_review and name
+  the recording/qualified interpretation needed. A clear omission in intelligible text is No.
 - Needs: first check whether information available BEFORE the operator answered was sufficient.
   Sufficient means THE OPERATOR has enough customer context to give a relevant answer, NOT that
   THE CUSTOMER already knows the answer or that the issue is already resolved. A clear question
@@ -58,6 +62,8 @@ Interpretation of the supplied INITIAL definitions (a changed saved definition o
   because the client asked a question. Customer follow-up questions are not operator clarification.
   If a necessary fact (e.g. comparison dates/source, transfer currency/time) is missing initially
   and the HUMAN asks for it before the relevant answer/case referral, choose assessed Yes, NOT N/A.
+  This includes an instrument/ticker and rejection message needed to identify a failed order;
+  merely knowing that an order was rejected does not supply those necessary case details.
 - Identification: general instructions without protected disclosure/action mean N/A. If verification
   was required and not confirmed before disclosure/action, No. A later check does not repair it.
   Merely discussing a possible FUTURE identity check does not mean it occurred or was required
@@ -66,6 +72,10 @@ Interpretation of the supplied INITIAL definitions (a changed saved definition o
 - Consultation: full credit for all material questions answered OR a correct next step/referral.
   A case awaiting follow-up can have a correct next step. Customer-confirmed working navigation
   supports routine guidance. Do not reduce the operator's score for a bot's earlier response.
+  Requesting the specific missing details needed to identify an issue and explaining the next
+  checking/referral step can satisfy the correct-next-step anchor even if the customer defers
+  sending them. Do not award 10 solely because that supported follow-up is not yet completed.
+  An empty promise to wait/check without an actionable path does not establish a correct step.
   An unanswered material question is partial consultation, not missing external authority. A precise
   official fee/policy claim whose truth cannot be established does need review, not an invented No.
   A request already formulated makes consultation applicable even if the operator gives no answer.

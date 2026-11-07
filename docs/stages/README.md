@@ -14,13 +14,13 @@ Each report records completed work, checks actually run, limitations, and the ne
 | 7 — Demo | Clean-source and zero-spend technical checks passed; human presentation/public submission pending | [Demo readiness](07-demo-readiness.md) |
 | 8 — Control/freeze | Awaiting organizer inputs | [Control and freeze](08-control-freeze.md) |
 
-Current DEV: **65 complete accepted assessments**, no latest failed or unstarted records. **26/26 targeted provisional checks** pass; 130 original/effective snapshots were independently recalculated without mismatch. The original implementation's 59 complete / six needs review and initial audit's 44/21 remain historical results.
+Current DEV: **64 complete / one needs review**, no latest failed or unstarted records. [Zero-spend corrections](../audits/2026-11-07/08-zero-spend-scoring-corrections.md) fix two supported KZ judgments and retract an unsupported call introduction pending recording review. Originals remain unchanged; 26/26 prior diagnostics and 130-snapshot arithmetic still pass. Earlier 65-complete and 59/6 or 44/21 counts are historical.
 
-Latest root/isolated-source verification: **125 backend tests**, **14 ordinary client tests**, production build, pip check and compileall passed. Prior clean setup remains recorded; dependencies are unchanged. The paid opt-in test was skipped; earlier real-provider success is historical. New copied-data budget, preview, review filters and cold-restart checks passed. See [CURRENT_CONTEXT.md](../../CURRENT_CONTEXT.md) for actual commands and remaining external gates.
+Latest root verification: **127 backend / 15 ordinary client tests**, production build, pip check and compileall passed. Prior isolated-source 125/14 and clean setup remain recorded; dependencies are unchanged. The paid opt-in test was skipped. Latest copied-data correction/restart and zero-budget blocking checks passed. See [CURRENT_CONTEXT.md](../../CURRENT_CONTEXT.md) for actual commands and external gates.
 
 Supplementary research completed: [Market analysis and incremental development plan](../MARKET_ANALYSIS.md). Compares 14 platforms, maps their approaches to the existing application and defines proposed future acceptance gates. This report does not mark the pending human review, demo or control/freeze gates complete.
 
-Scoring checkpoint: [Re-audit](../audits/2026-11-07/05-scoring-reaudit-results.md). All 65 accepted DEV results remain complete, with the same 26 targeted diagnostics and retained-result provenance. The $0.6271780 earlier scoring-fix cost is historical; new workflow improvements added $0.00 inference. Independent human accuracy remains unverified.
+Historical paid scoring checkpoint: [Re-audit](../audits/2026-11-07/05-scoring-reaudit-results.md). Its 65-complete count is superseded by the uncertainty retraction above; model provenance remains unchanged. The $0.6271780 earlier scoring-fix cost is historical; latest corrections add $0.00 inference. Independent human accuracy remains unverified.
 
 Zero-spend handoff: [Readiness checks](../audits/2026-11-07/06-zero-spend-readiness.md), [human review](../HUMAN_REVIEW.md), [demo card](../DEMO.md) and [control/freeze runbook](../CONTROL_AND_FREEZE.md). No new hosted-model requests were made.
 

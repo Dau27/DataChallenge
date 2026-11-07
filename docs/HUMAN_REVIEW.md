@@ -1,5 +1,7 @@
 # Independent human review
 
+Latest source correction: p4-ru-005 contact is needs_review, with its original Yes/92.31 preserved and effective total withheld. Review the noisy m0017 opening recording, then resolve its existing open appeal with evidence. The KZ needs/consultation corrections are explicitly agent-attributed; they do not mark any independent labels complete. [Correction report](audits/2026-11-07/08-zero-spend-scoring-corrections.md).
+
 Status: packet prepared; human adjudication has not occurred. This is the principal remaining validation gap. Automated tests and 26 targeted agent diagnostics do not establish model accuracy.
 
 The private workspace packet is under `local_data/readiness_20261107/human_review/`:

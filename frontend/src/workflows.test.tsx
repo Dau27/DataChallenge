@@ -86,3 +86,37 @@ it('requires a separate reviewer action and rationale before posting a decision'
   expect(fetchMock.mock.calls[0][0]).toBe('/api/appeals/TEST_APPEAL/decision');
   expect(JSON.parse(fetchMock.mock.calls[0][1]!.body as string)).toMatchObject({ action: 'confirm', judgment: null, expected_updated_at: 'TEST_REVISION' });
 });
+
+it('retracts an unsupported positive with a missing basis instead of forcing a scored answer', async () => {
+  const checklist = structuredClone(seed) as Checklist;
+  const judgment: Judgment = { disposition: 'assessed', value: true, explanation: 'SYNTHETIC unsupported introduction', na_reason: null, review_reason: null,
+    evidence: [{ kind: 'support', start_message_id: 'm0001', end_message_id: 'm0001' }] };
+  const evaluation: EvaluationDetail = { id: 'TEST_EVAL', updated_at: 'TEST_REVISION', conversation_id: 'TEST_CALL', checklist_id: 1,
+    state: 'succeeded', completeness: 'complete', total: '100.00', error: null, cached_from: null, created_at: '2026-11-01T00:00:00Z',
+    original: { results: { contact: judgment } }, effective: { results: { contact: judgment } }, original_score: null, effective_score: null,
+    checklist: { id: 1, snapshot: checklist, content_hash: 'TEST', created_at: '2026-11-01T00:00:00Z' },
+    metadata: { provider: 'TEST_ONLY', model: 'TEST_ONLY', mode: 'TEST/MOCK', prompt_version: 'TEST_ONLY' }, attempts: [], appeals: [], reviews: [],
+    usage: { request_attempts: 0, input_tokens_known: 0, output_tokens_known: 0, usage_complete: false, estimated_cost_usd: null, cost_rate_source: null, latency_ms: 0 } };
+  const before = structuredClone(evaluation);
+  const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(JSON.stringify({ id: 1 }), { status: 201 }));
+  const onSaved = vi.fn(async () => {});
+  render(<ReviewForm appeal={{ id: 'TEST_APPEAL', criterion_id: 'contact', comment: 'SYNTHETIC uncertain ASR', status: 'open', created_at: '2026-11-01T00:00:00Z' }}
+    criterion={checklist.criteria[0]} evaluation={evaluation} messages={[{ id: 'm0001', speaker: 'operator', timestamp: '00:00', text: 'SYNTHETIC company [unintelligible] hello' }]}
+    busy={false} run={async action => { await action(); }} onSaved={onSaved} />);
+  fireEvent.click(screen.getByRole('button', { name: 'Review appeal' }));
+  fireEvent.change(screen.getByLabelText('Reviewer action'), { target: { value: 'replace' } });
+  fireEvent.change(screen.getByLabelText('Disposition'), { target: { value: 'needs_review' } });
+  expect(screen.queryByLabelText('Replacement answer')).toBeNull();
+  expect((screen.getByLabelText('Missing basis') as HTMLTextAreaElement).required).toBe(true);
+  expect(screen.getByText(/final total will be withheld/)).toBeDefined();
+  fireEvent.change(screen.getByLabelText('Missing basis'), { target: { value: 'Recording review needed: opening ASR is unintelligible.' } });
+  fireEvent.change(screen.getByLabelText('Criterion explanation'), { target: { value: 'Self-introduction cannot be established from this source.' } });
+  fireEvent.change(screen.getByLabelText('Decision rationale'), { target: { value: 'SYNTHETIC retraction after source inspection' } });
+  fireEvent.click(screen.getByRole('button', { name: /Save decision/ }));
+  await waitFor(() => expect(onSaved).toHaveBeenCalledOnce());
+  expect(fetchMock).toHaveBeenCalledOnce();
+  expect(fetchMock.mock.calls[0][0]).toBe('/api/appeals/TEST_APPEAL/decision');
+  expect(JSON.parse(fetchMock.mock.calls[0][1]!.body as string)).toMatchObject({ action: 'replace', expected_updated_at: 'TEST_REVISION',
+    judgment: { disposition: 'needs_review', value: null, na_reason: null, review_reason: 'Recording review needed: opening ASR is unintelligible.' } });
+  expect(evaluation).toEqual(before);
+});

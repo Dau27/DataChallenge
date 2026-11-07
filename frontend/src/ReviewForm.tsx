@@ -11,9 +11,10 @@ export default function ReviewForm({ appeal, criterion, evaluation, messages, bu
   const original = evaluation.original!.results[criterion.id];
   const effective = evaluation.effective!.results[criterion.id];
   const [action, setAction] = useState<'confirm' | 'replace'>(effective.disposition === 'needs_review' ? 'replace' : 'confirm');
-  const [disposition, setDisposition] = useState<'assessed' | 'not_applicable'>('assessed');
+  const [disposition, setDisposition] = useState<Judgment['disposition']>('assessed');
   const [value, setValue] = useState(String(effective.value ?? (criterion.answer_type === 'scale' ? criterion.scale[0]?.value : true)));
   const [explanation, setExplanation] = useState(''); const [naReason, setNaReason] = useState('');
+  const [reviewReason, setReviewReason] = useState('');
   const [rationale, setRationale] = useState('');
   const [kind, setKind] = useState<'support' | 'absence' | 'context'>('support');
   const [start, setStart] = useState(effective.evidence[0]?.start_message_id ?? messages[0].id);
@@ -24,8 +25,9 @@ export default function ReviewForm({ appeal, criterion, evaluation, messages, bu
       {appeal.status === 'open' && <button className="secondary" onClick={() => setExpanded(!expanded)}>{expanded ? 'Close review' : 'Review appeal'}</button>}</div>
     {expanded && appeal.status === 'open' && <form onSubmit={event => { event.preventDefault(); void run(async () => {
       const judgment: Judgment | null = action === 'confirm' ? null : {
-        disposition, value: disposition === 'not_applicable' ? null : criterion.answer_type === 'scale' ? Number(value) : value === 'true',
-        explanation, na_reason: disposition === 'not_applicable' ? naReason : null, review_reason: null,
+        disposition, value: disposition !== 'assessed' ? null : criterion.answer_type === 'scale' ? Number(value) : value === 'true',
+        explanation, na_reason: disposition === 'not_applicable' ? naReason : null,
+        review_reason: disposition === 'needs_review' ? reviewReason : null,
         evidence: [{ kind, start_message_id: start, end_message_id: end }],
       };
       await api(`/appeals/${appeal.id}/decision`, { action, rationale, judgment, expected_updated_at: evaluation.updated_at });
@@ -35,11 +37,12 @@ export default function ReviewForm({ appeal, criterion, evaluation, messages, bu
       <p className="muted">This anonymous demo review is a separate action from appeal submission. It does not establish a secure reviewer identity.</p>
       <label>Reviewer action<select value={action} onChange={e => setAction(e.target.value as 'confirm' | 'replace')}><option value="confirm" disabled={effective.disposition === 'needs_review'}>Confirm current answer</option><option value="replace">Replace / resolve answer</option></select></label>
       {action === 'replace' && <>
-        <label>Disposition<select value={disposition} onChange={e => setDisposition(e.target.value as 'assessed' | 'not_applicable')}><option value="assessed">Assessed</option>{criterion.na_allowed && <option value="not_applicable">N/A — only if the saved condition holds</option>}</select></label>
+        <label>Disposition<select value={disposition} onChange={e => setDisposition(e.target.value as Judgment['disposition'])}><option value="assessed">Assessed</option>{criterion.na_allowed && <option value="not_applicable">N/A — only if the saved condition holds</option>}<option value="needs_review">Needs review — missing source or authority</option></select></label>
         {disposition === 'assessed' ? <label>Replacement answer<select value={value} onChange={e => setValue(e.target.value)}>{criterion.answer_type === 'scale'
           ? criterion.scale.map(a => <option key={a.value} value={a.value}>{a.value} · {a.description}</option>)
           : <><option value="true">Yes</option><option value="false">No</option></>}</select></label>
-          : <label>N/A justification <small>{criterion.na_condition}</small><textarea required value={naReason} onChange={e => setNaReason(e.target.value)} /></label>}
+          : disposition === 'not_applicable' ? <label>N/A justification <small>{criterion.na_condition}</small><textarea required value={naReason} onChange={e => setNaReason(e.target.value)} /></label>
+          : <><label>Missing basis<textarea required value={reviewReason} onChange={e => setReviewReason(e.target.value)} /></label><p className="muted">The final total will be withheld and this appeal will remain open until the missing basis is supplied.</p></>}
         <label>Criterion explanation<textarea required value={explanation} onChange={e => setExplanation(e.target.value)} /></label>
         <div className="form-grid"><label>Evidence kind<select value={kind} onChange={e => setKind(e.target.value as typeof kind)}><option>support</option><option>absence</option><option>context</option></select></label>
           <label>Start message<select value={start} onChange={e => setStart(e.target.value)}>{messages.map(m => <option key={m.id} value={m.id}>{m.id} · {m.speaker} · {m.timestamp}</option>)}</select></label>

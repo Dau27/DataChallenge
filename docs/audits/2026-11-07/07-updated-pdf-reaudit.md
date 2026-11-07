@@ -1,5 +1,7 @@
 # Updated solution audit against the supplied PDFs
 
+Follow-up: [zero-spend scoring corrections](08-zero-spend-scoring-corrections.md) correct the two supported KZ judgments and retract the unsupported call introduction into needs_review. Current DEV completeness is 64 complete / one awaiting source review. The audit below preserves its pre-correction evidence.
+
 Audit date: 7 November 2026. Application source: **8a60a6da4e57945482486d2f4d63c15da51d4d15**. Scope: source requirements, current regression tests and saved results after the three requested workflow improvements. **No model/organizer request, paid test or score change was made.**
 
 ## Verdict and score

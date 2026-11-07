@@ -40,12 +40,14 @@ def decide(db, appeal_id, action, rationale, judgment, expected_updated_at):
             if judgment is not None:
                 raise ValueError("Confirm does not accept a replacement judgment")
             replacement = Judgment.model_validate(effective["results"][criterion.id])
+            if replacement.disposition == "needs_review":
+                raise ValueError("An unresolved criterion cannot be confirmed; supply a supported replacement")
         elif action == "replace" and judgment is not None:
             replacement = judgment
         else:
             raise ValueError("Replace requires a complete validated judgment")
-        if replacement.disposition == "needs_review":
-            raise ValueError("A reviewer decision must resolve the criterion with an answer or a permitted N/A")
+        # A correction may retract an unsupported answer when the source cannot establish it.
+        # Preserve that missing basis instead of forcing No/N/A or retaining an invented Yes.
         message_ids = [m["id"] for m in conversation.snapshot["transcript"]]
         validate_judgment(criterion, replacement, message_ids)
         effective["results"][criterion.id] = replacement.model_dump(mode="json")
@@ -53,7 +55,7 @@ def decide(db, appeal_id, action, rationale, judgment, expected_updated_at):
         review = Review(appeal_id=appeal.id, evaluation_id=evaluation.id, criterion_id=criterion.id,
                         action=action, rationale=rationale, judgment=replacement.model_dump(mode="json"), resulting_score=calculated)
         session.add(review)
-        appeal.status = "decided"
+        appeal.status = "open" if replacement.disposition == "needs_review" else "decided"
         evaluation.effective, evaluation.effective_score = effective, calculated
         evaluation.completeness, evaluation.updated_at = calculated["completeness"], now()
         session.flush()
