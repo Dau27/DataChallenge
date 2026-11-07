@@ -6,7 +6,7 @@ The application uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite,
 
 ## Current verified state
 
-- **Market feature research refreshed:** ten platforms rechecked against the current build. Recommended next additions are saved-run comparison, evidence exports and transcript-text search with saved filters; all can use existing data without new inference. These are proposals, not implemented features. [Feature options and acceptance gates](docs/MARKET_FEATURE_OPTIONS.md). Demo deferral and zero-spend limits remain in force.
+- **Saved-data features implemented:** compare saved runs and original/effective answers, download JSON/CSV reports, and search transcripts with named browser filter presets. **144 backend / 27 client tests and build passed**; 249 copied real runs passed comparison and both export formats with provider calls forbidden. Originals and private files preserved; **$0 added inference**. [Stage reports](docs/improvements/README.md). Demo remains deferred. [Earlier market research](docs/MARKET_FEATURE_OPTIONS.md) explains the selected scope.
 
 - **Delivery scope updated:** the manual reference-review exercise is removed from delivery and demo plans. Private evidence is retained. **Five-minute demo work is deferred at the user's request.** [Scope update](docs/audits/2026-11-07/12-delivery-scope-cleanup.md).
 
@@ -81,6 +81,9 @@ For frontend development, run `npm run dev` inside `frontend` with the backend o
 4. Open a saved run. Click evidence IDs to highlight its original transcript range. Inspect N/A reasons, points, section percentages, separate flags, and any missing basis requiring review.
 5. Appeal a criterion with a comment. In a separate action, review the appeal, confirm/replace the answer, and save a rationale. Valid replacements need evidence. Review changes recalculate locally without a model call and preserve the original.
 6. Edit a criterion or add a genuinely new requirement, save a new version, select it, and create another evaluation. Existing results retain their old snapshot. Changes invalidate incompatible cache reuse.
+7. Use Compare saved runs to inspect two saved assessments of the exact same source revision. Choose original/effective independently; incompatible definitions or withheld totals do not produce total deltas.
+8. Download JSON or CSV from a selected saved run. Both answer sets, checklist/source identity, provenance and reviewer history are included. Source excerpts require an explicit checkbox; stored explanations/comments can already quote source text. Credentials and recording links are excluded/redacted. CSV uses typed long-form records with nested JSON cells and spreadsheet formula protection.
+9. Search literal transcript text and optionally restrict the speaker, then combine queue filters. Message links focus the exact source message. Save a named preset for the selected checklist version to restore it after reload. Presets are local to this browser/origin; Default filters resets the view. Search counts matching messages and shows up to five snippets per conversation.
 
 The UI reports states for the selected checklist version: not evaluated, queued, running, complete, needs review, failed, interrupted. It initially selects the original saved checklist and retains later explicit selections in browser session storage. Select v1 to inspect the initial DEV run. Successful HTTP inference and assessment completeness are separate concepts. Unsupported factual claims needing an unavailable authoritative source must request review, rather than invent company policy.
 

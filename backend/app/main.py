@@ -7,7 +7,7 @@ from typing import Any, Literal
 
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import Field, ValidationError, field_validator
 from sqlalchemy import select
@@ -21,6 +21,9 @@ from backend.app.services.jobs import Jobs
 from backend.app.services.reviews import decide, submit_appeal
 from backend.app.services.budget import BudgetError, request_bound
 from backend.app.services.checklists import preview_checklist
+from backend.app.services.saved_results import SavedResultNotFound, compare_saved, evaluation_snapshot, summary, version_view
+from backend.app.services.exports import csv_report, export_packet, json_report
+from backend.app.services.search import search_messages
 
 
 class OrganizerImport(Contract):
@@ -103,6 +106,8 @@ class ConversationResponse(Contract):
     pending_appeals: int = 0
     pending_review_targets: list[dict[str, str]] = Field(default_factory=list)
     critical_findings: list[dict[str, str]] = Field(default_factory=list)
+    search_matches: list[dict[str, str]] = Field(default_factory=list)
+    search_total_matches: int = 0
 
 
 class ConversationDetail(Contract):
@@ -130,21 +135,6 @@ class EvaluationDetail(EvaluationSummary):
 
 class JobStartResponse(Contract):
     evaluation_ids: list[str]
-
-
-def summary(evaluation):
-    return {"id": evaluation.id, "conversation_id": evaluation.conversation_id, "checklist_id": evaluation.checklist_id,
-            "state": evaluation.state, "completeness": evaluation.completeness, "cached_from": evaluation.cached_from,
-            "total": evaluation.effective_score.get("total") if evaluation.effective_score else None,
-            "error": evaluation.error, "created_at": evaluation.created_at, "updated_at": evaluation.updated_at}
-
-
-def version_view(version):
-    return {"id": version.id, "content_hash": version.content_hash, "snapshot": version.snapshot, "created_at": version.created_at}
-
-
-def columns(row):
-    return {column.name: getattr(row, column.name) for column in row.__table__.columns}
 
 
 def create_app(settings=None, provider=None):
@@ -199,6 +189,10 @@ def create_app(settings=None, provider=None):
     @app.exception_handler(ValueError)
     async def operation_invalid(_, error):
         return JSONResponse(status_code=422, content={"detail": str(error)})
+
+    @app.exception_handler(SavedResultNotFound)
+    async def saved_result_missing(_, error):
+        return JSONResponse(status_code=404, content={"detail": str(error)})
 
     @app.exception_handler(BudgetError)
     async def spending_blocked(_, error):
@@ -280,8 +274,9 @@ def create_app(settings=None, provider=None):
             return preview_checklist(version.snapshot, draft)
 
     @app.get("/api/conversations", response_model=list[ConversationResponse])
-    def conversations(checklist_id: int | None = None, latest_only: bool = True):
-        with db.sessions() as session:
+    def conversations(checklist_id: int | None = None, latest_only: bool = True,
+                      q: str = Query("", max_length=200), speaker: Literal["all", "operator", "client", "bot", "system"] = "all"):
+        with db.read_snapshot() as session:
             records = list(session.scalars(select(Conversation).order_by(Conversation.group_id, Conversation.source_id, Conversation.revision.desc())))
             evaluations = list(session.scalars(select(Evaluation).order_by(Evaluation.created_at.desc())))
             versions = {v.id: {c["id"]: c for c in v.snapshot["criteria"]} for v in session.scalars(select(ChecklistVersion))}
@@ -304,6 +299,9 @@ def create_app(settings=None, provider=None):
                 if latest_only and identity in seen:
                     continue
                 seen.add(identity)
+                matches, match_count = search_messages(row.snapshot["transcript"], q, speaker)
+                if (q.strip() or speaker != "all") and not match_count:
+                    continue
                 evaluation = latest.get(row.id)
                 flags = [{"evaluation_id": evaluation.id, "criterion_id": cid, "criterion_name": versions[evaluation.checklist_id][cid]["name"]}
                          for cid, value in (evaluation.effective_score or {}).get("flags", {}).items() if value is True] if evaluation else []
@@ -313,7 +311,7 @@ def create_app(settings=None, provider=None):
                               "evaluation": summary(evaluation) if evaluation else None, "created_at": row.created_at,
                               "pending_appeals": len(pending.get(identity if latest_only else row.id, [])),
                               "pending_review_targets": pending.get(identity if latest_only else row.id, []),
-                              "critical_findings": flags})
+                              "critical_findings": flags, "search_matches": matches, "search_total_matches": match_count})
             return items
 
     @app.get("/api/conversations/{conversation_id}", response_model=ConversationDetail)
@@ -344,18 +342,28 @@ def create_app(settings=None, provider=None):
                 query = query.where(Evaluation.conversation_id == conversation_id)
             return [summary(e) for e in session.scalars(query)]
 
+    @app.get("/api/evaluations/compare")
+    def compare_evaluations(left_id: str, right_id: str,
+                            left_basis: Literal["original", "effective"] = "effective",
+                            right_basis: Literal["original", "effective"] = "effective"):
+        with db.read_snapshot() as session:
+            return compare_saved(session, left_id, right_id, left_basis, right_basis)
+
     @app.get("/api/evaluations/{evaluation_id}", response_model=EvaluationDetail)
     def evaluation_detail(evaluation_id: str):
-        with db.sessions() as session:
-            row = session.get(Evaluation, evaluation_id)
-            if not row:
-                raise HTTPException(404, "Evaluation not found")
-            return {**summary(row), "original": row.original, "original_score": row.original_score,
-                    "effective": row.effective, "effective_score": row.effective_score,
-                    "checklist": version_view(session.get(ChecklistVersion, row.checklist_id)), "metadata": row.meta, "attempts": row.attempts,
-                    "usage": usage_summary(row.attempts, row.meta.get("rate", {})),
-                    "appeals": [columns(a) for a in session.scalars(select(Appeal).where(Appeal.evaluation_id == row.id).order_by(Appeal.created_at))],
-                    "reviews": [columns(r) for r in session.scalars(select(Review).where(Review.evaluation_id == row.id).order_by(Review.id))]}
+        with db.read_snapshot() as session:
+            return evaluation_snapshot(session, evaluation_id)
+
+    @app.get("/api/evaluations/{evaluation_id}/export")
+    def export_evaluation(evaluation_id: str, format: Literal["json", "csv"] = "json", include_excerpts: bool = False):
+        with db.read_snapshot() as session:
+            packet = export_packet(session, evaluation_id, settings, include_excerpts)
+        # Names come from the stored identifier; no caller-supplied path/header fragments.
+        safe_id = "".join(c for c in packet["evaluation"]["id"] if c.isascii() and (c.isalnum() or c in "_-"))[:80] or "saved"
+        return Response(json_report(packet) if format == "json" else csv_report(packet),
+            media_type="application/json" if format == "json" else "text/csv; charset=utf-8",
+            headers={"Content-Disposition": f'attachment; filename="cqa-{safe_id}.{format}"', "Cache-Control": "no-store",
+                     "X-Content-Type-Options": "nosniff"})
 
     @app.post("/api/evaluations/{evaluation_id}/retry", response_model=IdResponse, status_code=202)
     def retry(evaluation_id: str):

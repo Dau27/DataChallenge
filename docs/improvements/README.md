@@ -1,6 +1,18 @@
 # Implemented workflow improvements
 
-Completed 7 November 2026. Scope authorized: shared budget protection, checklist-change preview with field errors, and pending-appeal/critical-finding filters. No saved-run comparison or report-export feature was added.
+Completed 7 November 2026. The latest authorized stages add saved-run comparison, JSON/CSV exports and transcript search with saved filters. Existing budget protection, checklist preview and review filters are retained. Demo work remains deferred.
+
+| Latest stage | Result | Report |
+| --- | --- | --- |
+| 4 — Saved-run comparison | Passed: exact revision, original/effective selectors, evidence and rule/answer/points/provenance differences; incompatible/null totals handled | [Comparison](04-saved-run-comparison.md) |
+| 5 — JSON/CSV exports | Passed: actual downloads, both score sets/history, typed records, opt-in excerpts and credential/URL/formula protection | [Exports](05-saved-report-exports.md) |
+| 6 — Transcript search and saved filters | Passed: literal Unicode text/speaker search, exact links, combined filters, checklist-scoped presets and stale/error handling | [Search and final verification](06-transcript-search-saved-filters.md) |
+
+Latest full checks: **144 backend / 27 client passed**, **one paid opt-in skipped**, build and pip check passed. Copied actual data: **249 comparisons / 249 JSON exports / 249 CSV exports**, six multilingual searches and cold reopen passed with provider calls forbidden. Actual browser downloads/preset reload/evidence links passed; narrow layout fits 699 px. Main rows, credentials, rubric, budget baseline and archived private evidence preserved. **Zero model calls / $0.00 added inference**. These are usability improvements, not an accuracy or official score claim. Stage 6 records commands and limitations.
+
+## Earlier enhancement checkpoint
+
+The following results describe the earlier budget/preview/review-filter implementation; their counts are historical.
 
 | Stage | Result | Report |
 | --- | --- | --- |

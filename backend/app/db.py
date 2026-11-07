@@ -130,6 +130,13 @@ class Database:
         self.sessions = sessionmaker(self.engine, expire_on_commit=False)
 
     @contextmanager
+    def read_snapshot(self):
+        """One consistent SQLite read transaction, including review history."""
+        with self.sessions() as session:
+            session.execute(text("BEGIN"))
+            yield session
+
+    @contextmanager
     def transaction(self):
         # Serialize revision increments, job claims and review recalculation in SQLite.
         with self.sessions() as session:

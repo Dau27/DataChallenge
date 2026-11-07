@@ -1,21 +1,46 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { api } from './api';
 import type { Access, BudgetStatus, Conversation } from './types';
 import { EvaluationAction } from './Budget';
 import { label, statusOf } from './helpers';
 import type { Run } from './App';
+import { useSavedFilters } from './SavedFilters';
 
 export default function Conversations({ rows, access, budget, selectedVersion, completed, needsReview, busy, run, evaluate, refresh, notify }: {
   rows: Conversation[]; access: Access | null; selectedVersion: number; completed: number; needsReview: number;
   busy: boolean; run: Run; evaluate: (ids: string[]) => Promise<void>; refresh: () => Promise<void>; notify: (message: string) => void;
   budget?: BudgetStatus | null;
 }) {
-  const [language, setLanguage] = useState(''); const [channel, setChannel] = useState('');
-  const [status, setStatus] = useState(''); const [group, setGroup] = useState('');
-  const [search, setSearch] = useState(''); const [groupToImport, setGroupToImport] = useState('DEV');
-  const [appeals, setAppeals] = useState(''); const [critical, setCritical] = useState('');
+  const { filters, setField, controls } = useSavedFilters(selectedVersion);
+  const { language, channel, status, group, search, appeals, critical, text, speaker } = filters;
+  const [groupToImport, setGroupToImport] = useState('DEV');
   const [checked, setChecked] = useState<string[]>([]); const fileRef = useRef<HTMLInputElement>(null);
-  const filtered = rows.filter(r => (!language || r.language === language) && (!channel || r.channel === channel) && (!status || statusOf(r) === status)
+  const [retrySearch, setRetrySearch] = useState(0);
+  const [searchResult, setSearchResult] = useState<{ key: string; rows: Conversation[]; error: string }>({ key: '', rows: [], error: '' });
+  const query = text.trim(); const searching = !!query || speaker !== 'all';
+  const sourcesKey = JSON.stringify(rows.map(r => [r.id, r.content_hash]));
+  const searchKey = JSON.stringify([selectedVersion, query, speaker, sourcesKey, retrySearch]);
+  useEffect(() => {
+    if (!searching) return;
+    let active = true;
+    const timer = setTimeout(() => {
+      const params = new URLSearchParams({ checklist_id: String(selectedVersion), q: query, speaker });
+      void api<Conversation[]>(`/conversations?${params}`).then(data => {
+        if (data.some(hit => !rows.some(row => row.id === hit.id && row.content_hash === hit.content_hash))) {
+          throw new Error('Source revisions changed. Refresh the queue and retry transcript search.');
+        }
+        if (active) setSearchResult({ key: searchKey, rows: data, error: '' });
+      }).catch(e => { if (active) setSearchResult({ key: searchKey, rows: [], error: e instanceof Error ? e.message : 'Transcript search failed.' }); });
+    }, 200);
+    return () => { active = false; clearTimeout(timer); };
+  }, [searching, selectedVersion, query, speaker, searchKey]);
+  const searchPending = searching && searchResult.key !== searchKey;
+  const searchError = searching && searchResult.key === searchKey ? searchResult.error : '';
+  const hits = new Map(searchResult.rows.map(r => [r.id, r]));
+  // Use current queue status/appeals, attaching matches only to the exact returned revision/hash.
+  const candidates = !searching ? rows : searchPending || searchError ? [] : rows.filter(r => hits.get(r.id)?.content_hash === r.content_hash)
+    .map(r => ({ ...r, search_matches: hits.get(r.id)!.search_matches, search_total_matches: hits.get(r.id)!.search_total_matches }));
+  const filtered = candidates.filter(r => (!language || r.language === language) && (!channel || r.channel === channel) && (!status || statusOf(r) === status)
     && (!group || r.group_id === group) && r.source_id.toLowerCase().includes(search.toLowerCase())
     && (!appeals || ((r.pending_appeals ?? 0) > 0) === (appeals === 'pending'))
     && (!critical || ((r.critical_findings?.length ?? 0) > 0) === (critical === 'flagged')));
@@ -64,20 +89,29 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
           label={`Evaluate selected${selectedVisible.length ? ` (${selectedVisible.length})` : ''} →`}
           start={() => void run(async () => { await evaluate(selectedVisible); setChecked([]); })} />
       </div></div>
-      <div className="filters"><input aria-label="Search conversation ID" placeholder="Search conversation ID…" value={search} onChange={e => setSearch(e.target.value)} />
-        <select aria-label="Dataset filter" value={group} onChange={e => setGroup(e.target.value)}><option value="">All datasets</option>{groups.map(g => <option key={g}>{g}</option>)}</select>
-        <select aria-label="Language filter" value={language} onChange={e => setLanguage(e.target.value)}><option value="">All languages</option>{['RU', 'KZ', 'EN'].map(l => <option key={l}>{l}</option>)}</select>
-        <select aria-label="Channel filter" value={channel} onChange={e => setChannel(e.target.value)}><option value="">All channels</option><option>agent chat</option><option>voice call</option></select>
-        <select aria-label="Status filter" value={status} onChange={e => setStatus(e.target.value)}><option value="">All states</option>{['not_evaluated', 'queued', 'running', 'complete', 'needs_review', 'failed', 'interrupted'].map(s => <option value={s} key={s}>{label(s)}</option>)}</select>
-        <select aria-label="Pending appeals filter" value={appeals} onChange={e => setAppeals(e.target.value)}><option value="">Any appeal state</option><option value="pending">Pending appeals</option><option value="none">No pending appeals</option></select>
-        <select aria-label="Critical findings filter" value={critical} onChange={e => setCritical(e.target.value)}><option value="">Any critical state</option><option value="flagged">Critical findings</option><option value="none">No recorded critical findings</option></select>
+      {controls}
+      <div className="filters"><input aria-label="Search conversation ID" placeholder="Search conversation ID…" maxLength={2000} value={search} onChange={e => setField('search', e.target.value)} />
+        <input aria-label="Search transcript text" placeholder="Literal transcript text…" maxLength={200} value={text} onChange={e => setField('text', e.target.value)} />
+        <select aria-label="Transcript speaker filter" value={speaker} onChange={e => setField('speaker', e.target.value)}><option value="all">All speakers</option>{['operator', 'client', 'bot', 'system'].map(s => <option key={s}>{s}</option>)}</select>
+        <select aria-label="Dataset filter" value={group} onChange={e => setField('group', e.target.value)}><option value="">All datasets</option>{groups.map(g => <option key={g}>{g}</option>)}</select>
+        <select aria-label="Language filter" value={language} onChange={e => setField('language', e.target.value)}><option value="">All languages</option>{['RU', 'KZ', 'EN'].map(l => <option key={l}>{l}</option>)}</select>
+        <select aria-label="Channel filter" value={channel} onChange={e => setField('channel', e.target.value)}><option value="">All channels</option><option>agent chat</option><option>voice call</option></select>
+        <select aria-label="Status filter" value={status} onChange={e => setField('status', e.target.value)}><option value="">All states</option>{['not_evaluated', 'queued', 'running', 'complete', 'needs_review', 'failed', 'interrupted'].map(s => <option value={s} key={s}>{label(s)}</option>)}</select>
+        <select aria-label="Pending appeals filter" value={appeals} onChange={e => setField('appeals', e.target.value)}><option value="">Any appeal state</option><option value="pending">Pending appeals</option><option value="none">No pending appeals</option></select>
+        <select aria-label="Critical findings filter" value={critical} onChange={e => setField('critical', e.target.value)}><option value="">Any critical state</option><option value="flagged">Critical findings</option><option value="none">No recorded critical findings</option></select>
       </div>
+      {searchPending && <p role="status" className="search-status">Searching saved transcripts…</p>}
+      {searchError && <div role="alert" className="search-status"><p>{searchError}</p><button className="secondary" onClick={() => setRetrySearch(retrySearch + 1)}>Retry transcript search</button></div>}
       <div className="table-scroll"><table><thead><tr>
         <th><input type="checkbox" aria-label="Select all visible conversations" checked={filtered.length > 0 && selectedVisible.length === filtered.length} onChange={e => setChecked(e.target.checked ? filtered.map(r => r.id) : [])} /></th>
         <th>Conversation</th><th>Language</th><th>Channel</th><th>Assessment</th><th>Score / 100</th><th></th>
       </tr></thead><tbody>{filtered.map(row => <tr key={row.id}>
         <td><input type="checkbox" aria-label={`Select ${row.source_id}`} checked={checked.includes(row.id)} onChange={e => setChecked(e.target.checked ? [...checked, row.id] : checked.filter(id => id !== row.id))} /></td>
-        <td><a className="conversation-link" href={`#conversation/${row.id}`}>{row.source_id}</a><small>{row.group_id} · revision {row.revision} · {row.message_count} messages</small></td>
+        <td><a className="conversation-link" href={`#conversation/${row.id}`}>{row.source_id}</a><small>{row.group_id} · revision {row.revision} · {row.message_count} messages</small>
+          {searching && <div className="search-snippets"><small>{row.search_total_matches} matching message(s); showing up to 5</small>{row.search_matches?.map(m => <div key={m.id}>
+            <a href={`#conversation/${row.id}?message=${encodeURIComponent(m.id)}${row.evaluation ? `&evaluation=${encodeURIComponent(row.evaluation.id)}` : ''}`}>{m.id} · {m.speaker} · {m.timestamp}</a><p>{m.snippet}</p>
+          </div>)}</div>}
+        </td>
         <td><span className="language-chip">{row.language}</span></td><td>{row.channel === 'voice call' ? '◉ Call' : '◫ Chat'}<small>{row.channel === 'voice call' && (row.audio_available ? 'Recording link available' : 'Recording unavailable')}</small></td>
         <td><span className={`badge ${statusOf(row)}`}>{label(statusOf(row))}</span>{row.evaluation?.cached_from && <small>Cached original</small>}
           {!!row.pending_appeals && <small>{row.pending_appeals} pending appeal(s)</small>}
@@ -86,7 +120,7 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
         </td>
         <td className="score-cell">{row.evaluation?.total ?? '—'}</td><td><a className="open-link" href={`#conversation/${row.id}`}>Open ↗</a></td>
       </tr>)}</tbody></table></div>
-      {!filtered.length && <div className="empty"><strong>{rows.length ? 'No conversations match these filters.' : 'Your review queue is empty.'}</strong><p>{rows.length ? 'Adjust a filter to see more conversations.' : 'Import the organizer dataset or upload its JSON response to get started.'}</p></div>}
+      {!filtered.length && !searchPending && !searchError && <div className="empty"><strong>{rows.length ? 'No conversations match these filters.' : 'Your review queue is empty.'}</strong><p>{rows.length ? 'Adjust a filter to see more conversations.' : 'Import the organizer dataset or upload its JSON response to get started.'}</p></div>}
       <div className="table-foot">{filtered.length} of {rows.length} conversations <span>States refer to the selected checklist version. No score means no resolved result.</span></div>
     </section>
   </>;

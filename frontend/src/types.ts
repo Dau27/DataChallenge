@@ -17,6 +17,15 @@ export type Judgment = {
   explanation: string; na_reason: string | null; review_reason: string | null; evidence: Evidence[];
 };
 export type Assessment = { results: Record<string, Judgment> };
+export type ComparisonCell = { criterion: Criterion | null; judgment: Judgment | null;
+  points: { raw_points: string | null; normalized_contribution: string | null } | null };
+export type ComparisonSide = { id: string; basis: 'original' | 'effective'; state: string; error: string | null;
+  created_at: string; updated_at: string; cached_from: string | null; checklist: ChecklistVersion;
+  score: Calculated | null; metadata: Record<string, unknown>; usage: EvaluationDetail['usage']; review_count: number };
+export type SavedComparison = { source: { id: string; source_id: string; revision: number; content_hash: string };
+  left: ComparisonSide; right: ComparisonSide; total_comparable: boolean; total_difference: string | null; notice: string;
+  criteria: { criterion_id: string; change: string; changes: string[]; configuration_changes: string[];
+    answer_comparable: boolean; points_difference: string | null; left: ComparisonCell; right: ComparisonCell }[] };
 export type Calculated = {
   total: string | null; reason: string | null; completeness: string; applicable_weight: string;
   raw_subtotal: string | null; flags: Record<string, boolean | null>;
@@ -35,6 +44,8 @@ export type Conversation = {
   pending_appeals?: number;
   pending_review_targets?: { appeal_id: string; conversation_id: string; evaluation_id: string; criterion_id: string; criterion_name: string }[];
   critical_findings?: { evaluation_id: string; criterion_id: string; criterion_name: string }[];
+  search_matches?: { id: string; speaker: string; timestamp: string; snippet: string }[];
+  search_total_matches?: number;
 };
 export type FieldIssue = { location: (string | number)[]; message: string; label?: string };
 export type ChecklistPreview = { valid: boolean; errors: FieldIssue[]; changes: { location: (string | number)[]; label: string; before: unknown; after: unknown }[] };

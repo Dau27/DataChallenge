@@ -5,17 +5,26 @@ import { EvaluationAction } from './Budget';
 import { answerLabel, evidenceMessages, label, points } from './helpers';
 import type { Run } from './App';
 import ReviewForm from './ReviewForm';
+import SavedComparison from './SavedComparison';
+import SavedExport from './SavedExport';
 
-export default function Detail({ id, initialEvaluation, initialCriterion = null, selectedVersion, busy, run, providerReady, budget, evaluate, onChange }: {
+export default function Detail({ id, initialEvaluation, initialCriterion = null, initialMessage = null, selectedVersion, busy, run, providerReady, budget, evaluate, onChange }: {
   id: string; initialEvaluation: string | null; selectedVersion: number; busy: boolean; run: Run; providerReady: boolean;
   evaluate: (ids: string[]) => Promise<void>; onChange: () => Promise<void>;
-  initialCriterion?: string | null; budget?: BudgetStatus | null;
+  initialCriterion?: string | null; initialMessage?: string | null; budget?: BudgetStatus | null;
 }) {
   const [conversation, setConversation] = useState<ConversationDetail | null>(null);
   const [evaluationId, setEvaluationId] = useState(initialEvaluation ?? '');
   const [evaluation, setEvaluation] = useState<EvaluationDetail | null>(null);
   const [error, setError] = useState(''); const [highlight, setHighlight] = useState<string[]>([]);
   const [appealFor, setAppealFor] = useState(''); const [comment, setComment] = useState('');
+  useEffect(() => {
+    if (!conversation || !initialMessage) return;
+    if (!conversation.snapshot.transcript.some(m => m.id === initialMessage)) { setHighlight([]); return; }
+    setHighlight([initialMessage]);
+    const message = document.getElementById(`message-${initialMessage}`);
+    message?.scrollIntoView({ block: 'center' }); message?.focus({ preventScroll: true });
+  }, [conversation, initialMessage]);
   useEffect(() => {
     if (!evaluation || !initialCriterion || (initialEvaluation && evaluation.id !== initialEvaluation)) return;
     const card = document.getElementById(`criterion-${initialCriterion}`);
@@ -84,14 +93,17 @@ export default function Detail({ id, initialEvaluation, initialCriterion = null,
     {error && <div className="banner error" role="alert">{error}</div>}
     <div className="detail-layout"><section className="panel transcript-panel" aria-label="Conversation transcript">
       <div className="transcript-heading"><h2>Transcript</h2><span className="badge">Source revision {conversation.revision}</span></div>
+      {initialMessage && !snapshot.transcript.some(m => m.id === initialMessage) && <p role="alert">The linked message is unavailable in this source revision.</p>}
       {snapshot.channel === 'voice call' && <div className="audio-panel">{snapshot.audio_url ? <><a href={snapshot.audio_url} target="_blank" rel="noreferrer">Open recording ↗</a><small>Recording opens in its source player. Evidence links navigate the transcript. Source recording access can expire.</small></> : <p>Recording unavailable. The full provided transcript is available below.</p>}</div>}
-      <div className="transcript-scroll">{snapshot.transcript.map(message => <article key={message.id} id={`message-${message.id}`} className={`message ${message.speaker} ${highlight.includes(message.id) ? 'highlighted' : ''}`}>
+      <div className="transcript-scroll">{snapshot.transcript.map(message => <article key={message.id} id={`message-${message.id}`} tabIndex={-1} className={`message ${message.speaker} ${highlight.includes(message.id) ? 'highlighted' : ''}`}>
         <div className="message-meta"><strong>{message.speaker}</strong><span>{message.id} · {message.timestamp}</span></div><p>{message.text}</p>
       </article>)}</div><div className="transcript-foot">Source text and timestamp strings are preserved. Bot and system messages provide context.</div>
     </section><section className="assessment-panel" aria-label="Conversation assessment">
       <div className="assessment-heading"><h2>Assessment</h2><label className="evaluation-picker">Saved run<select aria-label="Saved evaluation" value={evaluationId} onChange={e => { setEvaluation(null); setEvaluationId(e.target.value); }}><option value="" disabled>No saved evaluation</option>{conversation.evaluations.map(e => <option key={e.id} value={e.id}>v{e.checklist_id} · {label(e.state)} · {new Date(e.created_at).toLocaleTimeString()}</option>)}</select></label></div>
+      <SavedComparison key={conversation.id} runs={conversation.evaluations} currentId={evaluationId} sourceId={conversation.id} onEvidence={navigateEvidence} />
       {!evaluation && <div className="panel empty"><strong>No saved assessment selected</strong><p>Choose a saved checklist version and evaluate this conversation. Provider configuration is required for a live assessment.</p></div>}
       {evaluation && <>
+        <SavedExport key={evaluation.id} evaluationId={evaluation.id} />
         <div className="run-meta"><span className={`badge ${evaluation.state}`}>{evaluation.state}</span><span className="badge">Checklist v{evaluation.checklist_id}</span><span className="badge">{evaluation.cached_from ? 'Cached original assessment' : evaluation.metadata.mode}</span></div>
         {evaluation.error && <div className="banner error"><div><strong>Evaluation {evaluation.state}</strong><p>{evaluation.error}</p></div></div>}
         {['failed', 'interrupted'].includes(evaluation.state) && <button className="secondary" disabled={busy || !providerReady || !budget?.ready} onClick={() => void run(async () => { await api(`/evaluations/${evaluation.id}/retry`, {}); await saved(); })}>Retry saved job</button>}

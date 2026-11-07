@@ -58,6 +58,7 @@ export default function App() {
   const detailId = route.startsWith('#conversation/') ? route.slice('#conversation/'.length).split('?')[0] : null;
   const initialEvaluation = new URLSearchParams(route.split('?')[1]).get('evaluation');
   const initialCriterion = new URLSearchParams(route.split('?')[1]).get('criterion');
+  const initialMessage = new URLSearchParams(route.split('?')[1]).get('message');
   const completed = rows.filter(r => statusOf(r) === 'complete').length;
   const needsReview = rows.filter(r => statusOf(r) === 'needs_review').length;
 
@@ -94,7 +95,7 @@ export default function App() {
         {route.startsWith('#checklist') && selected
           ? <ChecklistEditor key={selected.id} version={selected} versions={versions} busy={busy} run={run} onSave={async id => { await refresh(); setSelectedVersion(id); setNotice(`Saved immutable checklist v${id}. It is selected for future evaluations. Existing assessments retain their original version.`); }} />
           : detailId
-            ? <Detail key={detailId} id={detailId} initialEvaluation={initialEvaluation} initialCriterion={initialCriterion} selectedVersion={selectedVersion} busy={busy} run={run} providerReady={!!access?.provider_configured} budget={budget} evaluate={evaluate} onChange={refresh} />
+            ? <Detail key={detailId} id={detailId} initialEvaluation={initialEvaluation} initialCriterion={initialCriterion} initialMessage={initialMessage} selectedVersion={selectedVersion} busy={busy} run={run} providerReady={!!access?.provider_configured} budget={budget} evaluate={evaluate} onChange={refresh} />
             : <Conversations rows={rows} access={access} budget={budget} selectedVersion={selectedVersion} completed={completed} needsReview={needsReview} busy={busy} run={run} evaluate={evaluate} refresh={refresh} notify={setNotice} />}
       </main>
       <footer>CQA prototype <span>Persistent local review · Source transcript evidence · Versioned checklists</span></footer>

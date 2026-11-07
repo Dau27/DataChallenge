@@ -1,5 +1,7 @@
 # Market feature options for the current CQA application
 
+Implementation follow-up, 7 November 2026: the user selected the first three stages, now implemented and tested with zero inference spend. See the [comparison, export and search stage reports](improvements/README.md). The research-only statements below describe the earlier checkpoint; the optional later features remain proposals. Demo execution remains deferred.
+
 Research date: 7 November 2026, Asia/Bishkek. Inspected repository: ec4c943. This refresh examines ten representative platforms through official product/help documentation and updates the [earlier market survey](MARKET_ANALYSIS.md) for the features we have since implemented.
 
 **Recommendation: add saved-run comparison and evidence exports first, then transcript-text search with saved filters.** All three can use real stored data with zero additional inference and fit the existing architecture. Weight-impact simulation and criterion breakdowns are useful follow-ons. Policy-grounded evaluation is promising later, when approved documents and an authorized inference test are available.
