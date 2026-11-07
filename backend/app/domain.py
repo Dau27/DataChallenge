@@ -197,7 +197,7 @@ class Assessment(Contract):
 def validate_judgment(criterion: Criterion, judgment: Judgment, message_ids: list[str] | None = None):
     if judgment.disposition == "assessed":
         if judgment.na_reason is not None or judgment.review_reason is not None:
-            raise ValueError("An assessed answer cannot have N/A or review reasons")
+            raise ValueError(f"{criterion.id}: disposition assessed requires na_reason=null and review_reason=null (JSON null, not a string); keep the answer if observed")
         if criterion.answer_type == "scale":
             if isinstance(judgment.value, bool) or not isinstance(judgment.value, (int, float, Decimal)):
                 raise ValueError(f"{criterion.id}: expected an allowed numeric scale value")
@@ -212,6 +212,8 @@ def validate_judgment(criterion: Criterion, judgment: Judgment, message_ids: lis
     else:
         if judgment.value is not None or not (judgment.review_reason or "").strip() or judgment.na_reason is not None:
             raise ValueError(f"{criterion.id}: unresolved answers require a missing-basis reason and null value")
+        if judgment.review_reason.strip(" /-\t\r\n").casefold() in {"none", "null", "n/a", "na", "not applicable"}:
+            raise ValueError(f"{criterion.id}: a placeholder is not a missing-basis reason; assess observable facts or name the missing authority")
     if judgment.disposition != "needs_review" and not judgment.evidence:
         raise ValueError(f"{criterion.id}: resolved decisions need evidence, including for absence and N/A")
     if message_ids is not None:

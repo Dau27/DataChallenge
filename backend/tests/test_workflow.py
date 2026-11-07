@@ -30,6 +30,11 @@ def synthetic_payload(language="EN", channel="agent chat", source_id="TEST-MOCK-
 
 
 def response_for(assessment):
+    if "results" in assessment:
+        assessment = {"results": {key: {"na_condition_met": item["disposition"] == "not_applicable", "evidence": item["evidence"], "explanation": item["explanation"],
+                        "decision": {{"assessed": "assessed_value", "not_applicable": "not_applicable_reason", "needs_review": "needs_review_reason"}[item["disposition"]]:
+                            item["value"] if item["disposition"] == "assessed" else item["na_reason"] if item["disposition"] == "not_applicable" else item["review_reason"]}}
+                                  for key, item in assessment["results"].items()}}
     return {"status": "completed", "output": [{"type": "message", "content": [{"type": "output_text", "text": json.dumps(assessment)}]}],
             "usage": {"input_tokens": 100, "output_tokens": 50}}
 

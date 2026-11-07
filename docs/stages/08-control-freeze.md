@@ -2,6 +2,8 @@
 
 Status: **not reached; organizer inputs unavailable**.
 
+Preparation is complete in [CONTROL_AND_FREEZE.md](../CONTROL_AND_FREEZE.md): required inputs, safe import/versioning, combined budget reconciliation, actual-commit recording and permitted post-freeze UI actions. No model request was made to prepare it.
+
 - Application supports importing another organizer-supplied dataset group while preserving other signed endpoint parameters.
 - Group/source identity is namespaced; changed content preserves older transcript revisions and evidence.
 - The frozen application's UI can save new rubric versions and create evaluations without changing code.

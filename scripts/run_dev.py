@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from backend.app.config import Settings
 from backend.app.domain import Checklist, canonical_json
-from backend.app.services.evaluator import INSTRUCTIONS, output_schema
+from backend.app.services.evaluator import INSTRUCTIONS, operator_focus, output_schema
 
 
 def checked(response):
@@ -32,6 +32,7 @@ def four_attempt_bound(settings, snapshot, checklist):
     # Byte-level tokenizers cannot produce more text tokens than UTF-8 bytes. Allow
     # another 4096 input tokens for protocol/schema/repair framing on every attempt.
     body = canonical_json({"instructions": INSTRUCTIONS, "conversation": snapshot,
+                           "operator_focus_untrusted": operator_focus(snapshot),
                            "checklist": checklist.model_dump(mode="json"),
                            "schema": output_schema(checklist, [m["id"] for m in snapshot.get("transcript", [])])})
     input_upper = len(body.encode("utf-8")) + 4096

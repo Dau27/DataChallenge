@@ -2,6 +2,8 @@
 
 Status: **PASS for verified local reliability/installation gate**. Full DEV terminal-state report is tracked separately in Stage 5.
 
+Current recheck, 7 November 2026: a clean source snapshot containing the scoring fixes and recording-link correction passed the actual setup script, 94 backend tests, nine client tests, production build, pip check and compileall. It received no real credentials. Fresh home/assets/health returned HTTP 200, with zero conversations/evaluations and the original eight-criterion checklist. Missing-provider requests returned HTTP 503 without creating a result. See [zero-spend readiness](../audits/2026-11-07/06-zero-spend-readiness.md). The details below preserve earlier implementation checkpoints.
+
 - Persistent bounded job runner, original-only cache, explicit retry, startup interruption detection, one output repair and bounded transport retry are implemented.
 - Exhausted billing credit is identified and does not trigger repeated automatic retries. Refusal, output limits, malformed assessments and missing credentials never produce a fabricated score.
 - Actual full-run rate limits exposed a missing batch circuit break. Fixed it: honor Retry-After, defer server delays above 30 seconds, and stop further batch submission on provider 4xx failures. Actual historical reservations now count only sent requests at their original model rates; unsent hypothetical repairs no longer consume a past-attempt reservation. Unknown usage is still reserved and reported, not fabricated as zero. Latest backend suite: **74 passed**.

@@ -70,6 +70,14 @@ def test_unresolved_is_not_na(checklist, assessment):
     assert result["reason"] == "UNRESOLVED_CRITERIA"
 
 
+@pytest.mark.parametrize("reason", ["none", "/none/", "N/A", "null", "not applicable"])
+def test_placeholder_cannot_justify_uncertainty(checklist, assessment, reason):
+    judgment = assessment.results["contact"]
+    judgment.disposition, judgment.value, judgment.review_reason = "needs_review", None, reason
+    with pytest.raises(ValueError, match="placeholder"):
+        score(checklist, assessment)
+
+
 @pytest.mark.parametrize("kind", ["missing", "extra", "na", "scale", "bool_scale", "number_binary", "evidence", "reversed", "empty_reason"])
 def test_invalid_answers_cannot_complete(checklist, assessment, kind):
     if kind == "missing": del assessment.results["contact"]

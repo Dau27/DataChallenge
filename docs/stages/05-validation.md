@@ -1,5 +1,7 @@
 # Stage 5 — Validation
 
+Latest scoring fix/re-audit, 2026-11-07: **65 complete accepted DEV results, 26/26 targeted provisional checks, 94 backend tests, zero independent calculation mismatches across 130 accepted original/effective snapshots**. Earlier 44/21 and 59/6 sets remain historical records. The accepted set retains 56 validated v10 runs plus eight v11 and one v12; do not claim a uniform final-prompt benchmark or independent human accuracy. See [re-audit results](../audits/2026-11-07/05-scoring-reaudit-results.md). No new product features were added.
+
 Status: **PASS for the full DEV processing/accounting gate**. Independent human quality validation remains outstanding.
 
 - Backend suite: latest **74 passed**, one Starlette/AnyIO deprecation warning. Includes decimal arithmetic, strict scales/N/A/flags, exact coverage/evidence, atomic imports, immutable revisions, configuration/cache changes, retry/repair bounds, refusal/output limits, quota, persistent reviews, restart, Retry-After, disposition-specific provider schemas and concurrent budget guards.

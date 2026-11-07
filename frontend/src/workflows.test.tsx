@@ -3,11 +3,31 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ChecklistEditor from './ChecklistEditor';
 import ReviewForm from './ReviewForm';
-import type { Checklist, ChecklistVersion, EvaluationDetail, Judgment, Message } from './types';
+import Detail from './Detail';
+import type { Checklist, ChecklistVersion, ConversationDetail, EvaluationDetail, Judgment, Message } from './types';
 import seed from '../../config/initial_checklist.json';
 
 beforeEach(() => sessionStorage.clear());
 afterEach(() => { cleanup(); vi.restoreAllMocks(); sessionStorage.clear(); });
+
+it.each(['https://example.test/recording/player?id=SYNTHETIC', null])('uses the source player link or transcript fallback for a call, without treating HTML as audio (%s)', async audioUrl => {
+  const conversation: ConversationDetail = { id: 'TEST_CALL', source_id: 'SYNTHETIC_CALL', group_id: 'TEST_ONLY', revision: 1, content_hash: 'TEST_HASH', evaluations: [],
+    snapshot: { language: 'EN', channel: 'voice call', audio_url: audioUrl,
+      transcript: [{ id: 'm0001', speaker: 'operator', timestamp: '00:00', text: 'SYNTHETIC call transcript' }] } };
+  vi.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response(JSON.stringify(conversation)));
+  const { container } = render(<Detail id={conversation.id} initialEvaluation={null} selectedVersion={1} busy={false} run={async action => { await action(); }} providerReady={false} evaluate={async () => {}} onChange={async () => {}} />);
+  await screen.findByText('SYNTHETIC call transcript');
+  expect(container.querySelector('audio')).toBeNull();
+  if (audioUrl) {
+    const link = screen.getByRole('link', { name: /Open recording/ });
+    expect(link.getAttribute('href')).toBe(audioUrl);
+    expect(link.getAttribute('target')).toBe('_blank');
+    expect(link.getAttribute('rel')).toBe('noreferrer');
+  } else {
+    expect(screen.queryByRole('link', { name: /Open recording/ })).toBeNull();
+    expect(screen.getByText(/Recording unavailable/)).toBeDefined();
+  }
+});
 
 it('adds a genuinely new criterion through the editor and saves a complete new snapshot', async () => {
   const original = structuredClone(seed) as Checklist;

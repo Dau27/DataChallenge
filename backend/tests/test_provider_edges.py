@@ -93,11 +93,12 @@ def test_generated_schema_follows_removed_and_renamed_criteria(checklist):
     assert set(schema["required"]) == set(schema["properties"])
 
 
-def test_model_schema_prevents_forbidden_na_and_inconsistent_dispositions(checklist):
+def test_model_schema_constrains_choices_and_source_evidence(checklist):
     properties = output_schema(checklist, ["m0001", "m0002"])["properties"]["results"]["properties"]
-    contact = properties["contact"]["anyOf"]
-    assert {b["properties"]["disposition"]["enum"][0] for b in contact} == {"assessed", "needs_review"}
-    assessed = next(b["properties"] for b in contact if b["properties"]["disposition"]["enum"] == ["assessed"])
-    assert assessed["value"] == {"type": "boolean"}
-    assert assessed["na_reason"] == {"type": "null"} and assessed["evidence"]["minItems"] == 1
-    assert assessed["evidence"]["items"]["properties"]["start_message_id"]["enum"] == ["m0001", "m0002"]
+    contact = properties["contact"]["properties"]
+    branches = contact["decision"]["anyOf"]
+    assert {next(iter(b["properties"])) for b in branches} == {"assessed_value", "needs_review_reason"}
+    assert branches[0]["properties"]["assessed_value"]["type"] == "boolean"
+    assert contact["evidence"]["minItems"] == 1
+    assert contact["evidence"]["items"]["properties"]["start_message_id"]["enum"] == ["m0001", "m0002"]
+    assert properties["dialogue_management"]["properties"]["decision"]["anyOf"][0]["properties"]["assessed_value"]["enum"] == [10.0, 7.0, 4.0, 0.0]
