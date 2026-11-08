@@ -2,9 +2,9 @@
 
 The latest downloadable six-slide PowerPoint is delivered with the scoring-publication reply. Its final slide now includes538 backend passes and all16 known conflicts caught offline, with live accuracy unmeasured. It retains all six speaker notes, the native scoring table and two actual screenshots; every earlier export is preserved. No video recording was started or required by the supplied guide. [Release/validation report](improvements/35-scoring-private-publication.md).
 
-**Target: 4:30, with 30 seconds of buffer.** The 444-word narration below is a script, not a measured spoken rehearsal. Read the narration; use action/source notes as prompts rather than reciting them. Chat waiting time is not presenter delivery time.
+**Target: 4:30, with 30 seconds of buffer.** The 443-word speaker-note narration is a script, not a measured spoken rehearsal. Read the narration; use action/source notes as prompts rather than reciting them. Chat waiting time is not presenter delivery time.
 
-Keep the application available: the slides support the required evidence/appeal/checklist demonstration. They do not replace the organizer's live criterion-replacement check or actual control inference. Keep the repository private until the owner's event publication; the rehearsal uses saved results with inference disabled.
+Keep the application available: the slides support the required evidence/appeal/checklist demonstration. They do not replace the organizer's live criterion-replacement check or actual control inference. The repository is now public after owner authorization and anonymous verification; rehearsal still uses saved results with inference disabled.
 
 The existing private rehearsal copy already contains the demonstrated review and v6. Show their saved history honestly; prepare another fresh copy if a new appeal/save is needed. Never overwrite prior practice or main results. [Guarded setup and presenter card](DEMO.md).
 
@@ -40,9 +40,9 @@ Checklist changes are configuration. We can change a definition, answer type, we
 
 ## 6. Saved results and submission - 3:55-4:30
 
-Action: Summarize DEV64ok/oneerror, FBroker10ok, all originals retained,16 scoring conflicts caught offline, recorded cost and remaining organizer gates. The owner now authorizes public repository access; only claim public verification after it is observed.
+Action: Show public GitHub status, DEV64ok/oneerror, control10ok, original retention and offline scoring checks.
 
-We retain 65 DEV conversations: 64 complete and one unclear call. All ten FBroker control chats completed, with original judgments preserved. The submitted DEV and PROD files are verified on GitHub. The control batch cost about6.65 cents at recorded rates. We repaired the scoring causes behind sixteen reviewer corrections and caught all sixteen conflicts offline. Live accuracy is unmeasured. SWAP remains saved only. The organizer's criterion-change check, presentation and official freeze acknowledgment remain event steps.
+We retain 65 DEV conversations: 64 complete and one unclear call. All ten FBroker control chats completed, with original judgments preserved. The submitted DEV and PROD files and tested code are publicly verified on GitHub. The control batch cost about 6.65 cents at recorded rates. We repaired the scoring causes behind sixteen reviewer corrections and caught all sixteen conflicts offline. Live accuracy is unmeasured. SWAP remains saved only. The organizer's criterion-change check and official freeze acknowledgment remain event steps.
 
 ## Scope and evidence
 

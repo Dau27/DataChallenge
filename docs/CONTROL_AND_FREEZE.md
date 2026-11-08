@@ -1,43 +1,29 @@
 # Control data and official freeze
 
-Latest local work: [automated rubric repairs](improvements/34-automated-rubric-guards.md),538 backend tests passed with no provider spending. Submitted DEV/PROD bytes and all259 saved evaluations remain unchanged. Fixes are not committed/pushed by this task. Preserve private visibility and apply the freeze rules below; no new v14 control evaluation or official frozen-commit claim.
+**Public release verified:** implementation **6a3d36bb4ddadf3fb4460bd2e0f1216dc1029a89**, followed by report-only updates. Owner explicitly authorized public visibility. Anonymous repository/main and exact DEV/PROD file bytes pass; all166 tested source/data blobs match the fresh remote. [Release receipt](improvements/35-scoring-private-publication.md), [full PDF check](audits/2026-11-08/05-final-scoring-pdf-audit.md).
 
-Current status: genuine **FBroker10 has been processed and validated**, with all originals preserved; **Swap3 is saved and unevaluated**. Owner authorized up to$0.86 extra estimated model cost for FBroker; actual added estimate$0.06653520. Owner supplied **13:00** as stop-code; timezone uses client Asia/Bishkek. DEV/PROD were privately pushed and exact remote bytes verified at **dd6b708**; public access, organizer acceptance and official frozen-commit confirmation remain pending. [Actual control report](improvements/33-fbroker-control-submission.md). Older pre-release instructions below are historical where they refer to missing control access; retain the import/budget/freeze rules.
-
-**New organizer appendix:** exactly 10 control chats arrive at hour 23; receipt, assessment, validation, commit and push of results/prod/results.json must finish before hour 24 stop-code. The real Vector Field DEV file is already committed and pushed privately (**65 IDs / 64 ok / one permitted error**); its exact remote bytes were verified. [Exact Results JSON 1.0 commands and one-hour plan](SUBMISSION.md), [four-PDF audit](audits/2026-11-08/04-appendix-submission-audit.md), [private publication receipt](improvements/30-private-submission-push.md). The dedicated exporter/validator is tested and free; archival UI JSON is not the required wire format. Control data remain unavailable and no PROD placeholder exists. The owner's earlier two-hour estimate is not an official timestamp, live countdown or group ID.
-
-**Owner scope, 8 November:** keep the repository private until the owner releases it at the deadline. Organizer control access is unavailable. The [final offline documentation/recovery handoff](improvements/26-judge-readiness.md) is ready. The owner paused spoken rehearsal until explicitly saying proceed; other offline preparation may continue. [Current demo status](DEMO.md). Public access/submission, paid inference and actual control execution remain outside this task. No visibility change or organizer message.
-
-Scope clarification: guide pages 1/4 require the public repository/link handoff, README startup steps, organizer control and criterion-replacement check, final frozen commit and an at-most-five-minute presentation. For a paid model, disclose its name and approximate whole-evaluation cost; the existing README has a historical example and recorded attempts retain usage/cost provenance. Printing and an independent reference-labeling exercise are not PDF delivery requirements. Backup, exact-source tests and secret scans below are engineering safeguards. [Original PDF reread](audits/2026-11-08/03-pdf-requirements-clarification.md). Spoken rehearsal is currently paused; new inference spending remains prohibited.
-
-Current published private main is **fe0a613c70d62bff56c9ec7c95d80005a89cd1d3**, containing implementation **ed0b96e** plus its report-only receipt. Independent advertisement/fresh fetch/full-tree checks and all **163 tested source/data blobs**, including exact DEV bytes, match. [Publication receipt](improvements/30-private-submission-push.md). Subsequent local rehearsal/status edits are Markdown only. This does not certify public availability, organizer acceptance or official freeze.
-
-## Before the official freeze
-
-1. Obtain the exact control group identifier, official event start/freeze time and submission destination from organizers. Do not derive them from this computer's clock or try guessed groups.
-2. Review the candidate source and secret-scan evidence; verify the actual checkpoint hash and push outcome in CURRENT_CONTEXT.md. Main is published, but current anonymous public access and organizer receipt are not verified. Confirm those through the event process. A published checkpoint is not an official frozen version.
-3. Verify setup/start instructions and checks on the exact source being delivered. Current acceptance is **503 backend passed / one private-copy case skipped**, followed by that exact case **passed separately** on an isolated saved-data copy; **184 client passed / one paid opt-in skipped**, final queue regressions and TypeScript/Vite build passed. The 44 submission tests are included. [Appendix acceptance](audits/2026-11-08/04-appendix-submission-audit.md) and [private publication verification](improvements/30-private-submission-push.md) establish source/DEV parity. Earlier 460/182 and clean setup/startup/restart/recovery evidence at 535444d remain historical in the [merge/handoff report](improvements/24-main-sprint-merge.md). Repeat appropriate checks only if code changes or a new failure warrants them; record actual commit and clean/dirty status. A Git push is not an official freeze.
-4. Back up the private database with SQLite's backup API. Preserve .env, transcripts, rubric/evaluation snapshots, appeals and decisions. Keep the backup and organizer data outside Git.
-5. Keep spoken rehearsal paused until the owner explicitly says proceed. The [4:52 technical walkthrough](improvements/31-guided-demo-rehearsal.md) completed; the owner confirmed the spoken part was not performed. When resuming, use the disposable zero-spend copy and [DEMO.md](DEMO.md), confirm presenter checkpoints and time an actual continuous spoken pass. Earlier DOM/API/cold-restart checks remain valid. Fresh changed-criterion inference needs later authorization; show the earlier genuine custom-checklist run as historical.
-
-## When control data arrive
-
-1. Use the existing import UI with the exact supplied group ID or upload its saved JSON. Inspect the actual count, languages, channels and any import error; the control composition need not match DEV. Unchanged imports must remain idempotent; changed content creates a revision.
-2. Select the intended immutable checklist and inspect a transcript. An organizer criterion replacement must be saved through the editor, including its definition, answer type, anchors and N/A condition. Do not edit application code or prompt files to implement that replacement.
-3. Import/navigation/edit/review can be performed without inference cost. New control assessments or a newly changed criterion require real provider calls. The current zero-spend task stops before those actions; neither a saved DEV result nor a mocked response substitutes for control evaluation.
-4. Before later authorized inference, review the shared backend budget and opening baseline, including isolated-audit costs, historical unknown usage and overhead. Opening accounted usage$4.03490090 plus overhead$0.10 gives conservative$4.13490090 against the user's $5 task allowance; it is not an account balance. Effective BUDGET_LIMIT_USD remains0. The CLI, UI, retries and provider checks share the guard. Pure no-spend planning found ten worst-case representative reservations could exceed the hypothetical$0.86509910 remainder, while two fit. After authorization, preview actual control cases and start with two at a time, letting reservations settle. Never weaken the guard or raise the allowance automatically. [Recorded planning and limits](SUBMISSION.md). Account for unrelated/external spending; enqueue/send rechecks the quote atomically.
-5. Account for every control record as complete, needs review, failed/interrupted, processing or unstarted. Inspect evidence and unresolved reasons. Use explicit retries within budget; never substitute fabricated results.
-6. Before stop-code, run scripts/export_submission.py export/validate with the exact already-imported group and split=prod; require exactly10 original IDs including error records. Revalidate DEV65. Commit/push both actual files plus the tested code and verify the fetched commit/file contents. The owner makes the repository public at the deadline; verify public availability and organizer receipt when performed. Follow [SUBMISSION.md](SUBMISSION.md); no guessed group, fabricated score or local-only delivery claim.
-
-## At and after the actual freeze
-
-Record official timing, `git rev-parse HEAD`, `git status --short`, source checksum and control-state counts. After the actual freeze, keep application code, prompt and dependency files fixed. The guide permits processing data and saving checklist changes through the interface; preserve each version and every original/reviewed result.
-
-| Official evidence | Current value |
+| Item | Observed state |
 | --- | --- |
-| Event start / freeze time | Owner supplied stop-code13:00, interpreted Asia/Bishkek; official frozen-commit acknowledgment not recorded |
-| Control group | FBroker10 processed; Swap3 saved, unevaluated |
-| Delivered/frozen commit | Not recorded |
-| Control states | FBroker10 succeeded/complete; effective output10ok/zeroerror after16 source-based corrections, originals retained |
-| Public repository verification | Held by owner: do not make public yet; earlier authenticated main push verified |
-| Submission confirmation | Not submitted |
+| Team | Vector Field |
+| DEV |65 IDs,64ok/one explicit unclear-call error; unchanged bytes |
+| FBroker |10 real chats,10ok/80 judgments/two separate critical flags;16 reviewed replacements, originals retained |
+| SWAP |3 sources saved, zero evaluations; await further instruction |
+| Tests |538 backend passed; skipped private-copy case passed separately;84 focused passed. Frontend184/build acceptance is historical, source unchanged |
+| Stop-code |Owner supplied13:00, previously interpreted Asia/Bishkek; record the actual final commit, not an assumed official acknowledgment |
+| Public availability |Verified after explicit owner authorization, including unauthenticated DEV/PROD bytes |
+| Organizer receipt/freeze acknowledgment |Not confirmed; no organizer message sent |
+
+## Remaining event actions
+
+1. Owner sends/confirms the public repository link with organizers and records their final frozen commit. Use git rev-parse HEAD and git status --short; the report-only follow-up retains identical tested application/data source.
+2. Present within five minutes using the updated PowerPoint and application. Its443-word narration targets4:30; no completed timed human pass or compulsory video is claimed. [Presenter guide](PRESENTATION.md).
+3. If organizers supply a replacement criterion, save it through the existing editor and apply it using separately authorized provider access/budget. Historical custom-rule results are genuine but do not claim fresh evaluation of an unseen organizer rule.
+4. Follow any later SWAP instruction; do not evaluate it or place it in PROD now.
+
+## Freeze and data protection
+
+After the actual freeze, keep application code, prompt and dependencies fixed. The guide permits processing data and checklist changes through the interface on that version. Preserve original and reviewed answers, checklist snapshots, transcripts and review history. Both submitted files already revalidate against Results JSON1.0; repeated validation is free and does not regenerate results. [Exact commands](SUBMISSION.md).
+
+No further model spending is authorized. Current task adds$0.00; real.env/default budget stays0. The completed FBroker batch used$0.06653520 estimated cost over12 requests within its specific earlier$0.86 authorization. Unused estimate is not fresh permission. Retain shared reservations/retry protection. Recording ambiguity is an explicit error, not an invented zero or N/A.
+
+Private sources, signed endpoints, recordings, credentials, databases, backups and local PowerPoint files stay outside Git. Both remote branches/history were included in the release secret scan. Main15 tables/schema,259 evaluations,25 appeals/25 decisions and30 protected files remain unchanged. Earlier pre-release states remain documented in the stage reports and Git history.

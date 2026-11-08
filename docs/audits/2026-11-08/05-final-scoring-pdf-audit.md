@@ -17,7 +17,7 @@
 | Guide4: model and approximate whole-evaluation cost | gpt-4.1-mini; selected DEV mean about$0.00613 including recorded calls/retries. Real control total$0.06653520 over12 attempts. Current task adds$0.00; budget records/.env unchanged |
 | Guide4: readable README and runnable architecture | README documents startup, configuration, tests, costs, known limits and required outputs. React/TypeScript HTML/CSS/JS frontend, separate FastAPI API and SQLite remain suitable for later Dynamics365 adaptation; full CRM/authentication are not required |
 | Guide4: maximum-five-minute presentation | Updated six-slide deck retains editable scoring table, two actual screenshots, six speaker notes and planned4:30 script. It supports the required app/evidence/appeal/checklist demonstration; no timed human delivery or compulsory video is claimed |
-| Guide4/Appendix1: commit, push, public availability and stop-code | Owner first requested private push, then expressly authorized public visibility. Tested source/tree/results are verified before public release; observed publication receipts are recorded in stage35. Organizer link receipt and official frozen-commit acknowledgment remain separate |
+| Guide4/Appendix1: commit, push, public availability and stop-code | Owner first requested private push, then expressly authorized public visibility. Implementation6a3d36b, full tree, all166 source/data blobs and exact results are verified. Public visibility and unauthenticated file access pass; stage35 records receipts. Organizer link receipt and official frozen-commit acknowledgment remain separate |
 
 ## Additional archive check
 

@@ -1,4 +1,18 @@
-# Current state — scoring publication and final PDF recheck, 8 November 2026
+# Current state - scoring fixes publicly verified, 8 November 2026
+
+## Completed latest task
+
+Owner authorized push, then expressly authorized making the repository public. **6a3d36bb4ddadf3fb4460bd2e0f1216dc1029a89** /tree **ffa547c0372ab57b4ed49434b0043b573131a0f4** contains the tested stage34 fixes and fresh PDF audit. Independent advertisement/fetch/full-tree/all166-source-data-blob and exact DEV/PROD byte checks pass. GitHub public visibility and anonymous repository/main/results access verified. Both remote branches/history were secret-scanned; zero matches. README title and team line explicitly say **Vector Field**, matching both result files. No organizer message or official freeze acknowledgment.
+
+All259 evaluations/15 tables/schema,25 appeals/25 decisions,30 protected files, budget records and four earlier PPTX files remain unchanged. No source changes during publication, no result regeneration, no new model/provider/organizer request or API spend; SWAP3 unevaluated. Accepted538 backend/84 focused/one separate saved-copy tests remain exact-source evidence. Fresh four-PDF/15-page reread, two independent submission validations and414 passing archive snapshots recorded; one preserved v6 withheld-total placeholder exception disclosed. [Final PDF audit](docs/audits/2026-11-08/05-final-scoring-pdf-audit.md).
+
+Downloadable **Vector_Field_CQA_Public_Submission.pptx**: ignored local_data/scoring_publication_20261108/public-presentation/output;105637bytes/SHA64ac14f6bae873983aa561d24d8bec93d9b53d827ff46fa6d2d9f51c5b55a6a6. Artifact state9; six slides/six exact notes/native table/two screenshots retained. All six actual export slides visually checked; first five native texts/render bytes identical to prior export. Independent60/65=92.31 table math passes; package/layout/font/import checks pass.443 spoken words/planned4:30, no timed human narration or native PowerPoint execution. Explicit UTF-8 fixed the Windows-default-encoding notes checker, not deck content.
+
+Actual commands: fresh private prepare.py/audit.py, both submission CLI validate commands, all-branch verification fetch, final_checks.py, publish.py fixes, authorized make_public.py, Artifact Session render/export and native finalizer/render/check_presentation.py. Private receipts are in ignored local_data/scoring_publication_20261108. Report-only follow-up is being committed/pushed with identical source/result preservation checks; exact final SHA lives in receipt_publication.json and the task reply, followed by anonymous final-HEAD verification.
+
+Next concrete event step: owner confirms repository-link receipt/final frozen commit with organizers and presents the app/deck. Organizer criterion replacement still needs its actual instruction and separately authorized inference; unclear DEV call remains an honest error. No further model spending or SWAP evaluation. Earlier preparation/private/local states below are historical.
+
+## Earlier release preparation (historical)
 
 ## Latest authorized release
 

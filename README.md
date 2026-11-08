@@ -1,4 +1,4 @@
-# Conversation Quality Analytics
+# Vector Field - Conversation Quality Analytics
 
 **Team: Vector Field.** Organizer submission: [DEV results](results/dev/results.json), [format and control-hour procedure](docs/SUBMISSION.md).
 
@@ -6,7 +6,7 @@ A working Freedom Broker CQA prototype for evaluating **human operator performan
 
 **Core workflow:** import → select a saved checklist → evaluate → inspect evidence → appeal → review → recalculate and preserve the final result.
 
-The required product workflow is implemented and tested. Repository access remains private until the owner releases it at the deadline. The real **FBroker control set has been processed:10 validated final records**, with originals retained and source-based review recorded. **Swap3 is saved but unevaluated**, awaiting further instructions. [Control report](docs/improvements/33-fbroker-control-submission.md). Organizer acceptance, public handoff and official freeze remain pending. The [presentation](docs/PRESENTATION.md) and [demo guide](docs/DEMO.md) are ready; actual spoken rehearsal is still uncompleted.
+The required product workflow is implemented and tested. The repository is public after explicit owner authorization; anonymous repository and exact DEV/PROD access are verified. The real **FBroker control set has been processed:10 validated final records**, with originals retained and source-based review recorded. **Swap3 is saved but unevaluated**, awaiting further instructions. [Control report](docs/improvements/33-fbroker-control-submission.md). Organizer receipt, the criterion-replacement check and official freeze acknowledgment remain pending. The [presentation](docs/PRESENTATION.md) and [demo guide](docs/DEMO.md) are ready; actual spoken rehearsal is still uncompleted.
 
 ## What judges can assess
 
@@ -18,7 +18,7 @@ The required product workflow is implemented and tested. Repository access remai
 | Correct scoring | Deterministic weighted arithmetic, N/A redistribution, section percentages, two-decimal total and a separate critical-violation flag. |
 | Appeals and review | Save a criterion-level appeal/comment. A separate reviewer action confirms or changes the answer with a reason. Recalculate locally and retain original, decision and final result. |
 | Calls and persistence | Inspect transcripts and open the supplied recording player link. Saved sources, checklist versions, assessments and review history survive restart. |
-| Organizer Results JSON 1.0 | Offline export/validation of all original IDs, canonical criteria, full-transcript evidence positions and honest error records. DEV65 prepared; genuine control10 pending. |
+| Organizer Results JSON 1.0 | Offline export/validation of all original IDs, canonical criteria, full-transcript evidence positions and honest error records. DEV65 and genuine FBroker control10 are validated and published. |
 
 The HTML/CSS/JavaScript frontend has a separate API boundary for later Dynamics 365 adaptation. Registration is unnecessary for this prototype; appeal and review are separate actions rather than production access-controlled roles.
 
@@ -26,7 +26,7 @@ Additional saved-data tools include exact-run and cohort comparison, criterion b
 
 ## Run locally on Windows
 
-Requires **Python 3.12+, Node.js 22+, npm and Git**. Use an authorized checkout or a privately supplied source copy; the repository is not being made public at this stage.
+Requires **Python 3.12+, Node.js 22+, npm and Git**. Clone the public repository: git clone https://github.com/Dau27/DataChallenge.git, then open its folder.
 
 From the repository root:
 
@@ -79,7 +79,7 @@ Evidence excerpts come from saved transcript messages. Validation checks allowed
 | Required control submission | **10 FBroker IDs / 10 ok**, using effective judgments after16 source-based corrections; every model original retained |
 | Automated scoring regression | All16 original conflicts rejected offline;16 reviewed replacements and all10 effective control assessments accepted; no new model calls |
 
-The latest scoring fixes retain final538-test backend acceptance. Earlier **ed0b96e** added the submission adapter/queue-link fix; **dd6b708** published reviewed FBroker results, followed by the04e06aa report receipt. Current release verification is recorded in [stage35](docs/improvements/35-scoring-private-publication.md); the owner now authorizes public visibility after verified push. [Scoring repairs](docs/improvements/34-automated-rubric-guards.md), [fresh four-PDF requirement audit](docs/audits/2026-11-08/05-final-scoring-pdf-audit.md). All259 saved evaluations, review history, protected files and submitted results remain unchanged. Historical evaluations include attempts/revisions, not259 separate conversations.
+The latest scoring fixes retain final538-test backend acceptance. Earlier **ed0b96e** added the submission adapter/queue-link fix; **dd6b708** published reviewed FBroker results, followed by the04e06aa report receipt. Current release verification is recorded in [stage35](docs/improvements/35-scoring-private-publication.md); implementation6a3d36b is publicly verified, including all166 tested source/data files and exact DEV/PROD bytes. [Scoring repairs](docs/improvements/34-automated-rubric-guards.md), [fresh four-PDF requirement audit](docs/audits/2026-11-08/05-final-scoring-pdf-audit.md). All259 saved evaluations, review history, protected files and submitted results remain unchanged. Historical evaluations include attempts/revisions, not259 separate conversations.
 
 Independent judgment accuracy has **not** been measured. The offline quality report correctly remains unlabeled for65 selected originals/520 judgments. One call's self-introduction is unclear, so its effective total is withheld and the original retained. Saved DEV results predate v13; real FBroker results used v13 and16 subsequent source-based review corrections. Current v14 prompt/validation improvements have offline regression evidence only; no new live v14 evaluation is claimed. The PDFs do not define a weighted project-grade formula, and earlier informal readiness estimates are not official jury scores.
 
@@ -99,7 +99,7 @@ Use the dedicated offline [submission commands](docs/SUBMISSION.md). Existing UI
 
 | Item | Current status |
 | --- | --- |
-| Public repository and organizer link handoff | DEV/PROD privately pushed in dd6b708 and exact remote bytes verified. Repository stays private; owner must complete public access and organizer receipt before stop-code |
+| Public repository and organizer link handoff | Public repository/main and exact DEV/PROD bytes verified after owner-authorized release of6a3d36b. Organizer link receipt remains to be confirmed |
 | Organizer control data and replacement-criterion challenge | FBroker10 processed and validated; Swap3 saved with zero evaluations. Additional criterion instructions and organizer acceptance remain pending |
 | Official frozen commit | Await official event timing/instruction; the tested checkpoint is not an official freeze |
 | At-most-five-minute presentation | Technical screen flow verified in 4:52; owner confirmed no spoken pass and paused rehearsal. Spoken timing and fresh authorized changed-criterion inference remain pending |
