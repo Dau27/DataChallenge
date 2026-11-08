@@ -1,9 +1,26 @@
 # Implemented workflow improvements
 
-Completed 7 November 2026. The latest stages repair comparison freshness and refine comparison/export/search/browser presets. Existing budget protection, checklist preview and review filters are retained. Demo work remains deferred.
+Latest accepted feature: [23 — offline quality reporting](23-offline-quality-report.md). **460 full backend tests passed**, 52 feature regressions, real65-run/ 520-judgment unlabeled CLI report and249 individual saved-run reads. No labels, scores or accuracy were invented. Original-only source/checklist/provenance compatibility, missing/abstained coverage and normalized scale errors are explicit. Client source is unchanged from this task's 182/one-skipped/build acceptance. No API spend; demo deferred.
+
+Latest audit: [post-cohort/print PDF recheck](../audits/2026-11-08/02-post-cohort-print-audit.md), **408 backend /182 client/build passed**, one paid opt-in skipped. A shared metadata-reader crash was reproduced/fixed without changing saved results. Informal readiness stays about 85/100; independent accuracy and organizer/event gates remain open. [Authorized offline continuation](../plans/2026-11-08-offline-continuation.md) starts with an explicitly unlabeled-until-referenced quality report. No API spend; demo deferred.
+
+Latest offline stage: [22 — cohort/print integration](22-cohort-print-integration.md). [19 — cohort comparison](19-cohort-comparison.md) and [20 — printable saved reports](20-printable-saved-reports.md) are mounted with exact-ID review navigation, retained history/UI and preserved originals. Combined **403 backend / 182 client passed, one paid opt-in skipped; production build and pip check passed**. Actual copied data: 20 cohort scenarios, 376 pairs, 252 rendered packets; browser exact-pair/narrow/native-print-preview checks passed. A4/Letter and long multilingual paper pagination remain unverified. No API spending; demo deferred.
+
+[21 — private backup/recovery](21-backup-recovery.md) remains available, with its verified actual-data fresh-path round trip. The [canonical handoff](../plans/2026-11-08-three-chat-handoff.md) records accepted builder commits and the completed shared integration. Counts in earlier audit/stage records below are historical.
+
+Current combined-source verification: [8 November PDF audit](../audits/2026-11-08/01-integrated-pdf-audit.md) covers these stages together with completed history/index/design work. It repairs extreme-weight validation and records 309 backend/118 client/build checks, preserved originals and zero added inference. Earlier stage counts below remain historical.
+
+Updated 8 November 2026. The latest stages add saved-data criterion breakdowns, explained review priority and strict weight-impact preview. Existing comparison/export/search/preset refinements, budget protection and concurrent UI/backend fixes are retained. Demo work remains deferred.
+
+Latest local integration check, 8 November: **299 backend / 118 client tests and build passed**, one paid opt-in skipped, with the combined design, insight tools and pagination/index changes. Added queue continuity, exact saved-run copy links and full saved-run context; repaired timestamp ordering and initial filter reset. All 249 saved results, eight original main tables and 30 protected files preserved. [History/design verification](18-history-design-integration.md). No paid requests; demo deferred. The [earlier review-experience checkpoint](16-review-experience-integration.md) records the scoped quick views, filter chips and compact spacing.
 
 | Current stage | Result | Report |
 | --- | --- | --- |
+| 18 - History/design integration | Stable paged review context, queue restoration, saved-run links and timestamp/filter repairs; 299 backend / 118 client / build passed | [Integration verification](18-history-design-integration.md) |
+| 13 - Criterion breakdowns | Dataset-separated saved-answer distributions, explicit coverage/denominators and exact-case drilldown | [Breakdowns](13-criterion-breakdowns.md) |
+| 14 - Review priority | Explained reason counts, user-selected queue ordering/filtering and exact historical appeal targets | [Priority queue](14-review-priority.md) |
+| 15 - Weight-impact preview | Strict weight-only fixed-judgment scenarios with preserved nulls, denominators and source provenance | [Weight preview](15-weight-impact-preview.md) |
+| 16 - Insight verification | 283 backend / 107 client / one skipped; build, actual-data/browser and preservation checks | [Final verification](16-insights-verification.md) |
 | 7 - Comparison consistency | Fixed either-side reviewed-run refresh; stable selections, late-response guards, difference filters/counts and recorded provenance | [Comparison repair](07-comparison-refresh-and-differences.md) |
 | 8 - Export usability | Simple criterion CSV, exact bounded selected-run exports, snapshot manifests and privacy/format guards | [Export refinements](08-simple-and-selected-exports.md) |
 | 9 - Retrieval and presets | Full message-match navigation/highlights, atomic v1-to-v2 storage migration, explicit edit operations and previewed portable presets | [Search/preset refinements](09-match-navigation-and-presets.md) |
@@ -11,7 +28,7 @@ Completed 7 November 2026. The latest stages repair comparison freshness and ref
 | 11 - Review workspace design | Compact tools, visible search, clearer assessment hierarchy, responsive layout and keyboard navigation; 173 backend/63 client/build pass | [Design and usability](11-review-workspace-design.md) |
 | 12 - Main merge | Refinement branch merged with concurrent UI preserved; three conflicted files resolved and exact merged source verified | [Merge verification](12-main-refinement-merge.md) |
 
-Latest exact merged-source checks: **173 backend / 63 client passed, one paid opt-in skipped; build and pip check passed**. Fresh copied data: 249 saved comparisons and JSON/archival CSV/simple CSV exports, 100-run batches in all three formats, 187 match pages and cold reopen passed. Original-data/protected-file checks passed again; prior stage reports retain their browser coverage. Later concurrent changes are separate from this tested merge. **Zero provider requests / $0.00**. No new semantic accuracy or official-grade claim.
+Earlier insight-only snapshot: **283 backend / 107 client passed, one paid opt-in skipped; build and pip check passed**, including a repeat in isolated source. Fresh copied data passed 152 criterion distributions, 375 priority-source checks and 788 weight scenarios; two historical bases explicitly refuse simulation. Original-data/protected-file and narrow-browser checks passed. **Zero provider requests / $0.00**. No new semantic accuracy or official-grade claim. That certification preceded indexing/history; the later combined verification is linked above.
 
 The earlier [PDF audit](../audits/2026-11-07/13-post-features-pdf-audit.md) found the comparison freshness issue. Stage 7 repairs it. The [market follow-up](../ADOPTED_FEATURE_REVIEW.md) records the original recommendations; stages 7-10 implement the selected refinement set while leaving other optional ideas separate.
 

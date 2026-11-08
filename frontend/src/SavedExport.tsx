@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { downloadSavedReport } from './api';
 import type { ReportFormat } from './api';
 
-export default function SavedExport({ evaluationId }: { evaluationId: string }) {
+export default function SavedExport({ evaluationId, onError }: { evaluationId: string; onError?: () => void }) {
   const [excerpts, setExcerpts] = useState(false); const [pending, setPending] = useState(false); const [error, setError] = useState('');
   const mounted = useRef(true); const selected = useRef(evaluationId); const sequence = useRef(0);
   selected.current = evaluationId;
@@ -13,7 +13,7 @@ export default function SavedExport({ evaluationId }: { evaluationId: string }) 
     const active = () => mounted.current && selected.current === evaluationId && sequence.current === token;
     setPending(true); setError('');
     try { await downloadSavedReport(evaluationId, format, excerpts, active); }
-    catch (e) { if (active()) setError(e instanceof Error ? e.message : 'Export failed.'); }
+    catch (e) { if (active()) { setError(e instanceof Error ? e.message : 'Export failed.'); onError?.(); } }
     finally { if (active()) setPending(false); }
   };
   return <section className="panel saved-export" aria-label="Saved report export">

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from './api';
 import { answerLabel, label, points } from './helpers';
 import type { ComparisonCell, ComparisonSide, EvaluationSummary, Evidence, SavedComparison as Comparison } from './types';
+import { savedRunLabel } from './savedRunLabel';
 
 type Difference = 'all' | 'answers' | 'points' | 'configuration' | 'details';
 const detailChanges = new Set(['explanation', 'evidence', 'na_reason', 'review_reason']);
@@ -13,13 +14,13 @@ function matchesDifference(row: Comparison['criteria'][number], filter: Differen
   return row.changes.length > 0 && row.changes.every(c => detailChanges.has(c));
 }
 
-function initialPair(runs: EvaluationSummary[], currentId: string) {
+function defaultPair(runs: EvaluationSummary[], currentId: string) {
   const target = runs.find(r => r.id === currentId) ?? runs[0];
   if (!target) return { left: '', right: '' };
   const time = Date.parse(target.created_at);
   const earlier = runs.filter(r => r.id !== target.id && r.state === 'succeeded' && r.checklist_id === target.checklist_id
-    && Number.isFinite(time) && Date.parse(r.created_at) <= time)
-    .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+    && Number.isFinite(time) && (r.created_at < target.created_at || (r.created_at === target.created_at && r.id < target.id)))
+    .sort((a, b) => a.created_at === b.created_at ? a.id === b.id ? 0 : a.id > b.id ? -1 : 1 : a.created_at > b.created_at ? -1 : 1);
   return { left: earlier[0]?.id ?? runs.find(r => r.id !== target.id)?.id ?? target.id, right: target.id };
 }
 
@@ -50,11 +51,12 @@ function Provenance({ side, title }: { side: ComparisonSide; title: string }) {
   </section>;
 }
 
-export default function SavedComparison({ runs, currentId, sourceId, onEvidence }: {
+export default function SavedComparison({ runs, currentId, sourceId, onEvidence, initialPair }: {
   runs: EvaluationSummary[]; currentId: string; sourceId: string; onEvidence: (e: Evidence) => void;
+  initialPair?: { left: string; right: string };
 }) {
-  const [open, setOpen] = useState(false);
-  const [left, setLeft] = useState(''); const [right, setRight] = useState('');
+  const [open, setOpen] = useState(!!initialPair);
+  const [left, setLeft] = useState(initialPair?.left ?? ''); const [right, setRight] = useState(initialPair?.right ?? '');
   const [leftBasis, setLeftBasis] = useState<'original' | 'effective'>('effective');
   const [rightBasis, setRightBasis] = useState<'original' | 'effective'>('effective');
   const [outcome, setOutcome] = useState<{ key: string; result: Comparison | null; error: string }>({ key: '', result: null, error: '' });
@@ -75,18 +77,21 @@ export default function SavedComparison({ runs, currentId, sourceId, onEvidence 
     const params = new URLSearchParams({ left_id: left, right_id: right, left_basis: leftBasis, right_basis: rightBasis });
     void api<Comparison>(`/evaluations/compare?${params}`).then(data => {
       if (data.source.id !== sourceId) throw new Error('Comparison source revision does not match this transcript.');
+      if (initialPair && (data.left.id !== left || data.right.id !== right || data.left.basis !== leftBasis || data.right.basis !== rightBasis)) {
+        throw new Error('Saved comparison does not match the requested cohort run IDs or answer sets.');
+      }
       if (active) setOutcome({ key, result: data, error: '' });
     }).catch(e => { if (active) setOutcome({ key, result: null, error: e instanceof Error ? e.message : 'Comparison failed.' }); });
     return () => { active = false; };
   }, [open, left, right, leftBasis, rightBasis, sourceId, key, selectionAvailable]);
-  const runLabel = (run: EvaluationSummary) => `v${run.checklist_id} · ${label(run.state)} · ${new Date(run.created_at).toLocaleString()} · ${run.id.slice(0, 8)}`;
+  const runLabel = savedRunLabel;
   const visible = result?.criteria.filter(r => (!changedOnly || r.change !== 'unchanged') && matchesDifference(r, difference)) ?? [];
   return <section className="panel saved-comparison">
     <button className="secondary" aria-expanded={open} onClick={() => {
       if (!open) {
-        const defaults = initialPair(runs, currentId);
-        if (!runs.some(r => r.id === left)) setLeft(defaults.left);
-        if (!runs.some(r => r.id === right)) setRight(defaults.right);
+        const defaults = defaultPair(runs, currentId);
+        if (!initialPair && !runs.some(r => r.id === left)) setLeft(defaults.left);
+        if (!initialPair && !runs.some(r => r.id === right)) setRight(defaults.right);
         // Reopening also refreshes a previously loaded result, while retaining valid choices.
         setRetry(r => r + 1);
       }
@@ -94,11 +99,16 @@ export default function SavedComparison({ runs, currentId, sourceId, onEvidence 
     }} disabled={!runs.length}>Compare saved runs</button>
     {open && <div role="region" aria-label="Saved-run comparison">
       <p>Inspect stored answers without evaluating again. Both runs must use this exact source revision.</p>
-      <small>The initial baseline prefers the most recent earlier successful run with the same checklist. Your selections stay in place when results update.</small>
+      {initialPair && <p>Opened the exact cohort run IDs. This review comparison starts with Effective answers; choose Original below to inspect the preserved original judgments.</p>}
+      <small>The initial baseline prefers the most recent earlier successful run with the same checklist among loaded runs. Browse saved-run pages to make older runs available. Your selections stay in place when results update.</small>
       <div className="comparison-controls">
-        <label>Baseline saved run<select aria-label="Baseline saved run" value={left} onChange={e => setLeft(e.target.value)}>{runs.map(r => <option key={r.id} value={r.id}>{runLabel(r)}</option>)}</select></label>
+        <label>Baseline saved run<select aria-label="Baseline saved run" value={left} onChange={e => setLeft(e.target.value)}>
+          {left && !runs.some(r => r.id === left) && <option value={left}>Unavailable saved run · {left}</option>}
+          {runs.map(r => <option key={r.id} value={r.id}>{runLabel(r)}</option>)}</select></label>
         <label>Baseline answer set<select aria-label="Baseline answer set" value={leftBasis} onChange={e => setLeftBasis(e.target.value as typeof leftBasis)}><option value="effective">Effective</option><option value="original">Original</option></select></label>
-        <label>Comparison saved run<select aria-label="Comparison saved run" value={right} onChange={e => setRight(e.target.value)}>{runs.map(r => <option key={r.id} value={r.id}>{runLabel(r)}</option>)}</select></label>
+        <label>Comparison saved run<select aria-label="Comparison saved run" value={right} onChange={e => setRight(e.target.value)}>
+          {right && !runs.some(r => r.id === right) && <option value={right}>Unavailable saved run · {right}</option>}
+          {runs.map(r => <option key={r.id} value={r.id}>{runLabel(r)}</option>)}</select></label>
         <label>Comparison answer set<select aria-label="Comparison answer set" value={rightBasis} onChange={e => setRightBasis(e.target.value as typeof rightBasis)}><option value="effective">Effective</option><option value="original">Original</option></select></label>
       </div>
       {error && <div role="alert"><p>{error}</p><button className="secondary" onClick={() => setRetry(retry + 1)}>Retry comparison</button></div>}

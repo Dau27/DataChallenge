@@ -1,10 +1,10 @@
 # Existing solution audit
 
-Completed 7 November 2026 against all supplied PDFs and MASTER_CONTEXT.md.
+Historical audits completed 7 November 2026 against the supplied PDFs and MASTER_CONTEXT.md. Latest combined-source audit: [post-cohort/print PDF audit](../2026-11-08/02-post-cohort-print-audit.md), with408 backend/182 client/build checks, a saved-metadata display fix and zero new inference. The earlier [8 November audit](../2026-11-08/01-integrated-pdf-audit.md) records309/118 checks at its historical source.
 
 Implementation follow-up: the comparison freshness issue from audit 13 is [fixed and regression-tested](../../improvements/07-comparison-refresh-and-differences.md). [Refinement verification](../../improvements/10-refinements-verification.md) passed 173 backend/58 client/build and actual saved-data/browser checks, with zero provider calls and preserved originals. The earlier audit/readiness estimate is not recalculated into a new official score. Demo remains deferred.
 
-**Latest post-feature audit:** application ad9f167 passes fresh **144 backend / 27 client checks and build**; 130 selected snapshots and 198 review histories reconcile, and all 249 saved runs pass comparison/JSON/CSV checks again. Informal readiness stays **about 85/100**. A new P2 comparison-refresh issue was reproduced; stored totals remain correct. No model calls/data/source changes; demo remains deferred. [Current audit](13-post-features-pdf-audit.md), [market follow-up](../../ADOPTED_FEATURE_REVIEW.md).
+**Historical post-feature audit 13:** application ad9f167 passed **144 backend / 27 client checks and build**; 130 selected snapshots and 198 review histories reconciled, and all 249 saved runs passed comparison/JSON/CSV checks. Informal readiness stayed **about 85/100**. Its comparison-refresh issue was subsequently repaired. [Earlier audit](13-post-features-pdf-audit.md), [market follow-up](../../ADOPTED_FEATURE_REVIEW.md).
 
 **Current delivery scope:** the manual reference-review exercise is removed from delivery/demo plans. Existing private evidence and historical reports are retained. **Demo work is deferred at the user's request; no preparation or rehearsal is being started.** [Scope update](12-delivery-scope-cleanup.md).
 

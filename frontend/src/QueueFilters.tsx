@@ -8,6 +8,8 @@ export default function QueueFilters({ filters, groups, setField }: {
   const advanced = ['group', 'language', 'channel', 'status', 'appeals', 'critical'] as const;
   const active = advanced.filter(key => filters[key] !== defaultFilters[key]).length;
   const changed = (Object.keys(defaultFilters) as (keyof Filters)[]).some(key => filters[key] !== defaultFilters[key]);
+  const names: Record<keyof Filters, string> = { search: 'Conversation ID', text: 'Transcript', speaker: 'Speaker', group: 'Dataset', language: 'Language', channel: 'Channel', status: 'State', appeals: 'Appeals', critical: 'Critical findings' };
+  const displayValue = (key: keyof Filters) => key === 'status' ? label(filters[key]) : filters[key];
   return <div className="queue-filters">
     <div className="queue-search">
       <label>Conversation ID<input aria-label="Search conversation ID" placeholder="Find a conversation…" maxLength={2000} value={filters.search} onChange={e => setField('search', e.target.value)} /></label>
@@ -28,5 +30,11 @@ export default function QueueFilters({ filters, groups, setField }: {
       </details>
       {changed && <button className="text-button clear-filters" onClick={() => (Object.keys(defaultFilters) as (keyof Filters)[]).forEach(key => setField(key, defaultFilters[key]))}>Clear filters</button>}
     </div>
+    {changed && <div className="active-filter-chips" role="group" aria-label="Applied filters">
+      {(Object.keys(defaultFilters) as (keyof Filters)[]).filter(key => filters[key] !== defaultFilters[key]).map(key => <button className="filter-chip" key={key}
+        aria-label={`Remove ${names[key].toLowerCase()} filter`} title={`${names[key]}: ${displayValue(key)}`} onClick={() => setField(key, defaultFilters[key])}>
+        <span>{names[key]}: <span className="filter-chip-value">{displayValue(key)}</span></span><span aria-hidden="true">×</span>
+      </button>)}
+    </div>}
   </div>;
 }

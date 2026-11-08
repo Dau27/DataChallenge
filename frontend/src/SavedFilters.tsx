@@ -86,11 +86,18 @@ function uniqueName(name: string, names: Set<string>, suffix: string): string {
 }
 
 export function useSavedFilters(version: number) {
-  const [state, setState] = useState(() => load(version)); const [name, setName] = useState('');
+  const [state, setState] = useState(() => load(version));
+  const [name, setName] = useState(() => state.store.presets.find(p => p.id === state.selected)?.name ?? '');
+  const loadedVersion = useRef(version);
   const [preview, setPreview] = useState<ImportPreview | null>(null); const input = useRef<HTMLInputElement>(null); const importSequence = useRef(0);
   useEffect(() => {
     importSequence.current++; setPreview(null);
-    const loaded = load(version); setState(loaded); setName(loaded.store.presets.find(p => p.id === loaded.selected)?.name ?? '');
+    // The initial state already loaded this version. Re-reading it after the first
+    // paint can overwrite a user's first filter change with the saved defaults.
+    if (loadedVersion.current !== version) {
+      loadedVersion.current = version;
+      const loaded = load(version); setState(loaded); setName(loaded.store.presets.find(p => p.id === loaded.selected)?.name ?? '');
+    }
     return () => { importSequence.current++; };
   }, [version]);
   useEffect(() => {

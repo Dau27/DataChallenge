@@ -77,7 +77,7 @@ def test_pending_appeals_include_older_runs_and_revisions_but_not_other_checklis
 def test_critical_filter_data_uses_effective_dynamic_flags_without_score_penalty(tmp_path):
     def handler(payload):
         rubric = Checklist.model_validate(json.loads(payload['input'])['saved_checklist'])
-        assessment = full_assessment(rubric).model_dump(mode='json')
+        assessment = full_assessment(rubric, message_id='m0002').model_dump(mode='json')
         assessment['results']['critical_errors']['value'] = True
         return httpx.Response(200, json=response_for(assessment))
     client, calls, _ = client_and_calls(tmp_path, handler)

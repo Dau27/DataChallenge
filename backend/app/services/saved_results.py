@@ -21,6 +21,20 @@ def summary(evaluation):
             "error": evaluation.error, "created_at": evaluation.created_at, "updated_at": evaluation.updated_at}
 
 
+def summary_columns():
+    """Read list/detail headers without materializing judgments, metadata or attempts."""
+    return (Evaluation.id, Evaluation.conversation_id, Evaluation.checklist_id, Evaluation.state,
+            Evaluation.completeness, Evaluation.cached_from, Evaluation.effective_score["total"].as_string().label("total"),
+            Evaluation.error, Evaluation.created_at, Evaluation.updated_at)
+
+
+def saved_summaries(session, conversation_id=None):
+    query = select(*summary_columns()).order_by(Evaluation.created_at.desc(), Evaluation.id.desc())
+    if conversation_id:
+        query = query.where(Evaluation.conversation_id == conversation_id)
+    return [dict(row) for row in session.execute(query).mappings()]
+
+
 def version_view(version):
     return {"id": version.id, "content_hash": version.content_hash, "snapshot": version.snapshot, "created_at": version.created_at}
 
@@ -62,6 +76,17 @@ def numeric_difference(left, right):
         return None
 
 
+def _safe_generation_value(value):
+    if value is None:
+        return True
+    if type(value) not in {int, float}:
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:
+        return False
+
+
 def _side(snapshot, basis):
     score = snapshot[basis + "_score"]
     # Only evaluation provenance belongs here; arbitrary stored metadata is not a credential channel.
@@ -81,7 +106,7 @@ def _side(snapshot, basis):
     if not isinstance(generation, dict):
         generation = {}
     metadata["generation"] = {key: generation[key] for key in ("temperature", "max_output_tokens", "top_p")
-        if key in generation and (generation[key] is None or type(generation[key]) in {int, float} and math.isfinite(generation[key]))}
+        if key in generation and _safe_generation_value(generation[key])}
     if isinstance(generation.get("reasoning"), dict):
         effort = generation["reasoning"].get("effort")
         if isinstance(effort, str) and effort in {"none", "minimal", "low", "medium", "high", "xhigh"}:
