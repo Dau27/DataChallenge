@@ -1,5 +1,7 @@
 # Stage 26 - final offline preparation and judge-facing README
 
+Private publication follow-up: the owner subsequently authorized committing/pushing this documentation. Checkpoint f4eabbd was pushed and independently fetched with full-tree/tested-source equality; [stage 27](27-private-documentation-push.md) records the private GitHub verification and final receipt. The local/uncommitted statements below describe this stage's original offline completion, not the subsequent repository state. No public release or new inference.
+
 Completed 8 November 2026 under the owner's instruction to start the available final stages and clarify the README. Repository visibility stays unchanged/private by instruction; no public release or organizer message was attempted. Control data are unavailable. Paid inference, the five-minute presentation and optional paper-layout QA remain paused.
 
 ## Completed work
