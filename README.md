@@ -97,7 +97,7 @@ Use the dedicated offline [submission commands](docs/SUBMISSION.md). Existing UI
 
 | Item | Current status |
 | --- | --- |
-| Public repository and organizer link handoff | Repository stays private. DEV/PROD are prepared for private publication; owner must complete public access and organizer receipt before stop-code |
+| Public repository and organizer link handoff | DEV/PROD privately pushed in dd6b708 and exact remote bytes verified. Repository stays private; owner must complete public access and organizer receipt before stop-code |
 | Organizer control data and replacement-criterion challenge | FBroker10 processed and validated; Swap3 saved with zero evaluations. Additional criterion instructions and organizer acceptance remain pending |
 | Official frozen commit | Await official event timing/instruction; the tested checkpoint is not an official freeze |
 | At-most-five-minute presentation | Technical screen flow verified in 4:52; owner confirmed no spoken pass and paused rehearsal. Spoken timing and fresh authorized changed-criterion inference remain pending |

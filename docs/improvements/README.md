@@ -1,6 +1,6 @@
 # Implemented workflow improvements
 
-Control release: [33 - real FBroker evaluation, review and submission](33-fbroker-control-submission.md). FBroker10 all complete,16 source-based review corrections with originals retained,10ok/80 judged criteria and exact-format validation. Added authorized model estimate$0.06653520; Swap3 saved with zero evaluations. Private publication proceeds; owner public handoff and official freeze remain separate.
+Control release: [33 - real FBroker evaluation, review and submission](33-fbroker-control-submission.md). FBroker10 all complete,16 source-based review corrections with originals retained,10ok/80 criteria; exact DEV/PROD bytes privately pushed and fetched/verified in dd6b708. Added authorized model estimate$0.06653520; Swap3 saved with zero evaluations. Updated downloadable PowerPoint exported; owner public handoff and official freeze remain separate.
 
 Presentation: [32 - editable six-slide deck and presenter guide](32-presentation-deck.md). Saved-data evidence, native scoring table, actual screenshots and speaker notes;447-word script planned for4:30. Six rendered slides visually reviewed; source totals and preservation verified. No new inference or publication. [Presenter script](../PRESENTATION.md). The deck supports the required app demonstration; actual spoken rehearsal/control acceptance remain uncompleted.
 

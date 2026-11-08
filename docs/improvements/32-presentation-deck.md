@@ -1,5 +1,7 @@
 # Stage 32 - six-slide presentation and speaker guide
 
+**Subsequent export/control update:** the owner explicitly requested a downloadable PowerPoint. The original state6 export is preserved; a new **Vector_Field_CQA_Submission_Ready.pptx** from state7 updates only the final slide/notes after the verified private FBroker push. Six notes/native table retained, package/layout/import checks pass, all six slides rendered, first five native texts/PNG bytes unchanged and revised sixth visually reviewed. File105328bytes, SHA ef42c1288bf793711e7eb63f4465bd9934884b36f0c8647d20b8e5df2c210e6c; private local_data/presentation_20261108/powerpoint-ready/output. Current script444words/planned4:30. Export work used no model calls; separate owner-authorized FBroker batch cost$0.06653520. [Actual processing and export receipts](33-fbroker-control-submission.md). Original creation evidence below is historical.
+
 8 November 2026. The owner asked to make a presentation instead of a video. Created an editable live presentation, **Vector Field - Conversation Quality Analytics**, attached to the creation reply. Artifact reference: artifact_FIhdu6B34UO5CFCQiGF26x18r9TUWCDe. No video or audio recording, new evaluation, code change or public publication.
 
 ## Delivered content

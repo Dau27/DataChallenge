@@ -1,8 +1,8 @@
 # Vector Field - five-minute presentation
 
-An editable six-slide deck is attached to the presentation-creation reply in this chat. It includes speaker notes and a native scoring table. You can export it as PowerPoint from the viewer. No video recording was started or required by the supplied guide.
+An editable six-slide deck is attached to the presentation-creation reply. A downloadable **Vector_Field_CQA_Submission_Ready.pptx** is attached to the export reply, with its final slide updated after the real FBroker submission. It includes all six speaker notes and the native scoring table; the earlier export is preserved. No video recording was started or required by the supplied guide.
 
-**Target: 4:30, with 30 seconds of buffer.** The 447-word narration below is a script, not a measured spoken rehearsal. Read the narration; use action/source notes as prompts rather than reciting them. Chat waiting time is not presenter delivery time.
+**Target: 4:30, with 30 seconds of buffer.** The 444-word narration below is a script, not a measured spoken rehearsal. Read the narration; use action/source notes as prompts rather than reciting them. Chat waiting time is not presenter delivery time.
 
 Keep the application available: the slides support the required evidence/appeal/checklist demonstration. They do not replace the organizer's live criterion-replacement check or actual control inference. Keep the repository private until the owner's event publication; the rehearsal uses saved results with inference disabled.
 
@@ -40,9 +40,9 @@ Checklist changes are configuration. We can change a definition, answer type, we
 
 ## 6. Saved results and submission - 3:55-4:30
 
-Action: Summarize DEV: 64 ok / one error, historical model cost and remaining actual control/public/freeze gates.
+Action: Summarize DEV:64ok/oneerror; FBroker10ok privately pushed, Swap3 saved/unevaluated, recorded model cost and remaining public/criterion/freeze gates.
 
-We retain 65 DEV conversations: 64 complete and one unclear call requiring review. The required Results JSON is committed and privately verified; the unclear case is an explicit error, with no fabricated score. The selected DEV set used gpt-4.1-mini and averaged about $0.00613 per evaluation at recorded rates, including recorded retries. Those are historical estimates, not a current quote or account balance. Genuine control acceptance, final public handoff and the official freeze remain pending.
+We retain 65 DEV conversations: 64 complete and one unclear call. Both required DEV and PROD JSON files are committed and privately verified. All 10 FBroker control chats completed, and source-based review retains every original answer. The control batch cost about 6.65 cents at recorded rates. SWAP’s three records are saved but not evaluated. Public handoff, further criterion instructions and the official freeze remain pending. Coverage is not independent judgment accuracy.
 
 ## Scope and evidence
 
