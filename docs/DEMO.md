@@ -1,6 +1,8 @@
 # Five-minute demonstration
 
-**Resumed by the owner on 8 November 2026.** Preparation and zero-spend technical rehearsal are active. The repository stays private until the owner makes it public at the deadline. Organizer control data remain unavailable. No paid inference is authorized by this rehearsal.
+**Presentation option prepared:** the editable six-slide deck is attached to the creation reply. [Speaker script and action cues](PRESENTATION.md), [acceptance report](improvements/32-presentation-deck.md). Planned4:30, not measured spoken delivery. It supports the app's required evidence/appeal/checklist demonstration; no video was recorded and no provider call was made. The step-by-step spoken rehearsal below still awaits the owner's opening completion.
+
+**The owner explicitly resumed on 8 November 2026:** guide one part at a time and wait for completion before advancing. The earlier pause is revoked. Step1 (opening) is ready on saved p1-ru-001 / v1 /92.31; no spoken part is yet confirmed complete. No agent audio/video recording is active; presenter recording is optional and owner-operated. Keep chat waiting time separate from spoken duration. The repository stays private; organizer control remains unavailable and no paid inference is authorized.
 
 ## Presenter card
 
@@ -49,12 +51,13 @@ The completed DOM tests used rehearsal_retry.sqlite3; the browser used presenter
 
 A fresh evaluation after today's criterion change remains outside the zero-spend rehearsal. At the event, genuinely apply the changed checklist to the supplied data with authorized model access/budget. A saved result or successful configuration save does not complete that fresh-evaluation step. The existing application has earlier real custom-checklist evidence; this task does not claim a new v13/control run.
 
-Two spoken practices are an engineering recommendation. Record real durations below; blank/unmeasured rows must not be presented as passed.
+Two spoken practices are an engineering recommendation. Record real durations below; blank/unmeasured rows must not be presented as passed. The owner initially selected Start timed run on 8 November, but later explicitly confirmed **"I did not do it"**. Only the agent's technical screen walkthrough took **4:52**; this is not a completed spoken rehearsal. [Technical receipt and coaching](improvements/31-guided-demo-rehearsal.md). The app was restored to p1-ru-001 / v1 / 92.31 and a self-paced opening was offered; its completion is unconfirmed. The owner then paused the rehearsal until saying proceed. Do not restart narration or advance checkpoints during that pause. Target 4:30-4:40 for a future actual spoken pass.
 
-| Spoken rehearsal | Presenter / date | Measured duration | Required flow completed? |
+| Rehearsal | Presenter / date | Measured duration and basis | Required flow completed? |
 | --- | --- | --- | --- |
-| 1 | Pending | Not measured | Pending |
-| 2 | Pending | Not measured | Pending |
+| Technical walkthrough | Agent drove the browser, 8 November | **4:52 technical guide/browser wall time** | Screen actions completed; owner confirmed no spoken rehearsal |
+| First spoken pass | Paused by owner | Not performed / not measured | Await explicit instruction to proceed |
+| Second spoken pass | Pending | Not measured | Pending |
 
 Backup examples for questions: p1-en-001 (English); p1-kz-012 (preserved 84.62 original / 100 effective review); p4-ru-001 (recording-player link); p4-ru-005 (unclear self-introduction and withheld total). Link presence was checked; external player availability and intelligibility were not newly tested. Use optional comparison/export tools only after the core flow or if asked.
 

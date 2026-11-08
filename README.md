@@ -6,7 +6,7 @@ A working Freedom Broker CQA prototype for evaluating **human operator performan
 
 **Core workflow:** import → select a saved checklist → evaluate → inspect evidence → appeal → review → recalculate and preserve the final result.
 
-The required product workflow is implemented and tested. Repository access remains private until the owner releases it at the deadline. Organizer control data are unavailable; control acceptance and the official freeze are pending. Five-minute demo preparation has resumed: the [presenter guide and zero-spend rehearsal](docs/DEMO.md) are ready; spoken timings remain unmeasured.
+The required product workflow is implemented and tested. Repository access remains private until the owner releases it at the deadline. The real **FBroker control set has been processed:10 validated final records**, with originals retained and source-based review recorded. **Swap3 is saved but unevaluated**, awaiting further instructions. [Control report](docs/improvements/33-fbroker-control-submission.md). Organizer acceptance, public handoff and official freeze remain pending. The [presentation](docs/PRESENTATION.md) and [demo guide](docs/DEMO.md) are ready; actual spoken rehearsal is still uncompleted.
 
 ## What judges can assess
 
@@ -89,7 +89,7 @@ Whole-evaluation accounting includes recorded requests, retries and repairs. Est
 
 ## Required result files
 
-The new organizer appendix requires **results/dev/results.json** for all65 DEV dialogs and **results/prod/results.json** for exactly10 real control chats. The prepared [DEV file](results/dev/results.json) uses Results JSON1.0 and the registered team name. Its unresolved call is represented by the explicitly permitted status=error shape, not an invented score. PROD is absent until genuine inputs arrive.
+The organizer appendix requires **results/dev/results.json** for all65 DEV dialogs and **results/prod/results.json** for exactly10 real control chats. Both now exist in Results JSON1.0 for Vector Field: [DEV](results/dev/results.json) has64ok/one explicit unclear-call error; [PROD](results/prod/results.json) has10ok/zeroerrors. PROD uses saved effective judgments after16 source-based reviewer corrections, with every model original retained. This is not a claim of organizer labels or independent accuracy. SWAP is excluded.
 
 Use the dedicated offline [submission commands](docs/SUBMISSION.md). Existing UI JSON/CSV downloads are archival reports and do not match the organizer contract. Both actual result files must be committed, pushed and available in the public repository before stop-code. Export/validation incur no inference cost; control assessment needs actual data and later authorized provider access/budget.
 
@@ -97,10 +97,10 @@ Use the dedicated offline [submission commands](docs/SUBMISSION.md). Existing UI
 
 | Item | Current status |
 | --- | --- |
-| Public repository and organizer link handoff | Tested code and DEV results pushed and privately verified; owner will publish at the deadline. PROD, public access and organizer receipt remain pending |
-| Organizer control data and replacement-criterion challenge | Await exact access/group; ten control chats and required PROD JSON must be processed/validated/pushed within the final hour |
+| Public repository and organizer link handoff | Repository stays private. DEV/PROD are prepared for private publication; owner must complete public access and organizer receipt before stop-code |
+| Organizer control data and replacement-criterion challenge | FBroker10 processed and validated; Swap3 saved with zero evaluations. Additional criterion instructions and organizer acceptance remain pending |
 | Official frozen commit | Await official event timing/instruction; the tested checkpoint is not an official freeze |
-| At-most-five-minute presentation | Functional and actual browser review/checklist-save flow verified; spoken timing and a fresh paid changed-criterion evaluation remain pending |
+| At-most-five-minute presentation | Technical screen flow verified in 4:52; owner confirmed no spoken pass and paused rehearsal. Spoken timing and fresh authorized changed-criterion inference remain pending |
 
 Optional A4/Letter and long multilingual paper-layout checks remain deferred and unverified. They do not block the specified core workflow. The [latest four-PDF audit](docs/audits/2026-11-08/04-appendix-submission-audit.md) incorporates the new appendix; earlier no-submission-schema statements predate that material. See the [control/freeze procedure](docs/CONTROL_AND_FREEZE.md).
 

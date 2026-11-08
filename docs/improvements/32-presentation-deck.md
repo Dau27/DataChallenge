@@ -1,0 +1,30 @@
+# Stage 32 - six-slide presentation and speaker guide
+
+8 November 2026. The owner asked to make a presentation instead of a video. Created an editable live presentation, **Vector Field - Conversation Quality Analytics**, attached to the creation reply. Artifact reference: artifact_FIhdu6B34UO5CFCQiGF26x18r9TUWCDe. No video or audio recording, new evaluation, code change or public publication.
+
+## Delivered content
+
+Six slides: overview; source-linked judgments; deterministic scoring; separate appeal/review with original retained; editable checklist and explicitly historical evaluated version; actual DEV coverage/model cost/submission state. The cream/teal design follows the existing app. The deck has editable titles/body/score table, two actual local-app screenshots, speaker notes on every slide and source/context citations in those notes. It is saved in the live artifact viewer; a separate PPTX copy was not created. The owner can export from that viewer.
+
+[Presenter script and action cues](../PRESENTATION.md) are generated from the actual six slide notes. **447 spoken words / planned4:30**, with30seconds below the maximum. These are planned allocations, not measured presentation delivery. The earlier4:52 was only the agent's technical browser walkthrough; the owner confirmed no spoken pass was performed. The resumed one-part-at-a-time rehearsal remains at the unconfirmed opening; deck creation does not complete it.
+
+Slides support the required app demonstration. A deck or screenshots alone do not complete the organizer's criterion-replacement check; a fresh changed-criterion/control evaluation remains subject to actual data and later spending authorization.
+
+## Evidence and checks actually performed
+
+- The source excerpt and seven weighted criterion rows were read from saved p1-ru-001 / v1 / run43314e09e15541cd94a9423908b01394 in a query-only context. Independent Decimal arithmetic and the saved total agree:60 points /65 applicable weight ×100 =92.31. N/A and the separate unscored critical flag remain explicit.
+- Review screenshot shows original100/effective92.31 on the earlier disposable real-app copy. It is a source-supported agent demonstration, not an independent reference label. The saved v6 configuration is visibly labeled unevaluated; the earlier genuine v2 ticket-reference=No result is labeled historical.
+- DEV65/64ok/oneerror matches the actual required results file. The unresolved call is not given an invented zero or Contact=N/A. Historical gpt-4.1-mini mean cost about$0.00613 is distinct from current pricing, balance or new spend. Genuine PROD/public/freeze acceptance stays pending.
+- Rendered and visually inspected all six slides at1280×720. Refined and rerendered slides2/5 to fix a small divider and focus the screenshot on the ninth criterion. Reviewed both revised renders. No clipping/overflow/obscured required content remained in the inspected images.
+- Directly read all six saved speaker-note strings; checked one native table, two images, all element frames within the canvas, expected table contents, arithmetic and planned timing. Source notes were polished after visual review without changing canvas content. The live deck reached saved stateVersion6.
+- Fresh preservation checks passed all15 main tables/schema,249 saved evaluations,30 protected files,163 tested non-Markdown source/data files and unchanged HEAD/index. No provider/organizer request, environment/config change, Git commit/push or repository visibility change. Added inference:$0.00. Existing full application acceptance remains503 backend plus the separately passed private case /184 client/build; no redundant suite run for presentation/docs.
+
+## Actual workflow and private evidence
+
+Used the presentations skill and bundled runtime discovery, then live artifactSession.run callbacks: cover; slides2–3; slides4–6; all-slide render; slide2/5 repairs and rerender; note/editability inspection; final note polish. Spaces-specific create/connect and template-picker tools were unavailable; the available first-party Artifact Session successfully created a persistent viewer-bound deck. No fallback image generator or paid provider was used.
+
+Private ignored local_data/presentation_20261108 retains prepare.py, before.json and pre-existing Markdown copies, deck-data.json, build-batch.mjs, original/reviewed notes, artifact-receipt.json, all six final slide PNGs, check_deck.py and verification.json. Actual local commands: prepare.py, check_deck.py and write_presenter_guide.py; live session calls and their observed results are recorded in this chat. Initial documentation-path lookups used missing filenames; corrected them using the API reference map before authoring the body slides. No product file or test was affected.
+
+Final source/history/Markdown scan passed **251 candidate files / 552 then-reachable history blobs / 88 Markdown files / 456 local links**, zero credential/private-path matches, balanced fences and clean diff check. Fresh read-only authenticated GitHub metadata confirms **private=true / visibility=private / main**; no settings changed. Private final_checks.json and privacy_after.json retain those actual outcomes. All existing pending Markdown changes remain preserved; no commit/push was made.
+
+Next: the owner opens/exports the saved presentation and rehearses actual narration, one completed part at a time if desired. Keep the app ready for its required demonstration, inference disabled during rehearsal, saved data/private artifacts preserved and GitHub private until the owner's deadline action. Reports remain local/uncommitted after the prior verified fe0a613 push.

@@ -1,0 +1,38 @@
+# Stage 33 - real FBroker control evaluation and submission
+
+8 November 2026. The owner supplied the organizer release message, then explicitly authorized **up to $0.86 additional estimated model cost for FBroker only** and gave **13:00** as stop-code. Timezone is taken from the client context, Asia/Bishkek; no separate timezone was supplied. The repository must remain private. SWAP must be saved, not evaluated, until further organizer instructions.
+
+## Actual processing
+
+- Fetched the exact supplied GET groups without redirects: **FBroker10 chats; Swap3 records**. Validated both original envelopes, group IDs and unique original conversation IDs. Saved both raw payloads and a consistent pre-import SQLite backup only under ignored local_data/control_release_20261108. No endpoint/signature is published.
+- Imported all13 sources with the existing importer, retaining the old75 source revisions and249 evaluations. Reimport proved idempotent:10+3 unchanged, no duplicates. The first preservation helper correctly noticed new transcript-index rows but had incorrectly required equality of derived indexes; corrected it to allow expected additions/reindexing while preserving all original source/result/review rows. No product/data repair was needed.
+- Ran the real **gpt-4.1-mini**, current **literal-rubric-evidence-v13** prompt, original immutable **checklist v1 / eight criteria**, in five pairs through existing Jobs/Budget. No mock provider, SWAP job, code/prompt change or paid access check. All10 finished succeeded/complete;12 recorded provider attempts including retries/repair. Added accounted model estimate **$0.06653520**, below the authorized $0.86. Reservations are fully settled.
+- Used a runtime-only total guard of **$4.99490090** = reviewed opening$4.03490090 +overhead$0.10 +approved additional$0.86. After the batch, accounted usage$4.10143610 plus overhead$0.10; unused approved estimate$0.79346480. These are application estimates, not an account balance/invoice. Real .env and its default zero ceiling remain unchanged; workers closed and no new calls remain active.
+
+## Source-based review, originals preserved
+
+Structural success did not establish correct rubric judgments. Read all ten source conversations and saved answers. Applied **16 source-supported reviewer replacements across nine cases** through the existing appeal/decision service, retaining every original model answer and original total. Corrections address actual clarification versus N/A; rejected-order contradiction and explicit re-asking anchors; omitted report detail; specific recap versus a generic farewell; and account-specific disclosure without identification. The off-company solicitation and unverified account disclosure remain **two separate critical flags**, without automatically zeroing either total. Earlier generic client-request cases with sufficient context retain legitimate N/A.
+
+These are transparent assistant source-based review decisions, **not organizer labels or measured independent accuracy**. No additional model calls were used for review. The official output uses saved effective/final judgments, consistent with the application's review workflow. The original first export is privately retained as prod-before-review.json; the reviewed candidate is also retained before deliberate promotion.
+
+## Submission acceptance
+
+[results/prod/results.json](../../results/prod/results.json) now contains **10 real original IDs /10 ok /zero errors /80 criteria**, Vector Field, schema1.0, external_api/gpt-4.1-mini. The dedicated CLI export/validate and separately written appendix validator agree. Full source-array evidence positions, canonical IDs, raw anchors, N/A arithmetic and flag consistency pass;20 original/effective snapshots reconcile. All80 original model values still match the privately preserved first export.
+
+- PROD SHA256: **db41ac7af804b96b09b8d684a98d79d5d8dadb35f28cbfeab848adb1909cb57d**.
+- DEV SHA256 remains **3c5d8ce4c1d25244ec40c4d93553b3390178fc2e3d9a3c5dd81b00bb02108dd8**:65 original IDs,64ok/one honest unclear-call error, unchanged bytes and successful revalidation.
+- Main now has259 evaluations and88 source revisions; all249 previous evaluation rows,75 previous sources, prior checklist/appeal/review rows and30 protected files are retained. All163 tested non-Markdown source/data files remain unchanged, with the one required PROD JSON added. SWAP has **zero evaluations**.
+
+Private push is in progress at this pre-commit checkpoint. Commit/push both required files and reports to existing private main without force; verify independent advertisement, fresh fetch, full tree and exact DEV/PROD bytes. Do not infer successful delivery solely from local files. The owner retains responsibility for required public availability/organizer link receipt before stop-code; this task does not change repository visibility or send a message.
+
+## PowerPoint export completed alongside control work
+
+The owner explicitly requested a downloadable file. Exported the existing saved six-slide stateVersion6 without altering it; validated package structure, dimensions, fonts, editable table and first-party import. Reimported the actual PPTX, rendered and visually inspected all six slides; independently verified all six speaker notes and exact native table values. No native PowerPoint execution is claimed. Output: ignored local_data/presentation_20261108/powerpoint/output/Vector_Field_CQA.pptx,105042bytes, SHA256 **ba5b3919275f37bce2e96141633a016dd848f78ffb5e8d4f1a539b0268429891**. Export used no model calls. Its existing final slide predates this control acceptance; an updated submission-state deck can be exported after the verified push, preserving this original.
+
+An initial local export-validation attempt lacked the bundled Node module path; set the runtime path and reran successfully without changing deck content. Private export_receipt.json and validation.json retain the successful checks. PPTX/screenshots/raw data/keys/backups stay outside Git.
+
+## Commands and next step
+
+Actually executed private fetch_release.py, import_and_quote.py, run_fbroker.py --authorized-0.86-fbroker-only, audit_inputs.py, compact_audit.py, review_corrections.py and validate_promote.py; public scripts/export_submission.py export/validate for FBroker and validate for DEV. Private evaluation_manifest.json, import_quote.json, review_receipt.json and validation.json contain exact IDs, costs, decisions and preservation receipts. Code is unchanged from tested503 backend plus the separately passed private case /184 client/build acceptance; no unnecessary full-suite rerun for a data-only release.
+
+Next: verify private Git publication, preserve its receipts, finish the current PowerPoint handoff, await specific SWAP instructions and have the owner complete required public/event handoff before13:00 Asia/Bishkek. Do not evaluate SWAP or spend further merely because unused budget remains.

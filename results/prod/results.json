@@ -1,0 +1,1063 @@
+{
+  "schema_version": "1.0",
+  "team_name": "Vector Field",
+  "model": {
+    "mode": "external_api",
+    "name": "gpt-4.1-mini"
+  },
+  "results": [
+    {
+      "conversation_id": "p2-en-001",
+      "status": "ok",
+      "criteria": [
+        {
+          "criterion_id": "contact",
+          "value": true,
+          "rationale": "Operator greeted in English and introduced herself by name in the first human response (m0010).",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "discovery",
+          "value": true,
+          "rationale": "Source-based reviewer correction: The website was missing from the initial request. The human operator asked which site and received the company-site answer before giving navigation guidance. Necessary clarification was performed, so Yes rather than N/A.",
+          "evidence_turns": [
+            10,
+            11
+          ]
+        },
+        {
+          "criterion_id": "identification",
+          "value": null,
+          "rationale": "No identity verification was required for this general guidance about website navigation. N/A: Запрос не требовал идентификации.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "criterion_id": "consultation",
+          "value": 20,
+          "rationale": "Operator answered the client's question by specifying the correct website to use and app option, resolving the main issue; no secondary questions were omitted.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "criterion_id": "empathy",
+          "value": true,
+          "rationale": "Operator expressed gladness client got in and wished a good day, showing politeness and positive engagement.",
+          "evidence_turns": [
+            16
+          ]
+        },
+        {
+          "criterion_id": "dialogue",
+          "value": 4,
+          "rationale": "Source-based reviewer correction: The vague instruction \"the other one\" caused the customer to ask which address to open. This directly matches the 4-point anchor for having to ask again because of wording; the later clarification does not erase that disruption.",
+          "evidence_turns": [
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "criterion_id": "closure",
+          "value": true,
+          "rationale": "Source-based reviewer correction: The customer confirms the login worked; the operator explicitly acknowledges the achieved outcome (\"Glad you got in\") and says \"Have a good day\". This is a brief outcome recap plus farewell; a separate further-help offer is not required when the recap branch is met.",
+          "evidence_turns": [
+            15,
+            16
+          ]
+        },
+        {
+          "criterion_id": "critical",
+          "value": false,
+          "rationale": "No insults, off-company paid service offers, or confidential disclosures were present in the operator's messages.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16
+          ]
+        }
+      ],
+      "score": {
+        "final_score": 88.75,
+        "critical_flag": false
+      }
+    },
+    {
+      "conversation_id": "p2-en-002",
+      "status": "ok",
+      "criteria": [
+        {
+          "criterion_id": "contact",
+          "value": true,
+          "rationale": "Operator greeted in English and introduced themselves by name in the first human response (m0010).",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "discovery",
+          "value": null,
+          "rationale": "Client clearly stated the request and context initially, so operator had sufficient information from the start to answer. N/A: Данных для ответа хватало с самого начала.",
+          "evidence_turns": [
+            1
+          ]
+        },
+        {
+          "criterion_id": "identification",
+          "value": null,
+          "rationale": "No identity verification was required before providing general guidance about report location and pricing plan. N/A: Запрос не требовал идентификации.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ]
+        },
+        {
+          "criterion_id": "consultation",
+          "value": 20,
+          "rationale": "Operator fully answered all material questions and provided correct next steps, including how to find and download last year's report, where to find the pricing plan, and how to view the current plan without downloading.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ]
+        },
+        {
+          "criterion_id": "empathy",
+          "value": true,
+          "rationale": "Operator was polite throughout and responded appropriately to client concerns and questions, e.g., clarifying document selection and confirming understanding.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ]
+        },
+        {
+          "criterion_id": "dialogue",
+          "value": 10,
+          "rationale": "Operator's responses were clear, well-structured, and coherent, enabling client to understand and proceed without confusion.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ]
+        },
+        {
+          "criterion_id": "closure",
+          "value": true,
+          "rationale": "Operator explicitly recapped that client has the report and knows where to check the current plan, offered further help implicitly, and said goodbye.",
+          "evidence_turns": [
+            21
+          ]
+        },
+        {
+          "criterion_id": "critical",
+          "value": false,
+          "rationale": "No insults, off-company paid service offers, or confidential disclosures were present in the operator's messages.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ]
+        }
+      ],
+      "score": {
+        "final_score": 100.0,
+        "critical_flag": false
+      }
+    },
+    {
+      "conversation_id": "p2-kz-001",
+      "status": "ok",
+      "criteria": [
+        {
+          "criterion_id": "contact",
+          "value": true,
+          "rationale": "Operator greeted in Kazakh and introduced herself by name in the first human response (m0010).",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "discovery",
+          "value": true,
+          "rationale": "Source-based reviewer correction: The required transfer currency was absent initially. The human asks which currency, receives euros, then supplies currency-specific bank-details instructions. Clarification was performed; the enough-information-from-start N/A condition does not hold.",
+          "evidence_turns": [
+            10,
+            11
+          ]
+        },
+        {
+          "criterion_id": "identification",
+          "value": null,
+          "rationale": "No identity verification was required before providing the requested information or performing any protected action. N/A: Запрос не требовал идентификации.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "criterion_id": "consultation",
+          "value": 20,
+          "rationale": "Operator answered the customer's question fully by providing clear instructions on how to find the bank details for the transfer in the app, including selecting the currency as requested.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13
+          ]
+        },
+        {
+          "criterion_id": "empathy",
+          "value": true,
+          "rationale": "Operator expressed pleasure that the help was useful and said goodbye politely, showing client-oriented behavior.",
+          "evidence_turns": [
+            15
+          ]
+        },
+        {
+          "criterion_id": "dialogue",
+          "value": 10,
+          "rationale": "Operator's responses were clear, coherent, and well-ordered; no confusing or contradictory statements were present.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "criterion_id": "closure",
+          "value": false,
+          "rationale": "Source-based reviewer correction: The ending says the operator is glad to have helped and says goodbye, but contains no specific recap of the transfer instructions and no offer of further help. Generic satisfaction is not the required recap/offer.",
+          "evidence_turns": [
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "criterion_id": "critical",
+          "value": false,
+          "rationale": "No insults, offers of paid services outside the company, or confidential information disclosures were detected.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ]
+        }
+      ],
+      "score": {
+        "final_score": 93.75,
+        "critical_flag": false
+      }
+    },
+    {
+      "conversation_id": "p2-kz-002",
+      "status": "ok",
+      "criteria": [
+        {
+          "criterion_id": "contact",
+          "value": true,
+          "rationale": "Operator greeted in Kazakh and introduced himself by name in the first human response (m0010).",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "discovery",
+          "value": false,
+          "rationale": "Source-based reviewer correction: The cause of a rejected bond order is not established by the generic rejected status. The human explicitly refuses to check the ticker and asks no necessary diagnostic details before a definitive claim. Required clarification was omitted; N/A is not justified.",
+          "evidence_turns": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "criterion_id": "identification",
+          "value": null,
+          "rationale": "No identification was required before the operator's general guidance; no protected data or action disclosed. N/A: Запрос не требовал идентификации.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "criterion_id": "consultation",
+          "value": 0,
+          "rationale": "Source-based reviewer correction: The key recommendation is internally wrong: a rejected order is asserted to have necessarily executed, and the customer is told not to check anything. This matches the 0 anchor for an incorrect key recommendation, not the partial-answer 10 anchor.",
+          "evidence_turns": [
+            10,
+            11
+          ]
+        },
+        {
+          "criterion_id": "empathy",
+          "value": false,
+          "rationale": "Operator did not express politeness or respond to client's confusion or dissatisfaction; no empathy shown.",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "dialogue",
+          "value": 4,
+          "rationale": "Source-based reviewer correction: The customer must ask how a rejected order can be executed because of the human reply. This directly matches the 4-point re-asking anchor; clarity cannot receive the maximum 10.",
+          "evidence_turns": [
+            10,
+            11
+          ]
+        },
+        {
+          "criterion_id": "closure",
+          "value": false,
+          "rationale": "Operator did not provide a summary, offer further help, or say goodbye before chat ended.",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "critical",
+          "value": false,
+          "rationale": "No insults, no off-company paid service offers, no confidential information disclosed by operator.",
+          "evidence_turns": [
+            10
+          ]
+        }
+      ],
+      "score": {
+        "final_score": 20.0,
+        "critical_flag": false
+      }
+    },
+    {
+      "conversation_id": "p2-kz-003",
+      "status": "ok",
+      "criteria": [
+        {
+          "criterion_id": "contact",
+          "value": true,
+          "rationale": "Operator greeted in Kazakh and introduced herself by name in the first human response (m0010).",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "discovery",
+          "value": null,
+          "rationale": "Client's initial question was clear and sufficient for the operator to provide a relevant answer without needing to ask for additional information. N/A: Данных для ответа хватало с самого начала.",
+          "evidence_turns": [
+            1
+          ]
+        },
+        {
+          "criterion_id": "identification",
+          "value": null,
+          "rationale": "No identification was required for the general information provided by the operator; no protected data or actions were disclosed. N/A: Запрос не требовал идентификации.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "criterion_id": "consultation",
+          "value": 20,
+          "rationale": "Source-based reviewer correction: The actual request asks whether D-account funds can directly buy shares. The human clearly answers no and identifies the trading account, consistent with the supplied context; the customer confirms understanding. No material part of that request is left open. The later off-company solicitation remains a separate critical finding, not an invented partial-answer penalty.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "criterion_id": "empathy",
+          "value": false,
+          "rationale": "Operator was polite but did not explicitly acknowledge or respond to any client inconvenience or dissatisfaction expressed.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "criterion_id": "dialogue",
+          "value": 10,
+          "rationale": "Operator's responses were clear and coherent, with appropriate order and no confusing formulations; no explicit wait warnings were needed.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "criterion_id": "closure",
+          "value": true,
+          "rationale": "Operator explicitly offered further help and said goodbye in the last message (m0014).",
+          "evidence_turns": [
+            14
+          ]
+        },
+        {
+          "criterion_id": "critical",
+          "value": true,
+          "rationale": "Operator offered a paid service bypassing the company, which is a critical error.",
+          "evidence_turns": [
+            12
+          ]
+        }
+      ],
+      "score": {
+        "final_score": 76.92,
+        "critical_flag": true
+      }
+    },
+    {
+      "conversation_id": "p2-kz-004",
+      "status": "ok",
+      "criteria": [
+        {
+          "criterion_id": "contact",
+          "value": true,
+          "rationale": "Оператор в первом ответе поздоровался на языке клиента (казахский) и представился по имени.",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "discovery",
+          "value": true,
+          "rationale": "Source-based reviewer correction: No request had been stated. The human asks the customer to explain how they can help before giving any substantive answer; the customer then leaves. This is the necessary elicitation of the missing need. N/A is not allowed on the false premise that the request was sufficient initially.",
+          "evidence_turns": [
+            10,
+            11
+          ]
+        },
+        {
+          "criterion_id": "identification",
+          "value": null,
+          "rationale": "Запрос не требовал идентификации, так как клиент не успел задать вопрос и чат оборвался. N/A: Запрос не требовал идентификации.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "criterion_id": "consultation",
+          "value": null,
+          "rationale": "Чат закончился до того, как клиент сформулировал запрос, консультация не состоялась. N/A: Чат закончился до того, как клиент сформулировал запрос.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "criterion_id": "empathy",
+          "value": true,
+          "rationale": "Оператор вежливо поприветствовал клиента и предложил помощь, проявив клиентоориентированность.",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "dialogue",
+          "value": 10,
+          "rationale": "Ответ оператора ясен, связен, вежлив, без сбоев, клиенту понятно, как продолжить диалог.",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "closure",
+          "value": null,
+          "rationale": "Чат оборвался до возможности оператора завершить диалог, закрытие неприменимо. N/A: Чат оборвался до возможности его завершить.",
+          "evidence_turns": [
+            11
+          ]
+        },
+        {
+          "criterion_id": "critical",
+          "value": false,
+          "rationale": "В диалоге не выявлено оскорблений, предложений платных услуг в обход компании или раскрытия конфиденциальной информации.",
+          "evidence_turns": [
+            10
+          ]
+        }
+      ],
+      "score": {
+        "final_score": 100.0,
+        "critical_flag": false
+      }
+    },
+    {
+      "conversation_id": "p2-ru-001",
+      "status": "ok",
+      "criteria": [
+        {
+          "criterion_id": "contact",
+          "value": true,
+          "rationale": "Оператор в первом ответе поздоровался на языке клиента и представился: 'Здравствуйте! Меня зовут Лена'.",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "discovery",
+          "value": null,
+          "rationale": "В исходном запросе клиента содержится чёткий вопрос с необходимым контекстом для ответа оператора, поэтому данных для ответа хватало с самого начала. N/A: Данных для ответа хватало с самого начала.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "criterion_id": "identification",
+          "value": null,
+          "rationale": "Запрос не требовал проверки личности, оператор не выполнял защищённых действий. N/A: Запрос не требовал идентификации.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "criterion_id": "consultation",
+          "value": 15,
+          "rationale": "Source-based reviewer correction: The main question about the current web tariff is answered, but the explicitly requested broker-report section name is omitted. The customer postponing looking at the report does not retract that requested secondary detail. This matches the 15 anchor.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "criterion_id": "empathy",
+          "value": true,
+          "rationale": "Оператор вежливо обратился к клиенту, поблагодарил и предложил помощь, что соответствует проявлению эмпатии.",
+          "evidence_turns": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "criterion_id": "dialogue",
+          "value": 10,
+          "rationale": "Ответы оператора ясные, связные, последовательные, без сбоев, с корректным порядком и вежливым завершением.",
+          "evidence_turns": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "criterion_id": "closure",
+          "value": true,
+          "rationale": "Оператор попрощался и предложил дальнейшую помощь, что соответствует требованиям закрытия диалога.",
+          "evidence_turns": [
+            12
+          ]
+        },
+        {
+          "criterion_id": "critical",
+          "value": false,
+          "rationale": "В диалоге не выявлено оскорблений, предложений платных услуг в обход компании или раскрытия конфиденциальной информации.",
+          "evidence_turns": [
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "score": {
+        "final_score": 92.31,
+        "critical_flag": false
+      }
+    },
+    {
+      "conversation_id": "p2-ru-002",
+      "status": "ok",
+      "criteria": [
+        {
+          "criterion_id": "contact",
+          "value": true,
+          "rationale": "Оператор в первом ответе поздоровался на языке клиента (русском) и представился по имени.",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "discovery",
+          "value": null,
+          "rationale": "В исходном сообщении клиента содержится чёткий вопрос с необходимым контекстом для ответа оператора. N/A: Данных для ответа хватало с самого начала.",
+          "evidence_turns": [
+            1
+          ]
+        },
+        {
+          "criterion_id": "identification",
+          "value": null,
+          "rationale": "Запрос не требовал идентификации, так как оператор не раскрывал защищённые данные и не совершал защищённых действий. N/A: Запрос не требовал идентификации.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "criterion_id": "consultation",
+          "value": 10,
+          "rationale": "Оператор дал чёткие инструкции по обновлению данных и указал путь в меню, что закрывает основной вопрос клиента. Второй вопрос клиента о выводе денег остался без прямого ответа.",
+          "evidence_turns": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "criterion_id": "empathy",
+          "value": false,
+          "rationale": "Клиент выразил неудобство из-за невозможности вывести деньги, оператор не отреагировал на это неудобство и не проявил эмпатию.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "criterion_id": "dialogue",
+          "value": 4,
+          "rationale": "Source-based reviewer correction: After the customer asks when to retry withdrawal, the human repeats the menu instruction, causing the customer to ask the timing question again. This matches the 4-point anchor for re-asking due to answer wording/order.",
+          "evidence_turns": [
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "criterion_id": "closure",
+          "value": true,
+          "rationale": "Оператор попрощался и предложил написать при возникновении вопросов, что соответствует требованиям закрытия диалога.",
+          "evidence_turns": [
+            14
+          ]
+        },
+        {
+          "criterion_id": "critical",
+          "value": false,
+          "rationale": "В диалоге не выявлено оскорблений, предложений платных услуг в обход компании или раскрытия конфиденциальной информации.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        }
+      ],
+      "score": {
+        "final_score": 47.69,
+        "critical_flag": false
+      }
+    },
+    {
+      "conversation_id": "p2-ru-003",
+      "status": "ok",
+      "criteria": [
+        {
+          "criterion_id": "contact",
+          "value": true,
+          "rationale": "Оператор в первом ответе поздоровался на русском языке клиента и представился по имени: 'Здравствуйте, меня зовут Ринат'.",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "discovery",
+          "value": true,
+          "rationale": "Оператор уточнил недостающие данные (дату и валюту перевода) перед ответом, что показывает выявление потребности.",
+          "evidence_turns": [
+            13
+          ]
+        },
+        {
+          "criterion_id": "identification",
+          "value": true,
+          "rationale": "Оператор сообщил о необходимости подтверждения личности, и система зафиксировала подтверждение личности клиента до раскрытия данных.",
+          "evidence_turns": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "criterion_id": "consultation",
+          "value": 20,
+          "rationale": "Оператор передал информацию специалистам и дал корректный следующий шаг, объяснил разницу статусов перевода, ответил на вопросы клиента и сообщил, что при необходимости свяжутся для уточнения.",
+          "evidence_turns": [
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ]
+        },
+        {
+          "criterion_id": "empathy",
+          "value": true,
+          "rationale": "Оператор выразил понимание неудобства клиента: 'Понимаю, что неприятно не видеть отправленные деньги'.",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "dialogue",
+          "value": 10,
+          "rationale": "Ответы оператора ясные, последовательные, с предупреждением о необходимости ожидания и разъяснениями, без заметных сбоев.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22
+          ]
+        },
+        {
+          "criterion_id": "closure",
+          "value": true,
+          "rationale": "Source-based reviewer correction: The operator states the review/response next step, then closes with a concrete recap that no additional action is needed now, thanks the customer and says goodbye. Recap plus farewell satisfies Closing without requiring a separate further-help offer.",
+          "evidence_turns": [
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22
+          ]
+        },
+        {
+          "criterion_id": "critical",
+          "value": false,
+          "rationale": "В диалоге не выявлено оскорблений, предложений платных услуг в обход компании или раскрытия конфиденциальной информации.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22
+          ]
+        }
+      ],
+      "score": {
+        "final_score": 100.0,
+        "critical_flag": false
+      }
+    },
+    {
+      "conversation_id": "p2-ru-004",
+      "status": "ok",
+      "criteria": [
+        {
+          "criterion_id": "contact",
+          "value": false,
+          "rationale": "В первом ответе оператора (m0010) отсутствует приветствие и представление на языке клиента.",
+          "evidence_turns": [
+            10
+          ]
+        },
+        {
+          "criterion_id": "discovery",
+          "value": null,
+          "rationale": "Клиент ясно сформулировал проблему и контекст (невозможность вывода денег, просьба проверить счёт), оператор имел достаточно данных для ответа с самого начала. N/A: Данных для ответа хватало с самого начала.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "criterion_id": "identification",
+          "value": false,
+          "rationale": "Source-based reviewer correction: The human discloses a restriction on this specific customer account before any identity confirmation; the customer explicitly says identity has not been confirmed. Verification was required before that protected disclosure, so No rather than N/A.",
+          "evidence_turns": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ]
+        },
+        {
+          "criterion_id": "consultation",
+          "value": 10,
+          "rationale": "Оператор сообщил о наличии ограничения на вывод и указал, где смотреть детали, но не дал полного разъяснения по сути проблемы и не предложил следующий шаг или помощь.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "criterion_id": "empathy",
+          "value": false,
+          "rationale": "Оператор не выразил вежливость или реакцию на неудобство клиента, не было проявлено эмпатии.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "criterion_id": "dialogue",
+          "value": 4,
+          "rationale": "Source-based reviewer correction: Undefined references (\"там оно\", \"тот раздел\") force the customer to ask what restriction and which section; they ask where to look again. This matches the 4-point re-asking anchor, not the 7-point single understandable lapse.",
+          "evidence_turns": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "criterion_id": "closure",
+          "value": false,
+          "rationale": "Оператор закрыл чат без подведения итогов, предложения дальнейшей помощи и прощания.",
+          "evidence_turns": [
+            14,
+            15
+          ]
+        },
+        {
+          "criterion_id": "critical",
+          "value": true,
+          "rationale": "Source-based reviewer correction: The human reveals account-specific withdrawal-restriction information before identification, and the customer explicitly confirms no verification occurred. This is a confidential account-data disclosure; flag it separately without automatically zeroing the score.",
+          "evidence_turns": [
+            12,
+            13
+          ]
+        }
+      ],
+      "score": {
+        "final_score": 18.82,
+        "critical_flag": true
+      }
+    }
+  ]
+}

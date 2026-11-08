@@ -1,5 +1,11 @@
 # Implemented workflow improvements
 
+Control release: [33 - real FBroker evaluation, review and submission](33-fbroker-control-submission.md). FBroker10 all complete,16 source-based review corrections with originals retained,10ok/80 judged criteria and exact-format validation. Added authorized model estimate$0.06653520; Swap3 saved with zero evaluations. Private publication proceeds; owner public handoff and official freeze remain separate.
+
+Presentation: [32 - editable six-slide deck and presenter guide](32-presentation-deck.md). Saved-data evidence, native scoring table, actual screenshots and speaker notes;447-word script planned for4:30. Six rendered slides visually reviewed; source totals and preservation verified. No new inference or publication. [Presenter script](../PRESENTATION.md). The deck supports the required app demonstration; actual spoken rehearsal/control acceptance remain uncompleted.
+
+Rehearsal status: [31 - technical saved-result walkthrough](31-guided-demo-rehearsal.md). The agent's screen flow completed in **4:52**, including evidence, separate appeal/review with original retained, v6 save and clearly historical v2 provenance. The owner confirmed **no spoken rehearsal was performed**, then paused it until saying proceed. Zero model requests; all 249 main results/protected files preserved. Offline preparation may continue; no narration/checkpoint advance during the pause.
+
 Private publication of the tested submission adapter, queue repair and DEV results: [30 - commit, push and remote verification](30-private-submission-push.md). Publication preserves all saved results and the zero-spend/private-repository constraints; final receipts distinguish a private push from official public delivery or control acceptance.
 
 Latest required delivery work: [29 - new Results appendix, exact-format exporter/validator and DEV file](../audits/2026-11-08/04-appendix-submission-audit.md). Team Vector Field,65 real source IDs,64ok/one permittederror;44 new tests pass, full backend503 plus one separately executed saved-copy case pass, frontend184/build pass. No inference or fake control data. [Submission commands and one-hour plan](../SUBMISSION.md). Private repository/public-deadline instructions remain intact.

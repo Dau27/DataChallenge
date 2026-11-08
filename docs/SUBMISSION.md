@@ -7,13 +7,13 @@ Authority: CQA_Student_Guide_Appendix_Results.pdf, pages 1-3, supplied by the ow
 | Repository path | Required coverage | Current state |
 | --- | --- | --- |
 | [results/dev/results.json](../results/dev/results.json) | All 65 DEV dialogs: 60 chats and five calls | Committed and pushed privately in **ed0b96e**: **64 ok / one error**, remote bytes verified |
-| results/prod/results.json | Exactly ten organizer control chats, including error records | Not created; actual data/access still unavailable |
+| [results/prod/results.json](../results/prod/results.json) | Exactly ten organizer control chats, including error records | Real FBroker10, all10ok/zeroerror; original model results retained, effective judgments reviewed and independently validated |
 
-The owner will make the repository public at the deadline. Both real files must be committed, pushed and publicly available before stop-code; a local file or commit alone is insufficient. Do not infer official timing from this machine's clock. The owner currently expects control access in about two hours; the exact group/access instructions still come from organizers.
+The owner will make the repository public at the deadline. Both real files must be committed, pushed and publicly available before stop-code; a local file or commit alone is insufficient. Do not infer official timing from this machine's clock. The owner earlier estimated control access in about two hours; this is not an anchored event timestamp or live countdown. The exact group/access instructions still come from organizers.
 
 The DEV file and tested implementation have now been pushed to the existing private repository. Independent advertisement/fetch/full-tree/source checks and exact DEV byte comparison passed; authenticated GitHub metadata confirms it remains private. [Publication receipts](improvements/30-private-submission-push.md). This is not a claim of public organizer delivery, PROD acceptance or official freeze.
 
-No PROD IDs, judgments or placeholder results were invented. The DEV error preserves p4-ru-005: its reviewed self-introduction remains unclear and the final total is withheld. The appendix explicitly permits a record with status=error, criteria=[], score=null and an error reason; it must not become an invented zero or an invalid N/A for contact.
+No PROD IDs, judgments or placeholder results were invented: FBroker was fetched from the supplied organizer GET and processed with the initial eight-criterion checklist. The owner authorized up to$0.86 extra estimated model cost; actual added accounting was$0.06653520. Sixteen source-based review replacements preserve all originals; they are not independent labels. [Control receipts](improvements/33-fbroker-control-submission.md). Swap3 is saved but not evaluated/exported. The DEV error preserves p4-ru-005: its reviewed self-introduction remains unclear and its total withheld. Errors must not become invented zero scores or invalid Contact=N/A.
 
 ## Exact-format export and validation
 
