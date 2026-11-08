@@ -29,11 +29,14 @@ This file is an implementation specification, not evidence that any software, ev
 | C1 | `CQA_Chat_Quality_Checklist 1.pdf`, p. 1 | Eight initial criteria, weights, answer types and N/A conditions. |
 | C2 | Same checklist, p. 2 | Numerical anchors, weighting, N/A redistribution, rounding, exclusions. |
 | C3 | Same checklist, p. 3 | Evidence rules, No versus N/A, interpretation examples. |
+| A1 | `CQA_Student_Guide_Appendix_Results.pdf`, p. 1 | Required results/dev/results.json and results/prod/results.json;65 DEV and10 control records; obtain/process/validate/commit/push within hour23-24. |
+| A2 | Same appendix, p. 2 | Results JSON1.0 envelope, team/model disclosure, canonical criterion IDs, rationale/evidence and numeric score. |
+| A3 | Same appendix, p. 3 | Strict values, one-based full-transcript turn indices, N/A/flag rules and explicit error records; UTF-8 and exact10 control IDs. |
 | B | `Data 2 (1) 1.pdf` | Company background only; not a technical specification or brokerage policy manual. |
 
-Official requirements and initial scoring semantics come from G1–G4 and C1–C3. Architecture, storage formats, uncertainty states, versioning mechanisms, test strategy and milestones below are **engineering decisions**, not additional organizer requirements. Preserve that distinction in documentation and presentations.
+Official requirements and initial scoring semantics come from G1–G4 and C1–C3, with A1–A3 added by the owner on8November2026 as the organizer submission contract. Architecture, internal storage formats, uncertainty states, versioning mechanisms, test strategy and milestones below are **engineering decisions**, not additional organizer requirements. Preserve that distinction in documentation and presentations.
 
-If an explicit organizer clarification changes a requirement, record it with its provenance and update the configuration/specification. Do not silently reinterpret contradictory instructions. The companion `initial_checklist.json` encodes the initial rubric; criterion IDs and its JSON structure are implementation choices.
+If an explicit organizer clarification changes a requirement, record it with its provenance and update the configuration/specification. Do not silently reinterpret contradictory instructions. The companion `initial_checklist.json` encodes the initial rubric; internal IDs/structure remain engineering choices. A2/A3 now prescribe canonical wire IDs:contact,discovery,identification,consultation,empathy,dialogue,closure,critical. Preserve existing internal snapshots and translate at export rather than renaming saved results.
 
 ### Required product boundaries
 
@@ -369,13 +372,15 @@ Record actual commands and outcomes in `CURRENT_CONTEXT.md`. Unrun tests are “
 
 ## 12. Data handling, submission and demonstration
 
-The source guide calls for an open Git repository and a README, not publication of private client data. [G4] Ignore environment files, keys, downloaded DEV/control payloads, recordings, databases and private URLs. Commit only safe synthetic fixtures. Do not claim permission to redistribute supplied data or source PDFs. Avoid publishing an unauthenticated deployment containing real conversations. Keep third-party data handling within organizer permission; do not invent consent or compliance assurances.
+The source guide calls for an open Git repository and a README. [G4] The later appendix additionally requires prescribed result summaries at results/dev/results.json (65 DEV) and results/prod/results.json (10 real control), committed/pushed before stop-code. [A1-A3] This does not authorize publishing full client transcripts, source payloads, recordings, databases, credentials, private URLs or source PDFs. Keep those ignored. Only safe synthetic fixtures and the explicitly prescribed result fields belong in the delivery repository. Avoid publishing an unauthenticated deployment containing real conversations; do not invent consent or compliance assurances.
+
+Submission format1.0 requires team_name (Vector Field, supplied by user), actual model disclosure, original conversation IDs, eight canonical criterion IDs, raw anchor values/valid null=N/A, nonempty rationale and evidence_turns indexed from1 across the full original transcript. final_score is numeric and critical_flag matches critical without an automatic-zero penalty. Incomplete/failed cases retain their ID with status=error, criteria=[], score=null and a reason. The final hour includes obtaining/assessing all10 control chats, validation, commit and push. Never invent missing control IDs/results. The dedicated offline scripts/export_submission.py translates internal IDs without changing original snapshots; docs/SUBMISSION.md records commands. Source/evidence/score validation is not independent semantic accuracy.
 
 Prepare the repository and README, but do not claim submission or public publication unless it actually occurred. Use an explicitly supplied repository target and authorized push workflow. Record any manual submission step still needed.
 
 Five-minute demonstration:
 
-Execution status, 7 November 2026: demonstration work is deferred at the user's explicit request. Retain this outline as reference; do not start preparation or rehearsals until the user resumes that work.
+Execution status, 8 November 2026: the user resumed demonstration preparation and verification. Proceed on disposable private copies without paid inference. Keep the repository private until the owner changes visibility at the deadline. The new DEMO.md records actual technical rehearsal evidence; do not equate saved inference, a newly saved draft or automated timing with a fresh model evaluation or a timed spoken presentation. Organizer control access remains unavailable.
 
 | Time | Action |
 |---|---|

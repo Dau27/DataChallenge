@@ -1,6 +1,6 @@
 # Local operations
 
-This is the technical companion to the [judge-facing README](../README.md). Current owner instructions keep repository access private, paid inference paused and the presentation deferred. Organizer control data are unavailable.
+This is the technical companion to the [judge-facing README](../README.md). Current owner instructions keep repository access private and paid inference paused. [Demo preparation](DEMO.md) has resumed using disposable zero-spend copies; spoken timing remains unmeasured. Organizer control data are unavailable.
 
 ## Configuration and startup
 
@@ -53,6 +53,8 @@ Stop this server and close that shell before reopening the normal workspace. Do 
 Bundles are unencrypted full private SQLite copies, including transcripts and recording URL references. They exclude `.env`, external budget-baseline files, media, archived references and browser filter presets; preserve those separately. Keep bundles under ignored `local_data` or another protected private directory. Checksums detect damage relative to a trusted manifest, not malicious replacement of both files. See [backup/recovery limits](improvements/21-backup-recovery.md).
 
 ## Data import and offline reports
+
+For the organizer's newly required results/dev/results.json and results/prod/results.json, use the dedicated [Results JSON1.0 submission commands](SUBMISSION.md). Normal archival JSON/CSV exports remain a different format. Export/validation are read-only and free; genuine control inference still requires later authorization. Registered team is Vector Field; current selected DEV model/cost evidence is in README.
 
 With an authorized saved organizer JSON file:
 

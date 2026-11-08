@@ -1,6 +1,10 @@
 # Stage 7 — Demo and submission readiness
 
-Status: **demo execution is deferred at the user's request**. Existing technical evidence and runbooks are retained. No new demo preparation, presentation or rehearsal is being performed; timed presentation/public submission are not claimed complete.
+Status, 8 November: **demo preparation resumed by the user**. [Fresh rehearsal report](../improvements/28-demo-verification.md): three real DOM/local-API cases passed with37 requests and cold restart; actual browser evidence/appeal/reviewer100-to-92.31/new-v6-save/historical-v2 flow observed on a separate copy. Fixed an actual selected-run queue-link mismatch;184 frontend tests/one paid opt-in skipped and final production build pass. No response mocks or paid requests. [Five-minute guide](../DEMO.md) ready; measured spoken timing and a fresh paid changed-criterion evaluation remain pending. The [new Results appendix adapter and DEV65 file](../audits/2026-11-08/04-appendix-submission-audit.md) are also ready locally. Repository stays private until the owner's deadline action; genuine control remains unavailable.
+
+## Earlier readiness records
+
+The deferred-demo statements below describe earlier tasks, before the owner's latest instruction to resume. Earlier test counts remain historical; the current full-suite baseline is 460 backend / 182 client/build.
 
 Final offline preparation, 8 November: the [judge-facing README](../../README.md), [operations guide](../OPERATIONS.md) and [fresh private recovery handoff](../improvements/26-judge-readiness.md) are ready. The owner explicitly continues to hold public repository access; no visibility change or submission was attempted. Organizer control access is unavailable. Applicable latest app acceptance is 460 backend / 182 client/build at tested source 535444d, not the older counts below. This documentation/recovery stage does not resume presentation preparation or official freeze.
 

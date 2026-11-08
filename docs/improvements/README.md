@@ -1,5 +1,11 @@
 # Implemented workflow improvements
 
+Private publication of the tested submission adapter, queue repair and DEV results: [30 - commit, push and remote verification](30-private-submission-push.md). Publication preserves all saved results and the zero-spend/private-repository constraints; final receipts distinguish a private push from official public delivery or control acceptance.
+
+Latest required delivery work: [29 - new Results appendix, exact-format exporter/validator and DEV file](../audits/2026-11-08/04-appendix-submission-audit.md). Team Vector Field,65 real source IDs,64ok/one permittederror;44 new tests pass, full backend503 plus one separately executed saved-copy case pass, frontend184/build pass. No inference or fake control data. [Submission commands and one-hour plan](../SUBMISSION.md). Private repository/public-deadline instructions remain intact.
+
+Demo resumed: [28 - zero-spend rehearsal and final workflow checks](28-demo-verification.md). Production build and three actual React DOM/local-API checks passed, 37 real requests, supported 100-to-92.31 review with original retained, substantive checklist save and cold restart. Actual browser evidence/review/version-save checks also passed after the queue-link fix; spoken timing remains unmeasured. No API spending; repository stays private until the owner releases it at the deadline. Earlier deferred-demo records below are historical.
+
 Private documentation publication: [27 - README/report commit, push and remote verification](27-private-documentation-push.md). The owner authorized only the existing private repository; no public access, organizer submission, inference spending or demo work.
 
 Latest offline final stage: [26 - judge-facing README and private recovery handoff](26-judge-readiness.md). Clear requirement/feature mapping and startup, fresh actual backup/verify/fresh-path recovery with all 15 tables/schema and 249 results preserved, and a 65-original/520-judgment correctly unlabeled offline report. Source unchanged; no redundant app-suite rerun, no API spend. The owner explicitly holds public access; organizer control data are unavailable and the demo stays deferred.

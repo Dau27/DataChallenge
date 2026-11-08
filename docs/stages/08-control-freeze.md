@@ -2,6 +2,8 @@
 
 Status: **not reached; organizer inputs unavailable**.
 
+Preparation updated after the new Results appendix: [exact-format exporter/validator and DEV65 file](../audits/2026-11-08/04-appendix-submission-audit.md) are implemented and tested, team Vector Field. Real PROD must contain exactly10 original IDs, including allowed error records, and be committed/pushed with DEV before stop-code. [One-hour procedure](../SUBMISSION.md). Owner expects access in about two hours; exact identifier/timing still absent. No control evaluation, fake PROD, public release or paid call.
+
 Owner confirmation, 8 November: organizer control access is unavailable and repository publication must remain deferred. Preparation of [judge documentation and private recovery](../improvements/26-judge-readiness.md) is complete; the control run and public handoff are not current implementation tasks. No additional credential request, guessed dataset, model request, organizer message or official freeze is made.
 
 Preparation is complete in [CONTROL_AND_FREEZE.md](../CONTROL_AND_FREEZE.md): required inputs, safe import/versioning, combined budget reconciliation, actual-commit recording and permitted post-freeze UI actions. No model request was made to prepare it.

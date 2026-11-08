@@ -20,4 +20,5 @@ local_data/
 *.log
 playwright-report/
 test-results/
+.cqa-results-*.tmp
 !.gitkeep

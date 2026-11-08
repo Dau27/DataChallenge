@@ -13,6 +13,11 @@ import CriterionBreakdown from './CriterionBreakdown';
 import { useReviewPriority } from './ReviewPriority';
 import CohortComparison from './CohortComparison';
 
+const reviewHref = (row: Conversation) => {
+  const source = `#conversation/${encodeURIComponent(row.id)}`;
+  return row.evaluation ? `${source}?evaluation=${encodeURIComponent(row.evaluation.id)}` : source;
+};
+
 export default function Conversations({ rows, access, budget, selectedVersion, completed, needsReview, busy, run, evaluate, refresh, notify, onOpenPair }: {
   rows: Conversation[]; access: Access | null; selectedVersion: number; completed: number; needsReview: number;
   busy: boolean; run: Run; evaluate: (ids: string[]) => Promise<void>; refresh: () => Promise<void>; notify: (message: string) => void;
@@ -127,7 +132,7 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
         <th>Conversation</th><th>Language</th><th>Channel</th><th>Assessment</th><th>Score / 100</th><th></th>
       </tr></thead><tbody>{filtered.map(row => <tr key={row.id}>
         <td><input type="checkbox" aria-label={`Select ${row.source_id}`} checked={checked.includes(row.id)} onChange={e => setChecked(e.target.checked ? [...checked, row.id] : checked.filter(id => id !== row.id))} /></td>
-        <td><a className="conversation-link" href={`#conversation/${row.id}`}>{row.source_id}</a><small>{row.group_id} · revision {row.revision} · {row.message_count} messages</small>
+        <td><a className="conversation-link" href={reviewHref(row)}>{row.source_id}</a><small>{row.group_id} · revision {row.revision} · {row.message_count} messages</small>
           {searching && <TranscriptMatches key={JSON.stringify([row.id, row.content_hash, query, speaker])} row={row} query={query} speaker={speaker} />}
         </td>
         <td><span className="language-chip">{row.language}</span></td><td>{row.channel === 'voice call' ? '◉ Call' : '◫ Chat'}<small>{row.channel === 'voice call' && (row.audio_available ? 'Recording link available' : 'Recording unavailable')}</small></td>
@@ -137,7 +142,7 @@ export default function Conversations({ rows, access, budget, selectedVersion, c
           {row.critical_findings?.map(target => <small key={target.criterion_id}><a className="critical-link" href={`#conversation/${row.id}?evaluation=${target.evaluation_id}&criterion=${target.criterion_id}`}>⚑ {target.criterion_name}</a></small>)}
           {priority.renderReasons(row.id)}
         </td>
-        <td className="score-cell">{row.evaluation?.total ?? '—'}</td><td><a className="open-link" href={`#conversation/${row.id}`}>Open ↗</a></td>
+        <td className="score-cell">{row.evaluation?.total ?? '—'}</td><td><a className="open-link" href={reviewHref(row)}>Open ↗</a></td>
       </tr>)}</tbody></table></div>
       {!filtered.length && !searchPending && !searchError && !priority.pending && !priority.error && <div className="empty"><strong>{rows.length ? 'No conversations match these filters.' : 'Your review queue is empty.'}</strong><p>{rows.length ? 'Adjust a filter to see more conversations.' : 'Import the organizer dataset or upload its JSON response to get started.'}</p></div>}
       <div className="table-foot">{filtered.length} of {rows.length} conversations <span className="table-scroll-hint">Scroll the table sideways for more columns.</span><span>States refer to the selected checklist version. No score means no resolved result.</span></div>

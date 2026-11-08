@@ -1,5 +1,7 @@
 # Original PDF requirements clarified - 8 November 2026
 
+**Superseded for submission details:** the owner subsequently supplied the Results appendix. It adds exact JSON1.0 and required DEV/PROD files with65/10 records and a one-hour control/push window. The [new four-PDF audit and implemented adapter](04-appendix-submission-audit.md) govern current submission readiness. Earlier statements about absent output-schema instructions describe only the three materials then supplied. Demo preparation has also resumed.
+
 Private publication follow-up: this clarification and the judge-facing documentation were subsequently committed/pushed at verified checkpoint f4eabbd; [stage 27](../../improvements/27-private-documentation-push.md) records the private repository/tree/source checks and final receipt. Statements about local/uncommitted reports below describe the original audit task. No public visibility change, organizer submission or inference run.
 
 The implemented and previously tested application covers the specified product workflow. This reread found no additional mandatory feature to build. It does not establish perfect judgment accuracy or completed organizer acceptance. Earlier advice mixed required delivery items with optional engineering validation; the distinctions below supersede that advice.

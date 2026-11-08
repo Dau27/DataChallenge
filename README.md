@@ -1,10 +1,12 @@
 # Conversation Quality Analytics
 
+**Team: Vector Field.** Organizer submission: [DEV results](results/dev/results.json), [format and control-hour procedure](docs/SUBMISSION.md).
+
 A working Freedom Broker CQA prototype for evaluating **human operator performance** in Russian, Kazakh and English. Reviewers can trace each judgment to the conversation, challenge a criterion, and save a reasoned decision while retaining the original assessment.
 
 **Core workflow:** import → select a saved checklist → evaluate → inspect evidence → appeal → review → recalculate and preserve the final result.
 
-The required product workflow is implemented and tested. Repository access remains private at the owner's request. Organizer control data are unavailable; control acceptance and the official freeze are pending. The five-minute presentation remains deferred.
+The required product workflow is implemented and tested. Repository access remains private until the owner releases it at the deadline. Organizer control data are unavailable; control acceptance and the official freeze are pending. Five-minute demo preparation has resumed: the [presenter guide and zero-spend rehearsal](docs/DEMO.md) are ready; spoken timings remain unmeasured.
 
 ## What judges can assess
 
@@ -16,6 +18,7 @@ The required product workflow is implemented and tested. Repository access remai
 | Correct scoring | Deterministic weighted arithmetic, N/A redistribution, section percentages, two-decimal total and a separate critical-violation flag. |
 | Appeals and review | Save a criterion-level appeal/comment. A separate reviewer action confirms or changes the answer with a reason. Recalculate locally and retain original, decision and final result. |
 | Calls and persistence | Inspect transcripts and open the supplied recording player link. Saved sources, checklist versions, assessments and review history survive restart. |
+| Organizer Results JSON 1.0 | Offline export/validation of all original IDs, canonical criteria, full-transcript evidence positions and honest error records. DEV65 prepared; genuine control10 pending. |
 
 The HTML/CSS/JavaScript frontend has a separate API boundary for later Dynamics 365 adaptation. Registration is unnecessary for this prototype; appeal and review are separate actions rather than production access-controlled roles.
 
@@ -67,32 +70,39 @@ Evidence excerpts come from saved transcript messages. Validation checks allowed
 
 | Evidence | Recorded outcome |
 | --- | --- |
-| Backend acceptance | **460 tests passed** in both the existing and freshly installed environments |
-| Frontend acceptance | **182 passed, one paid opt-in skipped**; TypeScript and production build passed |
+| Backend acceptance | **503 passed / one private-copy case skipped** in the full guarded run; that exact private case then **passed separately** on an isolated saved-data copy |
+| Frontend acceptance | **184 passed, one paid opt-in skipped**; TypeScript and production build passed |
 | Installation and persistence | Actual clean setup, empty/saved-data startup, restart, backup/restore and CLI handoff passed |
 | Private saved DEV results | **65 conversations: 35 RU / 15 KZ / 15 EN; 60 chats and five calls. 64 complete / one needs review** |
 | Final offline recovery check | Fresh private bundle verified and restored; all **15 tables/schema and 249 historical evaluations** preserved; zero provider/network attempts |
+| Required DEV submission | **65 original IDs / 64 ok / one explicit error**, validated against the new appendix and the original API transcript ordering |
 
-The application source matches tested merge `535444d9e8e905c24413faf70f98c1b52da6eac6`; later judge-readiness edits are documentation only. The 460/182 counts are prior exact-source acceptance, not suites rerun for this README. The 249 historical evaluations include previous attempts and revisions; they are not 249 separate DEV conversations.
+The latest working candidate adds the organizer submission adapter and fixes queue links to open the exact saved run displayed for the selected checklist. The counts above are actual checks of those changes. Earlier tested merge `535444d9e8e905c24413faf70f98c1b52da6eac6` retains clean-install/recovery evidence; the current changes are recorded in the [updated audit](docs/audits/2026-11-08/04-appendix-submission-audit.md). The 249 historical evaluations include previous attempts and revisions; they are not 249 separate DEV conversations. Do not infer that local working changes have already been pushed.
 
 Independent judgment accuracy has **not** been measured. The offline quality report correctly remains unlabeled for 65 selected originals / 520 judgments. One call's self-introduction is unclear, so its effective total is withheld and the original retained. Saved DEV results predate the current v13 prompt; no fresh v13 or organizer-control result is claimed. The PDFs do not define a weighted project-grade formula, and earlier informal readiness estimates are not official jury scores.
 
 ### Model and cost
 
-The provider adapter uses OpenAI Responses structured output; each result retains its actual model, prompt/configuration and usage provenance. One recorded real RU evaluation used **gpt-5.4-mini**, one request, 3,347 input and 1,088 output tokens, with an estimated cost of **$0.00740625 (about $0.0074)** at its recorded rates. This is a historical example, not a current price quote or a fixed cost for every dialogue.
+The provider adapter uses OpenAI Responses structured output; each result retains its actual model, prompt/configuration and usage provenance. The selected DEV65 used **gpt-4.1-mini**: **72 recorded requests**, estimated total **$0.3983244**, averaging **about $0.00613 per evaluation**, including recorded retries/repairs. The observed range was $0.0048448-$0.016662 at the saved rates. These are historical usage estimates, not a current price quote, invoice or fixed cost for every dialogue. Earlier gpt-5.4-mini vertical-slice evidence is retained in the stage reports.
 
 Whole-evaluation accounting includes recorded requests, retries and repairs. Estimates require complete usage and identified rates; unknown usage is not treated as free. The shared budget covers UI evaluation, CLI runs, retries and provider checks. The budget is an application spending guard, not a provider account balance. **No new inference spending was incurred during final offline preparation.**
+
+## Required result files
+
+The new organizer appendix requires **results/dev/results.json** for all65 DEV dialogs and **results/prod/results.json** for exactly10 real control chats. The prepared [DEV file](results/dev/results.json) uses Results JSON1.0 and the registered team name. Its unresolved call is represented by the explicitly permitted status=error shape, not an invented score. PROD is absent until genuine inputs arrive.
+
+Use the dedicated offline [submission commands](docs/SUBMISSION.md). Existing UI JSON/CSV downloads are archival reports and do not match the organizer contract. Both actual result files must be committed, pushed and available in the public repository before stop-code. Export/validation incur no inference cost; control assessment needs actual data and later authorized provider access/budget.
 
 ## Remaining event steps
 
 | Item | Current status |
 | --- | --- |
-| Public repository and organizer link handoff | Intentionally deferred by the owner; no visibility change or organizer submission in this stage |
-| Organizer control data and replacement-criterion challenge | Await organizer-provided access and instructions; no substitute results claimed |
+| Public repository and organizer link handoff | Owner will publish at the deadline; current repository remains private; final result-file push/receipt not claimed |
+| Organizer control data and replacement-criterion challenge | Await exact access/group; ten control chats and required PROD JSON must be processed/validated/pushed within the final hour |
 | Official frozen commit | Await official event timing/instruction; the tested checkpoint is not an official freeze |
-| At-most-five-minute presentation | Required by the guide; deferred at the owner's request |
+| At-most-five-minute presentation | Functional and actual browser review/checklist-save flow verified; spoken timing and a fresh paid changed-criterion evaluation remain pending |
 
-Optional A4/Letter and long multilingual paper-layout checks remain deferred and unverified. They do not block the specified core workflow. See the [literal PDF requirement check](docs/audits/2026-11-08/03-pdf-requirements-clarification.md) and [control/freeze procedure](docs/CONTROL_AND_FREEZE.md).
+Optional A4/Letter and long multilingual paper-layout checks remain deferred and unverified. They do not block the specified core workflow. The [latest four-PDF audit](docs/audits/2026-11-08/04-appendix-submission-audit.md) incorporates the new appendix; earlier no-submission-schema statements predate that material. See the [control/freeze procedure](docs/CONTROL_AND_FREEZE.md).
 
 ## Tests and technical details
 
@@ -108,6 +118,6 @@ Pop-Location
 
 The normal backend suite blocks real provider transport, and the paid frontend test is opt-in. Do not run `npm run live-smoke` or hosted diagnostic/batch scripts during a zero-spend check.
 
-The app uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite and deterministic Decimal scoring. One backend process serves the compiled frontend and API on loopback. Credentials, downloaded data, recordings, databases, private backups and source PDFs remain outside Git. Review exports can still contain private conversation content and should be handled as private material.
+The app uses React/TypeScript/Vite, FastAPI/Pydantic, SQLAlchemy/SQLite and deterministic Decimal scoring. One backend process serves the compiled frontend and API on loopback. Credentials, downloaded full data, recordings, databases, private backups and source PDFs remain outside Git. Only the prescribed result summaries are prepared for repository submission under the appendix; archival review exports can contain additional private conversation content and should remain private.
 
 For detailed evidence and development history, see [final offline preparation](docs/improvements/26-judge-readiness.md), [tested merge/handoff](docs/improvements/24-main-sprint-merge.md), [stage reports](docs/stages/README.md), [feature reports](docs/improvements/README.md) and [CURRENT_CONTEXT.md](CURRENT_CONTEXT.md).

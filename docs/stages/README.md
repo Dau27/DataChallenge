@@ -2,6 +2,8 @@
 
 Each report records completed work, checks actually run, limitations, and the next step.
 
+Latest gate: [new Results appendix and submission adapter](../audits/2026-11-08/04-appendix-submission-audit.md). Team Vector Field's real DEV65 JSON is prepared (64ok/one honesterror); PROD10 awaits actual control.44 new targeted tests pass; full backend503 plus the separately executed private-copy case pass, frontend184/one paid opt-in skipped and build pass. Actual browser review/new-version save observed on a private copy. Spoken timing and final public delivery remain pending; no API spending. Older counts below are historical.
+
 | Stage | Status | Report |
 | --- | --- | --- |
 | 0 — Access | Passed | [Access checks](00-access.md) |
@@ -11,10 +13,10 @@ Each report records completed work, checks actually run, limitations, and the ne
 | 4 — Appeals | Passed | [Appeals and review history](04-appeals-review.md) |
 | 5 — Validation | Processing and targeted checks passed; semantic accuracy unverified; manual packet removed from delivery scope | [Validation results](05-validation.md) |
 | 6 — Reliability | Passed | [Clean installation and recovery](06-reliability.md) |
-| 7 — Demo | Prior technical checks passed; demo execution deferred by user; public submission pending | [Demo readiness](07-demo-readiness.md) |
+| 7 — Demo | Preparation resumed; three real DOM/API checks and cold restart passed; spoken timing pending, public submission held | [Demo readiness](07-demo-readiness.md) |
 | 8 — Control/freeze | Awaiting organizer inputs | [Control and freeze](08-control-freeze.md) |
 
-Final offline stage, 8 November: the [judge-facing README](../../README.md), [operations guide](../OPERATIONS.md) and [fresh private recovery handoff](../improvements/26-judge-readiness.md) are ready. All 15 recovered tables/schema and 249 historical evaluations match independently; the actual 65-original quality report correctly remains unlabeled. The owner holds public access, organizer control data are unavailable, and the presentation remains deferred. No new API spending or official freeze.
+Final offline stage, 8 November: the [judge-facing README](../../README.md), [operations guide](../OPERATIONS.md) and [fresh private recovery handoff](../improvements/26-judge-readiness.md) are ready. All 15 recovered tables/schema and 249 historical evaluations match independently; the actual 65-original quality report correctly remains unlabeled. The owner holds public access and organizer control data are unavailable. [Demo preparation subsequently resumed](../improvements/28-demo-verification.md): real DOM/API and restart checks passed, spoken timing pending. No new API spending or official freeze.
 
 Current DEV: **64 complete / one needs review**, no latest failed or unstarted records. [Zero-spend corrections](../audits/2026-11-07/08-zero-spend-scoring-corrections.md) fix two supported KZ judgments and retract an unsupported call introduction pending recording review. Originals remain unchanged; 26/26 prior diagnostics and 130-snapshot arithmetic still pass. Earlier 65-complete and 59/6 or 44/21 counts are historical.
 

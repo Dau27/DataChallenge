@@ -14,6 +14,32 @@ const rows = [row('KZ_DONE', 'KZ'), row('KZ_REVIEW', 'KZ', true, 2), row('RU_REV
 const props = { rows, access: null, selectedVersion: 1, completed: 1, needsReview: 3, busy: false,
   run: async (action: () => Promise<void>) => { await action(); }, evaluate: vi.fn(), refresh: vi.fn(), notify: vi.fn() };
 
+it('opens the exact saved run displayed in the selected-checklist queue, including after a version change', () => {
+  const first = row('CASE', 'RU');
+  first.evaluation = { ...first.evaluation!, id: 'SELECTED_V1_RUN', total: '92.31' };
+  const before = structuredClone(first);
+  const view = render(<Conversations {...props} rows={[first]} />);
+  const assertLinks = (runId: string) => {
+    const item = screen.getByRole('link', { name: 'TEST_CASE' });
+    const expected = `#conversation/CASE?evaluation=${runId}`;
+    expect(item.getAttribute('href')).toBe(expected);
+    expect(within(item.closest('tr')!).getByRole('link', { name: 'Open ↗' }).getAttribute('href')).toBe(expected);
+  };
+  assertLinks('SELECTED_V1_RUN');
+  const second = { ...first, evaluation: { ...first.evaluation!, id: 'SELECTED_V2_RUN', checklist_id: 2, total: '50.00' } };
+  view.rerender(<Conversations {...props} rows={[second]} selectedVersion={2} />);
+  assertLinks('SELECTED_V2_RUN');
+  expect(first).toEqual(before);
+});
+
+it('keeps transcript-only queue navigation available when the selected checklist has no assessment', () => {
+  const unrated = { ...row('UNRATED', 'EN'), evaluation: null };
+  render(<Conversations {...props} rows={[unrated]} />);
+  const item = screen.getByRole('link', { name: 'TEST_UNRATED' });
+  expect(item.getAttribute('href')).toBe('#conversation/UNRATED');
+  expect(within(item.closest('tr')!).getByRole('link', { name: 'Open ↗' }).getAttribute('href')).toBe('#conversation/UNRATED');
+});
+
 it('counts quick views within current source filters and changes only the review filters', () => {
   const fetch = vi.spyOn(globalThis, 'fetch');
   render(<Conversations {...props} />);
