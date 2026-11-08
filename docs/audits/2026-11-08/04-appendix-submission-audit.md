@@ -2,7 +2,7 @@
 
 ## Verdict
 
-The new appendix revealed a real missing delivery requirement: archival JSON exports were not valid organizer submissions, and both required root result files were absent. That earlier audit conclusion is now superseded. Implemented and tested an offline exact-format exporter/validator and created the real [DEV submission file](../../../results/dev/results.json) for **Vector Field**. It contains **65 original IDs / 64 ok / one explicit error**. It is prepared locally, not claimed submitted or publicly available.
+The new appendix revealed a real missing delivery requirement: archival JSON exports were not valid organizer submissions, and both required root result files were absent. That earlier audit conclusion is now superseded. Implemented and tested an offline exact-format exporter/validator and created the real [DEV submission file](../../../results/dev/results.json) for **Vector Field**. It contains **65 original IDs / 64 ok / one explicit error**. The tested implementation and DEV file are now committed and pushed to the private repository with remote contents verified; public delivery and organizer acceptance are not claimed.
 
 Core workflow/scoring checks remain valid; no architecture rebuild or model reevaluation was needed. PROD cannot be created until the ten real control inputs arrive. Independent semantic accuracy, current-v13/unseen control behavior, spoken demo timing, official freeze and final public delivery remain unverified. No official project-score formula is provided by these PDFs.
 
@@ -34,7 +34,7 @@ Appendix SHA-256: cf9e282fee6ee6fdc9ac0b857a513e21ff3010ef99db8e4d61df64f8c079f7
 | Missing/unresolved/failed result retained honestly | p4-ru-005 exported as error with empty criteria/null score/reason. Contact is not incorrectly given N/A; nothing is scored zero to disguise a failure. |
 | Required DEV file | Created at results/dev/results.json;65 records,64ok/oneerror,512 scored judgments. Independent validator agrees with the new exporter; no duplicates/gaps/internal UUIDs. |
 | Required PROD file | Intentionally absent pending actual ten chats; no placeholder/error IDs invented. CLI supports another imported group without code edits. |
-| Commit/push/public availability before stop-code | Current new files/fixes are local at this audit checkpoint. The prior b29c791 push remains private; owner publication/final push/freeze must be verified when performed. |
+| Commit/push/public availability before stop-code | Tested code and DEV committed/pushed privately in ed0b96e; remote tree/source/DEV bytes verified. Actual PROD, owner publication/final event push/freeze remain pending. |
 | Clear startup and paid-model cost | README/operations updated. Selected65 actual model gpt-4.1-mini,72 recorded request attempts, estimated total$0.3983244 /mean$0.00612807 per evaluation at recorded rates, not a fresh quote or account balance. |
 | Presentation at most five minutes | Script and functional/browser flow prepared; no measured spoken rehearsal. No false claim that automated test time equals presentation duration. |
 
@@ -56,13 +56,15 @@ Private commands/evidence are retained under ignored local_data/appendix_audit_2
 
 ## Final preservation and handoff checks
 
-All 15 main tables and schema, 249 saved evaluations and 30 protected files match the fresh baseline. All 249 original assessments/scores in the disposable presenter copy also remain identical. The two frontend fixes were already included in that baseline; of its 159 non-Markdown files, only the documented atomic-temp ignore rule changed afterward. Four new submission source/test/data files bring the current total to 163. HEAD and the Git index are unchanged; these are local working changes, not a new commit or push.
+All 15 main tables and schema, 249 saved evaluations and 30 protected files match the fresh baseline. All 249 original assessments/scores in the disposable presenter copy also remain identical. The two frontend fixes were already included in that baseline; of its 159 non-Markdown files, only the documented atomic-temp ignore rule changed afterward. Four new submission source/test/data files bring the current total to 163. HEAD and the Git index were unchanged at that pre-publication checkpoint; the subsequent authorized private push is recorded below.
 
 The final scan checked **247 candidate files, 514 reachable history blobs, 84 Markdown files and 426 local links**: zero credential/private-path matches, valid fences and clean `git diff --check`. All ten PowerShell command blocks across five operational documents parse; this syntax check did not execute the commands. Private presenter links/generator now match the verified port 8000, with their prior versions preserved.
 
 The preservation helper initially expected the ignore rule at the end of the file; its assertion was corrected to match the actual insertion before `!.gitkeep`, then the complete check passed. This was a helper correction, not an application/data fix. Private receipts: final_preservation.json, final_checks.json and documentation_commands.json. The cold handoff still matches every current non-Markdown file and the exact validated DEV bytes.
 
 ## Remaining work and boundaries
+
+**Private publication completed:** implementation ed0b96eb5b9acd8b6042a48d2cb5ebd56f09b2d9 was pushed from b29c791; independent advertisement/fresh fetch and complete tree 531181aa4111c85b7ace7c220440daec3f2aa422 match. All 163 tested source/data blobs and exact DEV bytes match; fresh CLI/independent revalidation confirms 65 records/64 ok/one error/512 judgments with zero forbidden attempts. Metadata before/after confirms private visibility. All main rows/schema/protected files remain unchanged; no inference or redundant suite run. [Publication report and final receipt procedure](../../improvements/30-private-submission-push.md). The report-only follow-up preserves this exact tested application/data version.
 
 Finish one measured spoken run; when control is genuinely released, import exactly that group and assess all ten records with later authorized provider access/budget, export/validate PROD and retain all failures. Commit/push both real files and tested code before stop-code; the owner will change visibility. Record actual remote/file/public/freeze evidence. The current zero-spend limit stays enforced and does not implicitly authorize control inference.
 

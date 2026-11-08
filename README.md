@@ -77,7 +77,7 @@ Evidence excerpts come from saved transcript messages. Validation checks allowed
 | Final offline recovery check | Fresh private bundle verified and restored; all **15 tables/schema and 249 historical evaluations** preserved; zero provider/network attempts |
 | Required DEV submission | **65 original IDs / 64 ok / one explicit error**, validated against the new appendix and the original API transcript ordering |
 
-The latest working candidate adds the organizer submission adapter and fixes queue links to open the exact saved run displayed for the selected checklist. The counts above are actual checks of those changes. Earlier tested merge `535444d9e8e905c24413faf70f98c1b52da6eac6` retains clean-install/recovery evidence; the current changes are recorded in the [updated audit](docs/audits/2026-11-08/04-appendix-submission-audit.md). The 249 historical evaluations include previous attempts and revisions; they are not 249 separate DEV conversations. Do not infer that local working changes have already been pushed.
+Tested implementation commit **ed0b96e** adds the organizer submission adapter and fixes queue links to open the exact saved run displayed for the selected checklist. It and the DEV file were pushed to the private repository; independent advertisement, fresh fetch, complete-tree and all 163 tested source/data blob checks passed. The [publication report](docs/improvements/30-private-submission-push.md) records exact verification. The counts above are actual acceptance of these changes; no new model evaluation was run for publication. Earlier tested merge `535444d9e8e905c24413faf70f98c1b52da6eac6` retains clean-install/recovery evidence; the [updated audit](docs/audits/2026-11-08/04-appendix-submission-audit.md) records current scope and limits. The 249 historical evaluations include previous attempts and revisions; they are not 249 separate DEV conversations.
 
 Independent judgment accuracy has **not** been measured. The offline quality report correctly remains unlabeled for 65 selected originals / 520 judgments. One call's self-introduction is unclear, so its effective total is withheld and the original retained. Saved DEV results predate the current v13 prompt; no fresh v13 or organizer-control result is claimed. The PDFs do not define a weighted project-grade formula, and earlier informal readiness estimates are not official jury scores.
 
@@ -97,7 +97,7 @@ Use the dedicated offline [submission commands](docs/SUBMISSION.md). Existing UI
 
 | Item | Current status |
 | --- | --- |
-| Public repository and organizer link handoff | Owner will publish at the deadline; current repository remains private; final result-file push/receipt not claimed |
+| Public repository and organizer link handoff | Tested code and DEV results pushed and privately verified; owner will publish at the deadline. PROD, public access and organizer receipt remain pending |
 | Organizer control data and replacement-criterion challenge | Await exact access/group; ten control chats and required PROD JSON must be processed/validated/pushed within the final hour |
 | Official frozen commit | Await official event timing/instruction; the tested checkpoint is not an official freeze |
 | At-most-five-minute presentation | Functional and actual browser review/checklist-save flow verified; spoken timing and a fresh paid changed-criterion evaluation remain pending |

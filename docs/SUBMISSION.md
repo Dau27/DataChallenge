@@ -6,10 +6,12 @@ Authority: CQA_Student_Guide_Appendix_Results.pdf, pages 1-3, supplied by the ow
 
 | Repository path | Required coverage | Current state |
 | --- | --- | --- |
-| [results/dev/results.json](../results/dev/results.json) | All 65 DEV dialogs: 60 chats and five calls | Prepared locally from saved effective results: **64 ok / one error** |
+| [results/dev/results.json](../results/dev/results.json) | All 65 DEV dialogs: 60 chats and five calls | Committed and pushed privately in **ed0b96e**: **64 ok / one error**, remote bytes verified |
 | results/prod/results.json | Exactly ten organizer control chats, including error records | Not created; actual data/access still unavailable |
 
 The owner will make the repository public at the deadline. Both real files must be committed, pushed and publicly available before stop-code; a local file or commit alone is insufficient. Do not infer official timing from this machine's clock. The owner currently expects control access in about two hours; the exact group/access instructions still come from organizers.
+
+The DEV file and tested implementation have now been pushed to the existing private repository. Independent advertisement/fetch/full-tree/source checks and exact DEV byte comparison passed; authenticated GitHub metadata confirms it remains private. [Publication receipts](improvements/30-private-submission-push.md). This is not a claim of public organizer delivery, PROD acceptance or official freeze.
 
 No PROD IDs, judgments or placeholder results were invented. The DEV error preserves p4-ru-005: its reviewed self-introduction remains unclear and the final total is withheld. The appendix explicitly permits a record with status=error, criteria=[], score=null and an error reason; it must not become an invented zero or an invalid N/A for contact.
 
