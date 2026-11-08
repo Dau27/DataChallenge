@@ -1,5 +1,7 @@
 # Three-chat implementation handoff
 
+**Latest status: MERGED INTO MAIN — local merge 535444d, 8 November.** Integration 0d95621 and the original working changes are preserved; zero conflicts and all 234 files retained byte-for-byte. Fresh full checks passed 460 backend / 182 client/build; clean setup, new-environment 460-test repeat, actual startup/restart and saved-data/recovery/quality CLI handoff passed. [Stage24 evidence](../improvements/24-main-sprint-merge.md). Builder worktrees remain intact. No API spend, push/publication or demo work. The earlier integration/baseline records below remain historical; public/event acceptance is not claimed.
+
 **Status: INTEGRATED — combined acceptance completed, 8 November 2026.** The original READY baseline and recovery checkpoint 91be713 are preserved. Latest cohort **28818fa** and print **be951f3** handoffs were merged locally without conflicts, mounted and tested together. **403 backend / 182 client passed, one paid opt-in skipped; production build and pip check passed.** [Integration report and visual limits](../improvements/22-cohort-print-integration.md). A4/Letter and long multilingual paper pagination remain unverified after native input control stopped. No API spend, remote publication or demo work.
 
 The coordinator must update this file to **READY** before the two builders edit code. Until then, builders can inspect existing code read-only and propose interfaces.

@@ -1,5 +1,9 @@
 # Other-chat status and updated prompts — 8 November 2026
 
+## Latest main handoff
+
+Accepted integration 0d95621, including cohort 28818fa, print be951f3, recovery and quality reporting, is now merged into local main at 535444d. Original working changes were checkpointed without losing content; no conflicts. Exact-source 460 backend / 182 client/build checks and a fresh-environment460-test repeat passed, alongside documented setup/startup/restart and private recovery/quality CLI handoff. All saved/protected data and existing builder worktrees are preserved. No other chat was restarted, rebased or overwritten; no outbound message was sent. [Merge evidence and remaining boundaries](../improvements/24-main-sprint-merge.md). No API spend, push or demo work.
+
 ## Latest integration acceptance
 
 Read the latest actual chat replies and verified their commits and clean assigned worktrees. Cohort **28818fa** supersedes d3242ef with owned legacy-metadata/response/identity/refresh repairs; print **be951f3** retains 7a6d2a7 code with resumed verification. Both chats were idle; no new chat or outbound message was required. Both handoffs were merged without conflicts into sprint-integration-20261108, retaining recovery and concurrent shared UI/history/research work.
