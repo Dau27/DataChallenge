@@ -1,5 +1,7 @@
 # Control data and official freeze
 
+Latest local work: [automated rubric repairs](improvements/34-automated-rubric-guards.md),538 backend tests passed with no provider spending. Submitted DEV/PROD bytes and all259 saved evaluations remain unchanged. Fixes are not committed/pushed by this task. Preserve private visibility and apply the freeze rules below; no new v14 control evaluation or official frozen-commit claim.
+
 Current status: genuine **FBroker10 has been processed and validated**, with all originals preserved; **Swap3 is saved and unevaluated**. Owner authorized up to$0.86 extra estimated model cost for FBroker; actual added estimate$0.06653520. Owner supplied **13:00** as stop-code; timezone uses client Asia/Bishkek. DEV/PROD were privately pushed and exact remote bytes verified at **dd6b708**; public access, organizer acceptance and official frozen-commit confirmation remain pending. [Actual control report](improvements/33-fbroker-control-submission.md). Older pre-release instructions below are historical where they refer to missing control access; retain the import/budget/freeze rules.
 
 **New organizer appendix:** exactly 10 control chats arrive at hour 23; receipt, assessment, validation, commit and push of results/prod/results.json must finish before hour 24 stop-code. The real Vector Field DEV file is already committed and pushed privately (**65 IDs / 64 ok / one permitted error**); its exact remote bytes were verified. [Exact Results JSON 1.0 commands and one-hour plan](SUBMISSION.md), [four-PDF audit](audits/2026-11-08/04-appendix-submission-audit.md), [private publication receipt](improvements/30-private-submission-push.md). The dedicated exporter/validator is tested and free; archival UI JSON is not the required wire format. Control data remain unavailable and no PROD placeholder exists. The owner's earlier two-hour estimate is not an official timestamp, live countdown or group ID.
@@ -33,9 +35,9 @@ Record official timing, `git rev-parse HEAD`, `git status --short`, source check
 
 | Official evidence | Current value |
 | --- | --- |
-| Event start / freeze time | Not supplied |
-| Control group | Not supplied |
+| Event start / freeze time | Owner supplied stop-code13:00, interpreted Asia/Bishkek; official frozen-commit acknowledgment not recorded |
+| Control group | FBroker10 processed; Swap3 saved, unevaluated |
 | Delivered/frozen commit | Not recorded |
-| Control states | Not run |
+| Control states | FBroker10 succeeded/complete; effective output10ok/zeroerror after16 source-based corrections, originals retained |
 | Public repository verification | Held by owner: do not make public yet; earlier authenticated main push verified |
 | Submission confirmation | Not submitted |

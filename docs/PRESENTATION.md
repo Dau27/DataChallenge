@@ -1,6 +1,6 @@
 # Vector Field - five-minute presentation
 
-An editable six-slide deck is attached to the presentation-creation reply. A downloadable **Vector_Field_CQA_Submission_Ready.pptx** is attached to the export reply, with its final slide updated after the real FBroker submission. It includes all six speaker notes and the native scoring table; the earlier export is preserved. No video recording was started or required by the supplied guide.
+The latest downloadable six-slide PowerPoint is delivered with the scoring-publication reply. Its final slide now includes538 backend passes and all16 known conflicts caught offline, with live accuracy unmeasured. It retains all six speaker notes, the native scoring table and two actual screenshots; every earlier export is preserved. No video recording was started or required by the supplied guide. [Release/validation report](improvements/35-scoring-private-publication.md).
 
 **Target: 4:30, with 30 seconds of buffer.** The 444-word narration below is a script, not a measured spoken rehearsal. Read the narration; use action/source notes as prompts rather than reciting them. Chat waiting time is not presenter delivery time.
 
@@ -40,9 +40,9 @@ Checklist changes are configuration. We can change a definition, answer type, we
 
 ## 6. Saved results and submission - 3:55-4:30
 
-Action: Summarize DEV:64ok/oneerror; FBroker10ok privately pushed, Swap3 saved/unevaluated, recorded model cost and remaining public/criterion/freeze gates.
+Action: Summarize DEV64ok/oneerror, FBroker10ok, all originals retained,16 scoring conflicts caught offline, recorded cost and remaining organizer gates. The owner now authorizes public repository access; only claim public verification after it is observed.
 
-We retain 65 DEV conversations: 64 complete and one unclear call. Both required DEV and PROD JSON files are committed and privately verified. All 10 FBroker control chats completed, and source-based review retains every original answer. The control batch cost about 6.65 cents at recorded rates. SWAP’s three records are saved but not evaluated. Public handoff, further criterion instructions and the official freeze remain pending. Coverage is not independent judgment accuracy.
+We retain 65 DEV conversations: 64 complete and one unclear call. All ten FBroker control chats completed, with original judgments preserved. The submitted DEV and PROD files are verified on GitHub. The control batch cost about6.65 cents at recorded rates. We repaired the scoring causes behind sixteen reviewer corrections and caught all sixteen conflicts offline. Live accuracy is unmeasured. SWAP remains saved only. The organizer's criterion-change check, presentation and official freeze acknowledgment remain event steps.
 
 ## Scope and evidence
 

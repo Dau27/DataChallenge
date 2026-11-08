@@ -70,16 +70,18 @@ Evidence excerpts come from saved transcript messages. Validation checks allowed
 
 | Evidence | Recorded outcome |
 | --- | --- |
-| Backend acceptance | **503 passed / one private-copy case skipped** in the full guarded run; that exact private case then **passed separately** on an isolated saved-data copy |
+| Backend acceptance | Latest scoring fixes: **538 passed**, one skipped private-copy case then **passed separately** on the current saved-data copy, with network/main-database guards; [regression report](docs/improvements/34-automated-rubric-guards.md) |
 | Frontend acceptance | **184 passed, one paid opt-in skipped**; TypeScript and production build passed |
 | Installation and persistence | Actual clean setup, empty/saved-data startup, restart, backup/restore and CLI handoff passed |
 | Private saved DEV results | **65 conversations: 35 RU / 15 KZ / 15 EN; 60 chats and five calls. 64 complete / one needs review** |
 | Final offline recovery check | Fresh private bundle verified and restored; all **15 tables/schema and 249 historical evaluations** preserved; zero provider/network attempts |
 | Required DEV submission | **65 original IDs / 64 ok / one explicit error**, validated against the new appendix and the original API transcript ordering |
+| Required control submission | **10 FBroker IDs / 10 ok**, using effective judgments after16 source-based corrections; every model original retained |
+| Automated scoring regression | All16 original conflicts rejected offline;16 reviewed replacements and all10 effective control assessments accepted; no new model calls |
 
-Tested implementation commit **ed0b96e** adds the organizer submission adapter and fixes queue links to open the exact saved run displayed for the selected checklist. It and the DEV file were pushed to the private repository; independent advertisement, fresh fetch, complete-tree and all 163 tested source/data blob checks passed. The [publication report](docs/improvements/30-private-submission-push.md) records exact verification. The counts above are actual acceptance of these changes; no new model evaluation was run for publication. Earlier tested merge `535444d9e8e905c24413faf70f98c1b52da6eac6` retains clean-install/recovery evidence; the [updated audit](docs/audits/2026-11-08/04-appendix-submission-audit.md) records current scope and limits. The 249 historical evaluations include previous attempts and revisions; they are not 249 separate DEV conversations.
+The latest scoring fixes retain final538-test backend acceptance. Earlier **ed0b96e** added the submission adapter/queue-link fix; **dd6b708** published reviewed FBroker results, followed by the04e06aa report receipt. Current release verification is recorded in [stage35](docs/improvements/35-scoring-private-publication.md); the owner now authorizes public visibility after verified push. [Scoring repairs](docs/improvements/34-automated-rubric-guards.md), [fresh four-PDF requirement audit](docs/audits/2026-11-08/05-final-scoring-pdf-audit.md). All259 saved evaluations, review history, protected files and submitted results remain unchanged. Historical evaluations include attempts/revisions, not259 separate conversations.
 
-Independent judgment accuracy has **not** been measured. The offline quality report correctly remains unlabeled for 65 selected originals / 520 judgments. One call's self-introduction is unclear, so its effective total is withheld and the original retained. Saved DEV results predate the current v13 prompt; no fresh v13 or organizer-control result is claimed. The PDFs do not define a weighted project-grade formula, and earlier informal readiness estimates are not official jury scores.
+Independent judgment accuracy has **not** been measured. The offline quality report correctly remains unlabeled for65 selected originals/520 judgments. One call's self-introduction is unclear, so its effective total is withheld and the original retained. Saved DEV results predate v13; real FBroker results used v13 and16 subsequent source-based review corrections. Current v14 prompt/validation improvements have offline regression evidence only; no new live v14 evaluation is claimed. The PDFs do not define a weighted project-grade formula, and earlier informal readiness estimates are not official jury scores.
 
 ### Model and cost
 

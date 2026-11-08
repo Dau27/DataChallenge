@@ -2,6 +2,8 @@
 
 Authority: CQA_Student_Guide_Appendix_Results.pdf, pages 1-3, supplied by the owner on 8 November 2026. This adds a required submission contract to the original guide/checklist. Registered team: **Vector Field**.
 
+Latest local scoring repair: [stage34](improvements/34-automated-rubric-guards.md). Prompt/validation updates are tested without inference and preserve every saved judgment and both submitted JSON files byte-for-byte. They do not regenerate v14 results or constitute a new Git publication. Keep the repository private and respect the official freeze.
+
 ## Required files and current state
 
 | Repository path | Required coverage | Current state |
