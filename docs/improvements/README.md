@@ -1,5 +1,7 @@
 # Implemented workflow improvements
 
+Latest delivery stage: [25 — main publication and remote verification](25-main-publication.md). GitHub main received f481908; independent advertisement/fetch/full-tree checks and all 159 tested source blobs match the accepted 535444d implementation. The subsequent report-only commit retains the same source. Existing results/secrets preserved, no API spending, demo deferred. Visibility/submission/freeze remain separate event steps.
+
 Latest integration stage: [24 — main sprint merge and handoff](24-main-sprint-merge.md). Local main now includes the accepted sprint through 535444d, preserving all 234 original working files and saved data. Exact-source 460 backend / 182 client/build passed; fresh setup and a second 460 backend run, actual startup/restart, recovery and quality CLI passed. No API spending; demo deferred; remote publication remains unperformed. Earlier stage counts below are historical.
 
 Latest accepted feature: [23 — offline quality reporting](23-offline-quality-report.md). **460 full backend tests passed**, 52 feature regressions, real65-run/ 520-judgment unlabeled CLI report and249 individual saved-run reads. No labels, scores or accuracy were invented. Original-only source/checklist/provenance compatibility, missing/abstained coverage and normalized scale errors are explicit. Client source is unchanged from this task's 182/one-skipped/build acceptance. No API spend; demo deferred.

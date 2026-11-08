@@ -1,6 +1,10 @@
 # Other-chat status and updated prompts — 8 November 2026
 
-## Latest main handoff
+## Latest publication status
+
+Main application checkpoint f481908 is pushed to GitHub and independently fetched/verified: complete tree matches local, tested merge 535444d is an ancestor, all 159 tested source/config/test blobs are unchanged. [Publication report](../improvements/25-main-publication.md). No other chat/worktree was overwritten or restarted; no builder branches or safety refs pushed. No API spending, visibility change, organizer submission or demo work.
+
+## Main handoff before publication
 
 Accepted integration 0d95621, including cohort 28818fa, print be951f3, recovery and quality reporting, is now merged into local main at 535444d. Original working changes were checkpointed without losing content; no conflicts. Exact-source 460 backend / 182 client/build checks and a fresh-environment460-test repeat passed, alongside documented setup/startup/restart and private recovery/quality CLI handoff. All saved/protected data and existing builder worktrees are preserved. No other chat was restarted, rebased or overwritten; no outbound message was sent. [Merge evidence and remaining boundaries](../improvements/24-main-sprint-merge.md). No API spend, push or demo work.
 

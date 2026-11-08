@@ -1,5 +1,7 @@
 # Stage 24 — sprint integration merged into main
 
+**Publication follow-up:** application checkpoint f481908 was subsequently pushed to GitHub and fetched back, with its full tree and all 159 tested source files verified. [Stage 25 publication receipt](25-main-publication.md). No API spend or demo work. Statements below about an unpushed local candidate describe this merge stage before that later user-authorized publication.
+
 Completed 8 November 2026. Local **main** now includes sprint-integration-20261108 through merge **535444d9e8e905c24413faf70f98c1b52da6eac6**. Existing working changes and saved results are preserved. **460 backend / 182 client tests passed**, one paid client test skipped; production build, fresh setup/startup, restart, recovery and CLI handoff checks passed. **No provider/organizer request or inference spending. Demo remains deferred.**
 
 ## Preservation and merge
@@ -50,7 +52,7 @@ Additional handoff checks used the **fresh installed interpreter and exact merge
 
 Private evidence: before.json/before.sqlite3, before.bundle and source/patch backups; merge.json; backend_guard.json/backend_guard_fresh.json; handoff.json and startup/guard logs; cli_acceptance.json/recovery_responses.json; preflight.json; final preservation and scan summaries. None belongs in Git.
 
-## Current boundaries
+## Boundaries at merge acceptance
 
 This is a **local merged/handoff-verified candidate**, not an official event freeze or public submission. Read-only git ls-remote succeeded and still reports remote main **5b726f9e3bb5b2899a6d8b98edfbf737f79e6cdf**. **No push or repository-visibility change was performed.** Public access, organizer submission and official freeze remain separate, explicit delivery steps.
 
