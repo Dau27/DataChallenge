@@ -2,6 +2,8 @@
 
 Status: **PASS for verified local reliability/installation gate**. Full DEV terminal-state report is tracked separately in Stage 5.
 
+Latest accepted source, 8 November: merge 535444d passed 460 backend tests in both installed environments, 182 client tests/one paid opt-in skipped, production build and actual clean setup/startup/restart. [Exact-source evidence](../improvements/24-main-sprint-merge.md). The subsequent [final offline handoff](../improvements/26-judge-readiness.md) changed documentation only and freshly verified recovery of all 15 tables/schema and 249 saved evaluations with zero provider/network/init attempts. Earlier counts below are historical. No paid inference or demo work.
+
 Latest enhancement gate: [shared budget protection](../improvements/01-shared-budget.md) now covers UI, CLI, retries and provider checks with persistent reservations and a default zero limit. Root/isolated-source checks passed 125 backend / 14 client tests and production build without model calls. The earlier checkpoint details below are historical; current source initialization adds only the two budget tables.
 
 Current recheck, 7 November 2026: a clean source snapshot containing the scoring fixes and recording-link correction passed the actual setup script, 94 backend tests, nine client tests, production build, pip check and compileall. It received no real credentials. Fresh home/assets/health returned HTTP 200, with zero conversations/evaluations and the original eight-criterion checklist. Missing-provider requests returned HTTP 503 without creating a result. See [zero-spend readiness](../audits/2026-11-07/06-zero-spend-readiness.md). The details below preserve earlier implementation checkpoints.

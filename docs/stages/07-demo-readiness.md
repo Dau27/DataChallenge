@@ -2,6 +2,8 @@
 
 Status: **demo execution is deferred at the user's request**. Existing technical evidence and runbooks are retained. No new demo preparation, presentation or rehearsal is being performed; timed presentation/public submission are not claimed complete.
 
+Final offline preparation, 8 November: the [judge-facing README](../../README.md), [operations guide](../OPERATIONS.md) and [fresh private recovery handoff](../improvements/26-judge-readiness.md) are ready. The owner explicitly continues to hold public repository access; no visibility change or submission was attempted. Organizer control access is unavailable. Applicable latest app acceptance is 460 backend / 182 client/build at tested source 535444d, not the older counts below. This documentation/recovery stage does not resume presentation preparation or official freeze.
+
 Latest authorized enhancements passed: shared spending protection, checklist preview/field errors and pending/critical review filters. Current root/isolated-source checks: 125 backend / 14 client tests and build passed; copied-data actual HTTP/browser/restart checks passed with zero added inference. Reviewed implementation aa3c08f was pushed privately. See [enhancement stage reports](../improvements/README.md); the readiness checkpoint examples below predate those additions.
 
 - The reviewed scoring/recording fixes and documentation were committed/pushed as private implementation checkpoint 6e16fdd, with matching ls-remote verification. A documentation-only follow-up records the evidence; tested code is unchanged. Public accessibility, submission and official freeze remain pending.

@@ -1,5 +1,11 @@
 # Implemented workflow improvements
 
+Private documentation publication: [27 - README/report commit, push and remote verification](27-private-documentation-push.md). The owner authorized only the existing private repository; no public access, organizer submission, inference spending or demo work.
+
+Latest offline final stage: [26 - judge-facing README and private recovery handoff](26-judge-readiness.md). Clear requirement/feature mapping and startup, fresh actual backup/verify/fresh-path recovery with all 15 tables/schema and 249 results preserved, and a 65-original/520-judgment correctly unlabeled offline report. Source unchanged; no redundant app-suite rerun, no API spend. The owner explicitly holds public access; organizer control data are unavailable and the demo stays deferred.
+
+Scope update: the user has **deferred optional A4/Letter and multilingual paper QA**, including reviewed/unresolved print layouts. [Print status and limits](20-printable-saved-reports.md). Existing print functionality/tests remain; paper layout is unverified. This does not block the required evaluation/evidence/editable-checklist/appeal/review workflow. No source or saved-data change, no API spend; demo deferred.
+
 Latest delivery stage: [25 — main publication and remote verification](25-main-publication.md). GitHub main received f481908; independent advertisement/fetch/full-tree checks and all 159 tested source blobs match the accepted 535444d implementation. The subsequent report-only commit retains the same source. Existing results/secrets preserved, no API spending, demo deferred. Visibility/submission/freeze remain separate event steps.
 
 Latest integration stage: [24 — main sprint merge and handoff](24-main-sprint-merge.md). Local main now includes the accepted sprint through 535444d, preserving all 234 original working files and saved data. Exact-source 460 backend / 182 client/build passed; fresh setup and a second 460 backend run, actual startup/restart, recovery and quality CLI passed. No API spending; demo deferred; remote publication remains unperformed. Earlier stage counts below are historical.

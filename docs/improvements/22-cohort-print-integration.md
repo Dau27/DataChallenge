@@ -1,5 +1,7 @@
 # Stage 22 — cohort comparison and printable reports integrated
 
+**Scope follow-up, 8 November:** the user deferred the remaining optional A4/Letter and multilingual paper-layout checks after Computer Use could not verify Chrome's URL. Reviewed/unresolved paper layouts remain unverified; existing saved-report tests and observed previews are retained. This is not a required-PDF workflow blocker and does not change the integrated implementation or any saved result. [Current print status](20-printable-saved-reports.md). No API spending; demo deferred. The original acceptance record below remains historical.
+
 Completed 8 November 2026 using the latest handed-off work from both other chats. Their original worktrees and commits are preserved. No model, organizer or provider-access request was made; added inference spend is **$0.00**. The five-minute demo remains deferred.
 
 ## Accepted source and integration

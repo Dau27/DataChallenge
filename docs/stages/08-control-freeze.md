@@ -2,6 +2,8 @@
 
 Status: **not reached; organizer inputs unavailable**.
 
+Owner confirmation, 8 November: organizer control access is unavailable and repository publication must remain deferred. Preparation of [judge documentation and private recovery](../improvements/26-judge-readiness.md) is complete; the control run and public handoff are not current implementation tasks. No additional credential request, guessed dataset, model request, organizer message or official freeze is made.
+
 Preparation is complete in [CONTROL_AND_FREEZE.md](../CONTROL_AND_FREEZE.md): required inputs, safe import/versioning, combined budget reconciliation, actual-commit recording and permitted post-freeze UI actions. No model request was made to prepare it.
 
 - Application supports importing another organizer-supplied dataset group while preserving other signed endpoint parameters.
